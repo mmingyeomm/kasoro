@@ -167,6 +167,10 @@ export type TurtleAnchor = {
               {
                 "kind": "account",
                 "path": "initializer"
+              },
+              {
+                "kind": "arg",
+                "path": "daoName"
               }
             ]
           }

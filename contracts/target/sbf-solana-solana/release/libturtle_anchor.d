@@ -1,1 +1,1 @@
-/Users/mungyo7/Desktop/Hackathon/Seoulana/Turtle-/turtle_anchor/target/sbf-solana-solana/release/libturtle_anchor.rlib: /Users/mungyo7/Desktop/Hackathon/Seoulana/Turtle-/turtle_anchor/programs/turtle_anchor/src/lib.rs
+/Users/mungyo7/Desktop/Hackathon/Seoulana/kasoro/contracts/target/sbf-solana-solana/release/libturtle_anchor.rlib: /Users/mungyo7/Desktop/Hackathon/Seoulana/kasoro/contracts/programs/turtle_anchor/src/lib.rs

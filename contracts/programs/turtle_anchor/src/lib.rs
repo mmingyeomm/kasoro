@@ -404,7 +404,9 @@ pub struct VoteProposal {
     pub status: VoteStatus,
 }
 
+
 #[derive(Accounts)]
+#[instruction(dao_name: String)] // 여기에 파라미터 추가
 pub struct InitializeDao<'info> {
     #[account(mut)]
     pub initializer: Signer<'info>,
@@ -412,11 +414,16 @@ pub struct InitializeDao<'info> {
         init,
         payer = initializer,
         space = 8 + DaoState::SPACE,
-        seeds = [b"dao", initializer.key().as_ref()],
+        seeds = [
+            b"dao", 
+            initializer.key().as_ref(),
+            dao_name.as_bytes() // 단순히 DAO 이름을 시드로 사용
+        ],
         bump
     )]
     pub dao: Account<'info, DaoState>,
     pub system_program: Program<'info, System>,
+    
 }
 
 #[derive(Accounts)]
