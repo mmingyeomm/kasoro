@@ -27,7 +27,7 @@ export class AuthController {
       return res.redirect(redirectUrl);
     } catch (error) {
       console.error('Twitter login error:', error);
-      return res.redirect('http://localhost:3000/login-error');
+      return res.redirect('https://kasoro.vercel.app/login-error');
     }
   }
 
@@ -70,10 +70,10 @@ export class AuthController {
       delete session.oauth_token_secret;
       
       // Redirect to frontend with success
-      return res.redirect('http://localhost:3000/auth-success');
+      return res.redirect('https://kasoro.vercel.app/auth-success');
     } catch (error) {
       console.error('Twitter callback error:', error);
-      return res.redirect('http://localhost:3000/login-error');
+      return res.redirect('https://kasoro.vercel.app/login-error');
     }
   }
 
@@ -114,6 +114,6 @@ export class AuthController {
   @Get('logout')
   logout(@Session() session: Record<string, any>, @Res() res: Response) {
     session.user = null;
-    return res.redirect('http://localhost:3000');
+    return res.redirect('https://kasoro.vercel.app');
   }
 }
