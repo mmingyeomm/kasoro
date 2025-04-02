@@ -12,36 +12,31 @@ describe("turtle_anchor", () => {
 
   const program = anchor.workspace.TurtleAnchor;
   const initializer = provider.wallet.publicKey;
-  console.log("initializer", initializer);
+
   // 테스트용 변수 설정
-  const daoName = "test2";
+  const daoName = "test4";
   const timeLimit = 60 * 60 * 24 * 7; // 7일(초 단위)
   const baseFee = 5; // 5%
   const aiModeration = true;
   const depositShare = 50; // 50%
   
   let daoPDA: PublicKey;
-  let slot: number;
-  
+  [daoPDA] = PublicKey.findProgramAddressSync(
+      [
+        Buffer.from("dao"), 
+        initializer.toBuffer(), 
+        Buffer.from(daoName)
+      ],
+      program.programId
+  );
+
   it("DAO를 초기화합니다", async () => {
     try {
-      // DAO PDA 생성을 위한 slot 정보 가져오기
-      slot = await provider.connection.getSlot();
-
-
-      [daoPDA] = PublicKey.findProgramAddressSync(
-        [Buffer.from("dao"), initializer.toBuffer(), Buffer.from(daoName)],
-        program.programId
-      );
-
       console.log("================================================");
-      console.log("프로그램 ID:", program.programId.toString());
-      console.log("지갑 주소:", initializer.toString());
-      console.log("DAO PDA:", daoPDA.toString());
-      console.log("Seed 구성요소:");
-      console.log("- dao (string):", Buffer.from("dao").toString());
-      console.log("- initializer (bytes):", initializer.toBuffer());
-      console.log("- daoName (string):", daoName);
+      console.log("- 프로그램 ID:", program.programId.toString());
+      console.log("- 사용자 주소:", initializer.toString());
+      console.log("- DAO 이름:", daoName);
+      console.log("- DAO PDA:", daoPDA.toString());
       console.log("================================================");
 
       // DAO 초기화 트랜잭션 실행
@@ -70,11 +65,11 @@ describe("turtle_anchor", () => {
         blockhash: latestBlockhash.blockhash,
         lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
       });
-      console.log("트랜잭션이 확인되었습니다!");
+      console.log("✅ DAO Initialize 트랜잭션 confirmed!");
 
       // DAO 상태 확인
       const daoAccount = await program.account.daoState.fetch(daoPDA);
-      console.log("DAO 계정 데이터:", daoAccount);
+      console.log("📝 DAO PDA data:", daoAccount);
 
       // 검증
       assert.equal(daoAccount.daoName, daoName);
@@ -90,9 +85,7 @@ describe("turtle_anchor", () => {
 
   // it("DAO에 SOL을 예치합니다", async () => {
   //   try {
-  //     const amount = new anchor.BN(0.11 * LAMPORTS_PER_SOL); // 0.1 SOL
-  //     const amount2 = new anchor.BN(0.22* LAMPORTS_PER_SOL); // 0.1 SOL
-      
+  //     const amount = new anchor.BN(0.123 * LAMPORTS_PER_SOL); // 0.123 SOL     
 
   //     const tx = await program.methods
   //       .deposit(amount)
@@ -102,6 +95,7 @@ describe("turtle_anchor", () => {
   //         systemProgram: anchor.web3.SystemProgram.programId,
   //       })
   //       .rpc();
+      
   //     console.log("예치할 금액:",parseFloat(amount.toString())/LAMPORTS_PER_SOL, "SOL");
   //     console.log("예치 트랜잭션:", tx);
   //     console.log("Solana Explorer URL:", `https://explorer.solana.com/tx/${tx}?cluster=devnet`);
@@ -113,29 +107,7 @@ describe("turtle_anchor", () => {
   //       blockhash: latestBlockhash.blockhash,
   //       lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
   //     });
-  //     console.log("예치 트랜잭션이 확인되었습니다!");
-
-  //     // 두번째 예치
-  //     const tx2 = await program.methods
-  //       .deposit(amount2)
-  //       .accounts({
-  //         depositor: initializer,
-  //         dao: daoPDA,
-  //         systemProgram: anchor.web3.SystemProgram.programId,
-  //       })
-  //       .rpc();
-  //     console.log("예치할 금액:",parseFloat(amount2.toString())/LAMPORTS_PER_SOL, "SOL");
-  //     console.log("예치 트랜잭션:", tx2);
-  //     console.log("Solana Explorer URL:", `https://explorer.solana.com/tx/${tx2}?cluster=devnet`);
-
-  //     // 트랜잭션 확인 대기
-  //     const latestBlockhash2 = await provider.connection.getLatestBlockhash();
-  //     await provider.connection.confirmTransaction({
-  //       signature: tx2,
-  //       blockhash: latestBlockhash2.blockhash,
-  //       lastValidBlockHeight: latestBlockhash2.lastValidBlockHeight
-  //     });
-  //     console.log("예치 트랜잭션이 확인되었습니다!");
+  //     console.log("✅예치 트랜잭션이 확인되었습니다!");      
       
   //     // DAO 상태 확인
   //     const daoAccount = await program.account.daoState.fetch(daoPDA);
