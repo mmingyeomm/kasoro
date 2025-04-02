@@ -23,16 +23,26 @@ async function bootstrap() {
   app.use(
     session({
       secret: 'x-oauth-secret',
-      resave: false,
-      saveUninitialized: false,
+      resave: true, // Changed to true to ensure session is saved back to the store
+      saveUninitialized: true, // Changed to true to save new sessions
       cookie: { 
         secure: process.env.NODE_ENV === 'production', // Only use secure in production
-        sameSite: 'none', // Required for cross-site requests
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Required for cross-site requests
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
       },
+      name: 'x_auth_session', // Custom name for the session cookie
     }),
   );
+  
+  // Log session middleware configuration
+  console.log('Session middleware configured with settings:', {
+    resave: true,
+    saveUninitialized: true,
+    cookieSecure: process.env.NODE_ENV === 'production',
+    cookieSameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    environment: process.env.NODE_ENV || 'development',
+  });
   
   await app.listen(process.env.PORT ?? 3001);
   console.log(`Application is running on: ${await app.getUrl()}`);

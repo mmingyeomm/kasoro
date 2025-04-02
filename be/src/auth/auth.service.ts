@@ -33,12 +33,18 @@ export class AuthService {
   }
 
   async getRequestToken() {
+    console.log('[GET_REQUEST_TOKEN] Starting to get request token from Twitter');
+    
     const oauth = this.getOAuthInstance();
+    
     // Use the appropriate callback URL based on environment
     const isProduction = process.env.NODE_ENV === 'production';
     const callback = isProduction
       ? 'http://kasoro.onrender.com/auth/callback'
       : 'http://localhost:3001/auth/callback';
+    
+    console.log('[GET_REQUEST_TOKEN] Using callback URL:', callback);
+    console.log('[GET_REQUEST_TOKEN] Environment:', process.env.NODE_ENV || 'development');
     
     // OAuth 1.0a parameters must be included in both the signature and the request
     const requestData = {
@@ -48,15 +54,19 @@ export class AuthService {
     };
 
     // Get authorization headers including the OAuth signature
+    console.log('[GET_REQUEST_TOKEN] Generating OAuth authorization');
     const authorization = oauth.authorize(requestData);
     const headers = oauth.toHeader(authorization);
-    console.log('Request headers:', headers);
-    console.log('Authorization:', authorization);
+    console.log('[GET_REQUEST_TOKEN] Request headers:', headers);
+    console.log('[GET_REQUEST_TOKEN] Authorization parameters:', authorization);
 
     try {
       // Format the request body properly
       const requestParams = new URLSearchParams();
       requestParams.append('oauth_callback', callback);
+      
+      console.log('[GET_REQUEST_TOKEN] Making request to Twitter API');
+      console.log('[GET_REQUEST_TOKEN] Request body:', requestParams.toString());
       
       const response = await fetch(requestData.url, {
         method: requestData.method,
@@ -67,25 +77,45 @@ export class AuthService {
         body: requestParams.toString(),
       });
 
+      console.log('[GET_REQUEST_TOKEN] Response status:', response.status);
+      console.log('[GET_REQUEST_TOKEN] Response headers:', JSON.stringify(response.headers, null, 2));
+      
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Twitter API Error:', errorText);
+        console.error('[GET_REQUEST_TOKEN] Twitter API Error:', errorText);
         throw new Error(`HTTP error! status: ${response.status}, details: ${errorText}`);
       }
 
       const data = await response.text();
+      console.log('[GET_REQUEST_TOKEN] Raw response data:', data);
+      
       const parsedData = new URLSearchParams(data);
       const oauth_token = parsedData.get('oauth_token');
       const oauth_token_secret = parsedData.get('oauth_token_secret');
+      
+      console.log('[GET_REQUEST_TOKEN] Parsed response:', {
+        has_oauth_token: oauth_token ? 'YES' : 'NO',
+        has_oauth_token_secret: oauth_token_secret ? 'YES' : 'NO',
+        oauth_token_length: oauth_token ? oauth_token.length : 0,
+        oauth_token_secret_length: oauth_token_secret ? oauth_token_secret.length : 0,
+      });
 
       return { oauth_token, oauth_token_secret };
     } catch (error) {
-      console.error('Error getting request token:', error);
+      console.error('[GET_REQUEST_TOKEN] Error getting request token:', error);
       throw error;
     }
   }
 
   async getAccessToken(oauth_token: string, oauth_verifier: string, oauth_token_secret: string) {
+    console.log('[GET_ACCESS_TOKEN] Starting to exchange tokens');
+    console.log('[GET_ACCESS_TOKEN] Input parameters:', {
+      oauth_token,
+      oauth_verifier,
+      oauth_token_secret_length: oauth_token_secret ? oauth_token_secret.length : 0,
+      has_token_secret: oauth_token_secret ? 'YES' : 'NO',
+    });
+    
     const oauth = this.getOAuthInstance();
     const requestData = {
       url: 'https://api.twitter.com/oauth/access_token',
@@ -93,16 +123,22 @@ export class AuthService {
       data: { oauth_token, oauth_verifier },
     };
 
-    console.log('Exchanging request token for access token:', { oauth_token, oauth_verifier });
+    console.log('[GET_ACCESS_TOKEN] Request data:', requestData);
 
+    // Generate authorization with token from the login step
+    console.log('[GET_ACCESS_TOKEN] Generating OAuth authorization with token secret');
     const authorization = oauth.authorize(requestData, { key: oauth_token, secret: oauth_token_secret });
     const headers = oauth.toHeader(authorization);
+    console.log('[GET_ACCESS_TOKEN] Authorization headers:', headers);
 
     try {
       // Format the request body properly
       const requestParams = new URLSearchParams();
       requestParams.append('oauth_token', oauth_token);
       requestParams.append('oauth_verifier', oauth_verifier);
+      
+      console.log('[GET_ACCESS_TOKEN] Making request to Twitter API');
+      console.log('[GET_ACCESS_TOKEN] Request body:', requestParams.toString());
       
       const response = await fetch(requestData.url, {
         method: requestData.method,
@@ -113,16 +149,23 @@ export class AuthService {
         body: requestParams.toString(),
       });
 
+      console.log('[GET_ACCESS_TOKEN] Response status:', response.status);
+      console.log('[GET_ACCESS_TOKEN] Response headers:', JSON.stringify(response.headers, null, 2));
+
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Twitter API Error (access token):', errorText);
+        console.error('[GET_ACCESS_TOKEN] Twitter API Error:', errorText);
         throw new Error(`HTTP error! status: ${response.status}, details: ${errorText}`);
       }
 
       const data = await response.text();
-      console.log('Got access token response:', data);
+      console.log('[GET_ACCESS_TOKEN] Raw response:', data);
       
       const parsedData = new URLSearchParams(data);
+      
+      // Log the parsed data without exposing sensitive details
+      console.log('[GET_ACCESS_TOKEN] Parsed data keys:', Array.from(parsedData.keys()));
+      
       const userData = {
         oauth_token: parsedData.get('oauth_token'),
         oauth_token_secret: parsedData.get('oauth_token_secret'),
@@ -130,14 +173,16 @@ export class AuthService {
         screen_name: parsedData.get('screen_name'),
       };
       
-      console.log('User authenticated:', {
+      console.log('[GET_ACCESS_TOKEN] User data extracted:', {
+        has_oauth_token: userData.oauth_token ? 'YES' : 'NO',
+        has_oauth_token_secret: userData.oauth_token_secret ? 'YES' : 'NO',
         user_id: userData.user_id,
         screen_name: userData.screen_name,
       });
       
       return userData;
     } catch (error) {
-      console.error('Error getting access token:', error);
+      console.error('[GET_ACCESS_TOKEN] Error getting access token:', error);
       throw error;
     }
   }
