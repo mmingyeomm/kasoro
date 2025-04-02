@@ -11,10 +11,25 @@ async function bootstrap() {
   console.log('API_KEY configured:', configService.get('API_KEY') ? 'Yes' : 'No');
   console.log('API_KEY_SECRET configured:', configService.get('API_KEY_SECRET') ? 'Yes' : 'No');
   
-  // Enable CORS
+  // Enable CORS - we need to use a function for dynamic origin validation
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://kasoro.vercel.app'],
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        'http://localhost:3000', 
+        'https://kasoro.vercel.app'
+      ];
+      
+      // Allow requests with no origin (like mobile apps, curl, etc)
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        console.warn(`CORS blocked request from origin: ${origin}`);
+        callback(null, false);
+      }
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
   });
   
   // Setup session with proper CORS support

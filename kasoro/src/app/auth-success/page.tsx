@@ -4,26 +4,42 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// 사용자 데이터 타입 정의
+// Define user type for TypeScript
 interface User {
   id: string;
   username: string;
-  // 필요한 다른 사용자 속성들을 여기에 추가할 수 있습니다
+  oauth_token?: string;
+  oauth_token_secret?: string;
 }
 
 export default function AuthSuccess() {
-  // null 또는 User 타입으로 명시적 타입 정의
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchUser() {
       try {
+        // For debugging
+        console.log("Environment:", process.env.NODE_ENV);
+        console.log("Backend URL env var:", process.env.NEXT_PUBLIC_BACKEND_URL);
+        
+        // Use the backend URL from environment or fallback to localhost
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+        console.log("Using backend URL:", backendUrl);
+        
         const response = await fetch(`${backendUrl}/auth/user`, {
           credentials: "include",
+          headers: {
+            'Accept': 'application/json',
+          },
         });
+        
+        if (!response.ok) {
+          throw new Error(`Error fetching user: ${response.status} ${response.statusText}`);
+        }
+        
         const data = await response.json();
+        console.log("User data received:", data ? "success" : "empty");
         setUser(data);
       } catch (error) {
         console.error("Error fetching user:", error);
