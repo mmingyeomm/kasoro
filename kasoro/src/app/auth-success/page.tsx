@@ -19,7 +19,7 @@ export default function AuthSuccess() {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const response = await fetch("http://localhost:3001/auth/user", {
+        const response = await fetch("https://kasoro.onrender.com/auth/user", {
           credentials: "include",
           headers: {
             'Accept': 'application/json',

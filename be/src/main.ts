@@ -11,19 +11,26 @@ async function bootstrap() {
   console.log('API_KEY configured:', configService.get('API_KEY') ? 'Yes' : 'No');
   console.log('API_KEY_SECRET configured:', configService.get('API_KEY_SECRET') ? 'Yes' : 'No');
   
-  // Enable CORS
+  // Enable CORS - allow both local and production domains
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'https://kasoro.vercel.app'],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
   
-  // Setup session
+  // Setup session with proper CORS support
   app.use(
     session({
       secret: 'x-oauth-secret',
       resave: false,
       saveUninitialized: false,
-      cookie: { secure: false }, // Set to true in production with HTTPS
+      cookie: { 
+        secure: process.env.NODE_ENV === 'production', // Only use secure in production
+        sameSite: 'none', // Required for cross-site requests
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+      },
     }),
   );
   
