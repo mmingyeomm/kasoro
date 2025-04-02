@@ -29,7 +29,7 @@ export default function Home() {
           {/* X Login Button */}
           <a
             className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-black text-white gap-2 hover:bg-[#333] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="http://localhost:3001/auth/login/twitter"
+            href="https://kasoro.vercel.app//auth/login/twitter"
           >
             <Image
               src="/x-logo.svg"
@@ -50,6 +50,9 @@ export default function Home() {
             Read our docs
           </a>
         </div>
+
+        
+
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a
