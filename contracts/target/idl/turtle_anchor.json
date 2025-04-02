@@ -1,0 +1,562 @@
+{
+  "address": "38cVbT7EHqPwfXR1VgXA5jJiBe3DSAFr6cdCEPx4fbAv",
+  "metadata": {
+    "name": "turtle_anchor",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "cast_vote",
+      "discriminator": [
+        20,
+        212,
+        15,
+        189,
+        69,
+        180,
+        69,
+        151
+      ],
+      "accounts": [
+        {
+          "name": "voter",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "dao",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "proposal_id",
+          "type": "u64"
+        },
+        {
+          "name": "option_index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "create_vote",
+      "discriminator": [
+        173,
+        115,
+        165,
+        78,
+        226,
+        132,
+        205,
+        254
+      ],
+      "accounts": [
+        {
+          "name": "proposer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "dao",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "vote_type",
+          "type": {
+            "defined": {
+              "name": "VoteType"
+            }
+          }
+        },
+        {
+          "name": "options",
+          "type": {
+            "vec": "string"
+          }
+        },
+        {
+          "name": "voting_period",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "deposit",
+      "discriminator": [
+        242,
+        35,
+        198,
+        137,
+        82,
+        225,
+        242,
+        182
+      ],
+      "accounts": [
+        {
+          "name": "depositor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "dao",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize_dao",
+      "discriminator": [
+        128,
+        226,
+        96,
+        90,
+        39,
+        56,
+        24,
+        196
+      ],
+      "accounts": [
+        {
+          "name": "initializer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "dao",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  97,
+                  111
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "initializer"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "dao_name",
+          "type": "string"
+        },
+        {
+          "name": "time_limit",
+          "type": "u64"
+        },
+        {
+          "name": "base_fee",
+          "type": "u64"
+        },
+        {
+          "name": "ai_moderation",
+          "type": "bool"
+        },
+        {
+          "name": "deposit_share",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "process_timeout",
+      "discriminator": [
+        248,
+        194,
+        110,
+        91,
+        207,
+        32,
+        200,
+        207
+      ],
+      "accounts": [
+        {
+          "name": "caller",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "dao",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "submit_content",
+      "discriminator": [
+        83,
+        67,
+        55,
+        88,
+        192,
+        77,
+        115,
+        15
+      ],
+      "accounts": [
+        {
+          "name": "author",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "dao",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "text",
+          "type": "string"
+        },
+        {
+          "name": "image_uri",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "DaoState",
+      "discriminator": [
+        24,
+        50,
+        14,
+        105,
+        233,
+        60,
+        201,
+        244
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "NotADepositor",
+      "msg": "Not a depositor"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidVotingPeriod",
+      "msg": "Invalid voting period"
+    },
+    {
+      "code": 6002,
+      "name": "ProposalNotFound",
+      "msg": "Proposal not found"
+    },
+    {
+      "code": 6003,
+      "name": "ProposalNotActive",
+      "msg": "Proposal is not active"
+    },
+    {
+      "code": 6004,
+      "name": "VotingPeriodEnded",
+      "msg": "Voting period has ended"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidOptionIndex",
+      "msg": "Invalid option index"
+    },
+    {
+      "code": 6006,
+      "name": "AlreadyVoted",
+      "msg": "Already voted"
+    },
+    {
+      "code": 6007,
+      "name": "TimeoutNotReached",
+      "msg": "Timeout not reached"
+    }
+  ],
+  "types": [
+    {
+      "name": "Content",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "author",
+            "type": "pubkey"
+          },
+          {
+            "name": "text",
+            "type": "string"
+          },
+          {
+            "name": "image_uri",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "type": "u64"
+          },
+          {
+            "name": "vote_count",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DaoState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "dao_name",
+            "type": "string"
+          },
+          {
+            "name": "initializer",
+            "type": "pubkey"
+          },
+          {
+            "name": "time_limit",
+            "type": "u64"
+          },
+          {
+            "name": "base_fee",
+            "type": "u64"
+          },
+          {
+            "name": "ai_moderation",
+            "type": "bool"
+          },
+          {
+            "name": "deposit_share",
+            "type": "u8"
+          },
+          {
+            "name": "timeout_timestamp",
+            "type": "u64"
+          },
+          {
+            "name": "total_deposit",
+            "type": "u64"
+          },
+          {
+            "name": "depositors",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "DepositorInfo"
+                }
+              }
+            }
+          },
+          {
+            "name": "contents",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "Content"
+                }
+              }
+            }
+          },
+          {
+            "name": "vote_proposals",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "VoteProposal"
+                }
+              }
+            }
+          },
+          {
+            "name": "next_proposal_id",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DepositorInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "depositor",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "u64"
+          },
+          {
+            "name": "locked_until",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VoteInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "voter",
+            "type": "pubkey"
+          },
+          {
+            "name": "option_index",
+            "type": "u8"
+          },
+          {
+            "name": "voting_power",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VoteProposal",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "proposal_id",
+            "type": "u64"
+          },
+          {
+            "name": "proposer",
+            "type": "pubkey"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "vote_type",
+            "type": {
+              "defined": {
+                "name": "VoteType"
+              }
+            }
+          },
+          {
+            "name": "options",
+            "type": {
+              "vec": "string"
+            }
+          },
+          {
+            "name": "start_time",
+            "type": "u64"
+          },
+          {
+            "name": "end_time",
+            "type": "u64"
+          },
+          {
+            "name": "votes",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "VoteInfo"
+                }
+              }
+            }
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "VoteStatus"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "VoteStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Completed"
+          },
+          {
+            "name": "Executed"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VoteType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "ChangeTimeLimit"
+          },
+          {
+            "name": "ChangeBaseFee"
+          },
+          {
+            "name": "ChangeAiModeration"
+          },
+          {
+            "name": "ContentQualityRating"
+          }
+        ]
+      }
+    }
+  ]
+}
