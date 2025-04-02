@@ -1,18 +1,10 @@
 import { Controller, Get, Query, Res, Session } from '@nestjs/common';
 import { Response } from 'express';
-import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  private readonly frontendUrl: string;
-  
-  constructor(
-    private readonly authService: AuthService,
-    private readonly configService: ConfigService,
-  ) {
-    this.frontendUrl = this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
-  }
+  constructor(private readonly authService: AuthService) {}
 
   @Get('login/twitter')
   async twitterLogin(@Res() res: Response, @Session() session: Record<string, any>) {
@@ -35,7 +27,7 @@ export class AuthController {
       return res.redirect(redirectUrl);
     } catch (error) {
       console.error('Twitter login error:', error);
-      return res.redirect(`${this.frontendUrl}/login-error`);
+      return res.redirect('http://localhost:3000/login-error');
     }
   }
 
@@ -78,10 +70,10 @@ export class AuthController {
       delete session.oauth_token_secret;
       
       // Redirect to frontend with success
-      return res.redirect(`${this.frontendUrl}/auth-success`);
+      return res.redirect('http://localhost:3000/auth-success');
     } catch (error) {
       console.error('Twitter callback error:', error);
-      return res.redirect(`${this.frontendUrl}/login-error`);
+      return res.redirect('http://localhost:3000/login-error');
     }
   }
 
@@ -122,6 +114,6 @@ export class AuthController {
   @Get('logout')
   logout(@Session() session: Record<string, any>, @Res() res: Response) {
     session.user = null;
-    return res.redirect(this.frontendUrl);
+    return res.redirect('http://localhost:3000');
   }
 }
