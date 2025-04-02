@@ -19,7 +19,8 @@ export default function AuthSuccess() {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const response = await fetch("http://localhost:3001/auth/user", {
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+        const response = await fetch(`${backendUrl}/auth/user`, {
           credentials: "include",
         });
         const data = await response.json();

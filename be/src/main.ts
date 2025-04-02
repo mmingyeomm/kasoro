@@ -13,17 +13,22 @@ async function bootstrap() {
   
   // Enable CORS
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'https://kasoro.vercel.app'],
     credentials: true,
   });
   
-  // Setup session
+  // Setup session with proper CORS support
   app.use(
     session({
       secret: 'x-oauth-secret',
       resave: false,
       saveUninitialized: false,
-      cookie: { secure: false }, // Set to true in production with HTTPS
+      cookie: { 
+        secure: process.env.NODE_ENV === 'production', // Only use secure in production
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Required for cross-site cookies
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+      },
     }),
   );
   
