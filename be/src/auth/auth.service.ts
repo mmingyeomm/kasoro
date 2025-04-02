@@ -7,6 +7,22 @@ import * as crypto from 'crypto';
 export class AuthService {
   constructor(private configService: ConfigService) {}
 
+  // In-memory token storage as a fallback
+  private static tokenSecrets: Map<string, string> = new Map();
+  
+  // Store a token secret
+  storeTokenSecret(token: string, secret: string) {
+    AuthService.tokenSecrets.set(token, secret);
+    console.log(`[TOKEN_STORE] Stored secret for token: ${token.substring(0, 5)}...`);
+  }
+  
+  // Retrieve a token secret
+  getTokenSecret(token: string): string | undefined {
+    const secret = AuthService.tokenSecrets.get(token);
+    console.log(`[TOKEN_STORE] Retrieved secret for token: ${token.substring(0, 5)}..., exists: ${!!secret}`);
+    return secret;
+  }
+  
   private getOAuthInstance() {
     const key = this.configService.get<string>('API_KEY');
     const secret = this.configService.get<string>('API_KEY_SECRET');
@@ -100,6 +116,11 @@ export class AuthService {
         oauth_token_secret_length: oauth_token_secret ? oauth_token_secret.length : 0,
       });
 
+      // Store the secret in our in-memory cache
+      if (oauth_token && oauth_token_secret) {
+        this.storeTokenSecret(oauth_token, oauth_token_secret);
+      }
+      
       return { oauth_token, oauth_token_secret };
     } catch (error) {
       console.error('[GET_REQUEST_TOKEN] Error getting request token:', error);

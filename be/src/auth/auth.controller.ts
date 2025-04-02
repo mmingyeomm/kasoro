@@ -56,13 +56,11 @@ export class AuthController {
         console.log('[AUTH] No session.save method available');
       }
       
-      // Store the token secret in both session and as a state parameter in the callback URL
-      const stateParam = Buffer.from(JSON.stringify({
-        secret: oauth_token_secret
-      })).toString('base64');
+      // We've already stored the token secret in our service's in-memory storage
+      // No need to pass it as a state parameter since Twitter seems to strip it
       
       // Redirect to Twitter for authentication
-      const redirectUrl = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauth_token}&state=${stateParam}`;
+      const redirectUrl = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauth_token}`;
       console.log('[AUTH] Redirecting to:', redirectUrl);
       
       return res.redirect(redirectUrl);
@@ -88,30 +86,24 @@ export class AuthController {
       console.log('[CALLBACK] Full session object:', JSON.stringify(session, null, 2));
       console.log('[CALLBACK] Req headers:', JSON.stringify(res.req.headers, null, 2));
       
-      // Try to get the token secret from both the session and state parameter
+      // Try to get the token secret from both the session and in-memory storage
       let oauth_token_secret = session.oauth_token_secret;
       
-      // If not in session, try to get it from the state parameter
-      if (!oauth_token_secret && state) {
-        try {
-          console.log('[CALLBACK] Attempting to decode state parameter');
-          const stateData = JSON.parse(Buffer.from(state, 'base64').toString());
-          oauth_token_secret = stateData.secret;
-          console.log('[CALLBACK] Successfully extracted token secret from state parameter');
-        } catch (e) {
-          console.error('[CALLBACK] Failed to decode state parameter:', e);
-        }
+      // If not in session, try to get it from the in-memory storage
+      if (!oauth_token_secret) {
+        console.log('[CALLBACK] Trying to get token secret from in-memory storage');
+        oauth_token_secret = this.authService.getTokenSecret(oauth_token);
       }
       
       console.log('[CALLBACK] Retrieved oauth_token_secret:', { 
         from_session: session.oauth_token_secret ? 'YES' : 'NO',
-        from_state: state ? 'ATTEMPTED' : 'NO',
+        from_memory: !!this.authService.getTokenSecret(oauth_token),
         has_oauth_token_secret: oauth_token_secret ? 'YES' : 'NO',
         oauth_token_secret_length: oauth_token_secret ? oauth_token_secret.length : 0
       });
       
       if (!oauth_token_secret) {
-        const err = new Error('Missing oauth_token_secret in both session and state parameter');
+        const err = new Error('Missing oauth_token_secret in both session and in-memory storage');
         console.error('[CALLBACK] ERROR:', err);
         throw err;
       }

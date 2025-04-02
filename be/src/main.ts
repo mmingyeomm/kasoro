@@ -23,13 +23,16 @@ async function bootstrap() {
   app.use(
     session({
       secret: 'x-oauth-secret',
-      resave: true, // Changed to true to ensure session is saved back to the store
-      saveUninitialized: true, // Changed to true to save new sessions
+      resave: true, 
+      saveUninitialized: true,
+      rolling: true, // Update expiration with each request
+      proxy: true, // Trust the reverse proxy
       cookie: { 
-        secure: process.env.NODE_ENV === 'production', // Only use secure in production
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Required for cross-site requests
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'none', // Always use none for cross-site
         httpOnly: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        path: '/',
       },
       name: 'connect.sid', // Match the existing cookie name
     }),
