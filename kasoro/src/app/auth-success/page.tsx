@@ -19,7 +19,7 @@ export default function AuthSuccess() {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const response = await fetch("https://kasoro.onrender.com/auth/user", {
+        const response = await fetch("http://localhost:3001/auth/user", {
           credentials: "include",
           headers: {
             'Accept': 'application/json',
@@ -31,8 +31,15 @@ export default function AuthSuccess() {
         }
         
         const data = await response.json();
-        console.log("User data received:", data ? "success" : "empty");
-        setUser(data);
+        console.log("User data received:", data);
+        
+        // Check if the data has valid user properties
+        if (data && data.id && data.username) {
+          setUser(data);
+        } else {
+          console.log("No valid user data found");
+          setUser(null);
+        }
       } catch (error) {
         console.error("Error fetching user:", error);
       } finally {

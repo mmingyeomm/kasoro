@@ -28,8 +28,8 @@ async function bootstrap() {
       rolling: true, // Update expiration with each request
       proxy: true, // Trust the reverse proxy
       cookie: { 
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'none', // Always use none for cross-site
+        secure: false, // Set to false for local development
+        sameSite: 'lax', // Use lax for local development
         httpOnly: true,
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
         path: '/',
@@ -47,7 +47,8 @@ async function bootstrap() {
     environment: process.env.NODE_ENV || 'development',
   });
   
-  await app.listen(process.env.PORT ?? 3001);
+  await app.listen(process.env.PORT ?? 3001, '0.0.0.0');
   console.log(`Application is running on: ${await app.getUrl()}`);
+  console.log(`Also available at: http://localhost:${process.env.PORT ?? 3001}`);
 }
 bootstrap();

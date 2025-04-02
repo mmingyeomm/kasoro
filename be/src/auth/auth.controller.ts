@@ -66,7 +66,7 @@ export class AuthController {
       return res.redirect(redirectUrl);
     } catch (error) {
       console.error('[AUTH] Twitter login error:', error);
-      return res.redirect('https://kasoro.vercel.app/login-error');
+      return res.redirect('http://localhost:3000/login-error');
     }
   }
 
@@ -160,17 +160,18 @@ export class AuthController {
       
       // Redirect to frontend with success
       console.log('[CALLBACK] Redirecting to success page');
-      return res.redirect('https://kasoro.vercel.app/auth-success');
+      return res.redirect('http://localhost:3000/auth-success');
     } catch (error) {
       console.error('[CALLBACK] Twitter callback error:', error);
-      return res.redirect('https://kasoro.vercel.app/login-error');
+      return res.redirect('http://localhost:3000/login-error');
     }
   }
 
   @Get('user')
   getUser(@Session() session: Record<string, any>) {
     console.log('User session data requested, returning:', session.user ? { id: session.user.id, username: session.user.username } : 'No user');
-    return session.user || null;
+    // Always return a valid JSON object
+    return session.user || { loggedIn: false };
   }
   
   @Get('debug')
@@ -204,6 +205,6 @@ export class AuthController {
   @Get('logout')
   logout(@Session() session: Record<string, any>, @Res() res: Response) {
     session.user = null;
-    return res.redirect('https://kasoro.vercel.app');
+    return res.redirect('http://localhost:3000');
   }
 }

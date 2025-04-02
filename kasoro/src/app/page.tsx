@@ -29,7 +29,7 @@ export default function Home() {
           {/* X Login Button */}
           <a
             className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-black text-white gap-2 hover:bg-[#333] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://kasoro.onrender.com/auth/login/twitter"
+            href="http://localhost:3001/auth/login/twitter"
           >
             <Image
               src="/x-logo.svg"
