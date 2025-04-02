@@ -11,9 +11,14 @@ async function bootstrap() {
   console.log('API_KEY configured:', configService.get('API_KEY') ? 'Yes' : 'No');
   console.log('API_KEY_SECRET configured:', configService.get('API_KEY_SECRET') ? 'Yes' : 'No');
   
-  // Enable CORS - allow both local and production domains
+  // Get frontend URL based on environment
+  const frontendUrl = process.env.NODE_ENV === 'production' 
+    ? configService.get('FRONTEND_URL')
+    : configService.get('FRONTEND_DEV_URL');
+  
+  // Enable CORS using environment variables
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://kasoro.vercel.app'],
+    origin: frontendUrl,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -28,8 +33,8 @@ async function bootstrap() {
       rolling: true, // Update expiration with each request
       proxy: true, // Trust the reverse proxy
       cookie: { 
-        secure: false, // Set to false for local development
-        sameSite: 'lax', // Use lax for local development
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         httpOnly: true,
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
         path: '/',
@@ -45,10 +50,11 @@ async function bootstrap() {
     cookieSecure: process.env.NODE_ENV === 'production',
     cookieSameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     environment: process.env.NODE_ENV || 'development',
+    frontendUrl,
   });
   
-  await app.listen(process.env.PORT ?? 3001, '0.0.0.0');
+  const port = configService.get('PORT') || 3001;
+  await app.listen(port);
   console.log(`Application is running on: ${await app.getUrl()}`);
-  console.log(`Also available at: http://localhost:${process.env.PORT ?? 3001}`);
 }
 bootstrap();

@@ -13,13 +13,11 @@ export class AuthService {
   // Store a token secret
   storeTokenSecret(token: string, secret: string) {
     AuthService.tokenSecrets.set(token, secret);
-    console.log(`[TOKEN_STORE] Stored secret for token: ${token.substring(0, 5)}...`);
   }
   
   // Retrieve a token secret
   getTokenSecret(token: string): string | undefined {
     const secret = AuthService.tokenSecrets.get(token);
-    console.log(`[TOKEN_STORE] Retrieved secret for token: ${token.substring(0, 5)}..., exists: ${!!secret}`);
     return secret;
   }
   
@@ -58,10 +56,7 @@ export class AuthService {
     const callback = isProduction
       ? 'http://kasoro.onrender.com/auth/callback'
       : 'http://localhost:3001/auth/callback';
-    
-    console.log('[GET_REQUEST_TOKEN] Using callback URL:', callback);
-    console.log('[GET_REQUEST_TOKEN] Environment:', process.env.NODE_ENV || 'development');
-    
+  
     // OAuth 1.0a parameters must be included in both the signature and the request
     const requestData = {
       url: 'https://api.twitter.com/oauth/request_token',
@@ -73,17 +68,12 @@ export class AuthService {
     console.log('[GET_REQUEST_TOKEN] Generating OAuth authorization');
     const authorization = oauth.authorize(requestData);
     const headers = oauth.toHeader(authorization);
-    console.log('[GET_REQUEST_TOKEN] Request headers:', headers);
-    console.log('[GET_REQUEST_TOKEN] Authorization parameters:', authorization);
 
     try {
       // Format the request body properly
       const requestParams = new URLSearchParams();
       requestParams.append('oauth_callback', callback);
-      
-      console.log('[GET_REQUEST_TOKEN] Making request to Twitter API');
-      console.log('[GET_REQUEST_TOKEN] Request body:', requestParams.toString());
-      
+
       const response = await fetch(requestData.url, {
         method: requestData.method,
         headers: {
@@ -93,9 +83,7 @@ export class AuthService {
         body: requestParams.toString(),
       });
 
-      console.log('[GET_REQUEST_TOKEN] Response status:', response.status);
-      console.log('[GET_REQUEST_TOKEN] Response headers:', JSON.stringify(response.headers, null, 2));
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error('[GET_REQUEST_TOKEN] Twitter API Error:', errorText);
@@ -103,18 +91,10 @@ export class AuthService {
       }
 
       const data = await response.text();
-      console.log('[GET_REQUEST_TOKEN] Raw response data:', data);
       
       const parsedData = new URLSearchParams(data);
       const oauth_token = parsedData.get('oauth_token');
       const oauth_token_secret = parsedData.get('oauth_token_secret');
-      
-      console.log('[GET_REQUEST_TOKEN] Parsed response:', {
-        has_oauth_token: oauth_token ? 'YES' : 'NO',
-        has_oauth_token_secret: oauth_token_secret ? 'YES' : 'NO',
-        oauth_token_length: oauth_token ? oauth_token.length : 0,
-        oauth_token_secret_length: oauth_token_secret ? oauth_token_secret.length : 0,
-      });
 
       // Store the secret in our in-memory cache
       if (oauth_token && oauth_token_secret) {
