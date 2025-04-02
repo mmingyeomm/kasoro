@@ -56,8 +56,13 @@ export class AuthController {
         console.log('[AUTH] No session.save method available');
       }
       
+      // Store the token secret in both session and as a state parameter in the callback URL
+      const stateParam = Buffer.from(JSON.stringify({
+        secret: oauth_token_secret
+      })).toString('base64');
+      
       // Redirect to Twitter for authentication
-      const redirectUrl = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauth_token}`;
+      const redirectUrl = `https://api.twitter.com/oauth/authenticate?oauth_token=${oauth_token}&state=${stateParam}`;
       console.log('[AUTH] Redirecting to:', redirectUrl);
       
       return res.redirect(redirectUrl);
@@ -71,27 +76,42 @@ export class AuthController {
   async twitterCallback(
     @Query('oauth_token') oauth_token: string,
     @Query('oauth_verifier') oauth_verifier: string,
+    @Query('state') state: string,
     @Session() session: Record<string, any>,
     @Res() res: Response,
   ) {
     try {
       console.log('=============================================');
-      console.log('[CALLBACK] Received from Twitter with params:', { oauth_token, oauth_verifier });
+      console.log('[CALLBACK] Received from Twitter with params:', { oauth_token, oauth_verifier, state });
       console.log('[CALLBACK] Session ID:', session.id);
       console.log('[CALLBACK] Session cookie settings:', session.cookie);
       console.log('[CALLBACK] Full session object:', JSON.stringify(session, null, 2));
       console.log('[CALLBACK] Req headers:', JSON.stringify(res.req.headers, null, 2));
       
-      // Get the token secret from the session
-      const oauth_token_secret = session.oauth_token_secret;
+      // Try to get the token secret from both the session and state parameter
+      let oauth_token_secret = session.oauth_token_secret;
       
-      console.log('[CALLBACK] Retrieved from session:', { 
+      // If not in session, try to get it from the state parameter
+      if (!oauth_token_secret && state) {
+        try {
+          console.log('[CALLBACK] Attempting to decode state parameter');
+          const stateData = JSON.parse(Buffer.from(state, 'base64').toString());
+          oauth_token_secret = stateData.secret;
+          console.log('[CALLBACK] Successfully extracted token secret from state parameter');
+        } catch (e) {
+          console.error('[CALLBACK] Failed to decode state parameter:', e);
+        }
+      }
+      
+      console.log('[CALLBACK] Retrieved oauth_token_secret:', { 
+        from_session: session.oauth_token_secret ? 'YES' : 'NO',
+        from_state: state ? 'ATTEMPTED' : 'NO',
         has_oauth_token_secret: oauth_token_secret ? 'YES' : 'NO',
         oauth_token_secret_length: oauth_token_secret ? oauth_token_secret.length : 0
       });
       
       if (!oauth_token_secret) {
-        const err = new Error('Missing oauth_token_secret in session');
+        const err = new Error('Missing oauth_token_secret in both session and state parameter');
         console.error('[CALLBACK] ERROR:', err);
         throw err;
       }

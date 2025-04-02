@@ -31,7 +31,7 @@ async function bootstrap() {
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
       },
-      name: 'x_auth_session', // Custom name for the session cookie
+      name: 'connect.sid', // Match the existing cookie name
     }),
   );
   
