@@ -14,17 +14,17 @@ export default function KasoroApp() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-pink-50 to-fuchsia-100">
       {/* Header */}
-      <header className={`w-full flex justify-between items-center p-6 transition-all duration-500 ${isLoaded ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}>
-        <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-white rounded-xl shadow-pink flex items-center justify-center p-2">
-            <Image src="/kasoro_logo.png" alt="Kasoro Logo" width={32} height={32} />
-          </div>                        
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-fuchsia-600 bg-clip-text text-transparent">
-            <Link href="/" className="text-fuchsia-700 hover:text-fuchsia-900 transition-colors">
-              KASORO
-            </Link>
-          </h1>
-        </div>
+      <header className="w-full py-6 px-6 flex justify-between items-center relative z-10">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-white rounded-xl shadow-pink flex items-center justify-center p-2">
+              <Image src="/kasoro_logo.png" alt="Kasoro Logo" width={32} height={32} />
+            </div>
+            <h2 className="text-xl font-bold text-pink-primary">
+              <Link href="/">
+                KASORO
+              </Link>
+            </h2>
+          </div>
         
         <nav className="flex items-center space-x-6">
           <Link href="/Kasoro/profile" className="px-5 py-2 bg-gradient-to-r from-pink-primary to-purple-primary text-purple-dark rounded-full font-medium shadow-md hover:shadow-pink transition-all hover:scale-105">

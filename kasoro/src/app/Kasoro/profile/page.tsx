@@ -69,35 +69,17 @@ export default function ProfilePage() {
       </div>
       
       {/* Header */}
-      <header className={`w-full flex justify-between items-center p-6 transition-all duration-500 ${isLoaded ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}>
-        <div className="flex items-center space-x-3">
-          <div className="relative w-12 h-12 bg-white rounded-xl shadow-pink flex items-center justify-center p-2 group">
-            <Image 
-              src="/kasoro_logo.png" 
-              alt="Kasoro Logo" 
-              width={32} 
-              height={32}
-              className="group-hover:animate-pulse-soft" 
-            />
+      <header className="w-full py-6 px-6 flex justify-between items-center relative z-10">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-white rounded-xl shadow-pink flex items-center justify-center p-2">
+              <Image src="/kasoro_logo.png" alt="Kasoro Logo" width={32} height={32} />
+            </div>
+            <h2 className="text-xl font-bold text-pink-primary">
+              <Link href="/">
+                KASORO
+              </Link>
+            </h2>
           </div>
-          <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-primary to-purple-primary">
-            <Link href="/Kasoro">
-              KASORO
-            </Link>
-          </h1>
-        </div>
-        
-        <nav className="flex items-center space-x-4">
-          <Link 
-            href="/Kasoro" 
-            className="text-purple-dark font-medium hover:text-pink-primary transition-colors"
-          >
-            Dashboard
-          </Link>
-          <button className="px-4 py-2 bg-gradient-to-r from-pink-primary to-purple-primary text-white rounded-full shadow-soft hover:shadow-pink transition-all hover:scale-105 text-sm">
-            Connect Wallet
-          </button>
-        </nav>
       </header>
 
       {/* Main Content */}
@@ -312,7 +294,7 @@ export default function ProfilePage() {
               Cancel
             </button>
             <button 
-              className="px-8 py-3 bg-gradient-to-r from-pink-primary to-purple-primary text-white rounded-full font-medium shadow-pink hover:shadow-lg transition-all hover:scale-105"
+              className="px-8 py-3 bg-gradient-to-r from-pink-primary to-purple-primary rounded-full font-medium shadow-pink hover:shadow-lg transition-all hover:scale-105"
               onClick={saveProfile}
             >
               Save Changes
