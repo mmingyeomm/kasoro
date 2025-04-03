@@ -83,7 +83,7 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row justify-center gap-6 mb-16">
             <Link 
-              href="/app"
+              href="/Kasoro"
               className="px-8 py-4 bg-gradient-to-r from-pink-500 to-fuchsia-600 text-white rounded-full shadow-lg text-xl font-medium transition-all transform hover:scale-105 hover:shadow-xl group flex items-center justify-center gap-3"
             >
               <span>Launch App</span>

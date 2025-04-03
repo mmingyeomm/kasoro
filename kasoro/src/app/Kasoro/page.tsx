@@ -1,0 +1,88 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+
+export default function KasoroApp() {
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  return (
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-pink-50 to-fuchsia-100">
+      {/* Header */}
+      <header className={`w-full flex justify-between items-center p-6 transition-all duration-500 ${isLoaded ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}>
+        <div className="flex items-center space-x-3">
+          <div className="relative w-12 h-12 rounded-full bg-white shadow-md p-1.5 flex items-center justify-center">
+            <Image src="/kasoro_logo.png" alt="Kasoro Logo" width={30} height={30} />
+          </div>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-fuchsia-600 bg-clip-text text-transparent">
+            Kasoro
+          </h1>
+        </div>
+        
+        <nav className="flex items-center space-x-6">
+          <Link href="/" className="text-fuchsia-700 hover:text-fuchsia-900 transition-colors">
+            Home
+          </Link>
+          <button className="px-4 py-2 bg-gradient-to-r from-pink-500 to-fuchsia-600 text-white rounded-full text-sm">
+            Connect Wallet
+          </button>
+        </nav>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-grow p-6 md:p-10">
+        <div className={`max-w-6xl mx-auto transition-all duration-700 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <h2 className="text-3xl font-bold mb-6">Welcome to Kasoro App</h2>
+          
+          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <h3 className="text-xl font-semibold mb-4">Get Started</h3>
+            <p className="mb-4 text-gray-600">
+              Connect your wallet to start depositing or challenging in communities.
+            </p>
+            <button className="px-6 py-3 bg-gradient-to-r from-pink-500 to-fuchsia-600 text-white rounded-full">
+              Connect Wallet
+            </button>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <h3 className="text-xl font-semibold mb-4">Active Communities</h3>
+              <p className="text-gray-500 mb-8">No communities available yet. Connect wallet to see communities.</p>
+              <button className="px-4 py-2 border border-pink-500 text-fuchsia-600 rounded-full hover:bg-pink-50 transition-colors">
+                Browse Communities
+              </button>
+            </div>
+            
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <h3 className="text-xl font-semibold mb-4">My Activity</h3>
+              <p className="text-gray-500 mb-8">Connect your wallet to see your activity.</p>
+              <button className="px-4 py-2 border border-pink-500 text-fuchsia-600 rounded-full hover:bg-pink-50 transition-colors">
+                View Activity
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+      
+      {/* Footer */}
+      <footer className="w-full bg-gradient-to-r from-pink-500 to-fuchsia-600 py-6 mt-auto">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+          <div className="flex items-center space-x-3 mb-4 md:mb-0">
+            <span className="text-white text-sm">© 2025 Kasoro</span>
+          </div>
+          
+          <div className="flex space-x-6 text-sm">
+            <a href="#" className="text-white hover:text-indigo-900 transition-colors">Terms</a>
+            <a href="#" className="text-white hover:text-indigo-900 transition-colors">Privacy</a>
+            <a href="#" className="text-white hover:text-indigo-900 transition-colors">Support</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
