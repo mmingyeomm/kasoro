@@ -430,6 +430,7 @@ pub struct InitializeDao<'info> {
 pub struct Deposit<'info> {
     #[account(mut)]
     pub depositor: Signer<'info>,
+    
     #[account(mut)]
     pub dao: Account<'info, DaoState>,
     pub system_program: Program<'info, System>,
