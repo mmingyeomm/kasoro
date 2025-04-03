@@ -19,6 +19,7 @@ export class GameRoomRepository {
   }
 
   async create(gameRoom: Partial<GameRoom>): Promise<GameRoom> {
+    
     const newGameRoom = this.gameRoomRepository.create(gameRoom);
     return this.gameRoomRepository.save(newGameRoom);
   }
@@ -30,4 +31,7 @@ export class GameRoomRepository {
       order: { messages: { createdAt: 'ASC' } },
     });
   }
+
+
+
 }

@@ -20,9 +20,6 @@ export class GameRoom {
   @JoinColumn({ name: 'creatorId' })
   creator: User;
 
-  @Column()
-  creatorId: string;
-
   @OneToMany(() => Message, message => message.gameRoom)
   messages: Message[];
 }

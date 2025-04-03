@@ -25,6 +25,9 @@ export class GameRoomController {
     @Body() createGameRoomDto: CreateGameRoomDto,
     @CurrentUser() user: any,
   ): Promise<GameRoom> {
+
+    console.log( "2-------------------------- "+ user)
+
     return this.gameRoomService.createGameRoom(createGameRoomDto, user.id);
   }
 

@@ -19,10 +19,14 @@ export class GameRoomService {
     return gameRoom;
   }
 
-  async createGameRoom(createGameRoomDto: CreateGameRoomDto, userId: string): Promise<GameRoom> {
+  async createGameRoom(createGameRoomDto: CreateGameRoomDto, xid: string): Promise<GameRoom> {
+
+    console.log( "2-------------------------- "+ xid)
+
+
     return this.gameRoomRepository.create({
       ...createGameRoomDto,
-      creatorId: userId,
+      
     });
   }
 

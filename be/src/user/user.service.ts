@@ -25,11 +25,11 @@ export class UserService {
     return this.userRepository.findOne({ where: { xId } });
   }
 
-  async findById(id: number): Promise<User | null> {
+  async findById(id: string): Promise<User | null> {  // number에서 string으로 변경
     return this.userRepository.findOne({ where: { id } });
   }
 
-  async update(id: number, updateData: Partial<CreateUserDto>): Promise<User> {
+  async update(id: string, updateData: Partial<CreateUserDto>): Promise<User> {  // number에서 string으로 변경
     const result = await this.userRepository.update(id, updateData);
     if (result.affected === 0) {
       throw new NotFoundException(`User with ID ${id} not found`);
