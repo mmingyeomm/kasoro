@@ -3,9 +3,13 @@ use anchor_lang::solana_program::clock::Clock;
 
 declare_id!("38cVbT7EHqPwfXR1VgXA5jJiBe3DSAFr6cdCEPx4fbAv");
 
-// 추가할거
-// 1. 투표 시 vote_count 증가
+pub const MASTER_WALLET: &str = "wPrpTY68NWWQQqJbiHaiYNPMk2QRtgWBb3tmEj5nfxY";
 
+////////////////////////////////////////////////////////////////////////////////////////
+// 추가할거
+// 1. 투표 시 vote_count 증가?
+// 2. daostate의 is_active 변경하는 함수 권한 -> signer말고 프로젝트 측 마스터 지갑으로 변경해야할듯
+////////////////////////////////////////////////////////////////////////////////////////
 
 // ┌───────────────┐          ┌────────────────────┐
 // │ (1) Initialize│          │   DaoState (PDA)   │
@@ -348,6 +352,12 @@ pub mod turtle_anchor {
 
         Ok(())
     }
+
+    pub fn toggle_dao_state(ctx: Context<ToggleDaoState>) -> Result<()> {
+        let dao = &mut ctx.accounts.dao;
+        dao.is_active = !dao.is_active;
+        Ok(())
+    }
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
@@ -488,6 +498,8 @@ pub enum ErrorCode {
     TimeoutNotReached,
     #[msg("DAO is not active")]
     DaoNotActive,
+    #[msg("Unauthorized access")]
+    UnauthorizedAccess,
 }
 
 #[derive(Accounts)]
@@ -519,5 +531,16 @@ pub struct ProcessTimeout<'info> {
     #[account(mut)]
     pub caller: Signer<'info>,
     #[account(mut)]
+    pub dao: Account<'info, DaoState>,
+}
+
+#[derive(Accounts)]
+pub struct ToggleDaoState<'info> {
+    #[account(mut)]
+    pub authority: Signer<'info>,
+    #[account(
+        mut,
+        constraint = authority.key().to_string() == MASTER_WALLET @ ErrorCode::UnauthorizedAccess
+    )]
     pub dao: Account<'info, DaoState>,
 }

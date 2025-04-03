@@ -255,6 +255,31 @@
           "type": "string"
         }
       ]
+    },
+    {
+      "name": "toggle_dao_state",
+      "discriminator": [
+        192,
+        139,
+        240,
+        146,
+        156,
+        192,
+        85,
+        18
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "dao",
+          "writable": true
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -317,6 +342,11 @@
       "code": 6008,
       "name": "DaoNotActive",
       "msg": "DAO is not active"
+    },
+    {
+      "code": 6009,
+      "name": "UnauthorizedAccess",
+      "msg": "Unauthorized access"
     }
   ],
   "types": [

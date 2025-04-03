@@ -261,6 +261,31 @@ export type TurtleAnchor = {
           "type": "string"
         }
       ]
+    },
+    {
+      "name": "toggleDaoState",
+      "discriminator": [
+        192,
+        139,
+        240,
+        146,
+        156,
+        192,
+        85,
+        18
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "dao",
+          "writable": true
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -323,6 +348,11 @@ export type TurtleAnchor = {
       "code": 6008,
       "name": "daoNotActive",
       "msg": "DAO is not active"
+    },
+    {
+      "code": 6009,
+      "name": "unauthorizedAccess",
+      "msg": "Unauthorized access"
     }
   ],
   "types": [

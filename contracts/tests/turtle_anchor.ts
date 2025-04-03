@@ -85,78 +85,78 @@ describe("turtle_anchor", () => {
   //   }
   // });
 
-  it("DAO에 SOL을 예치합니다", async () => {
-    try {
+  // it("DAO에 SOL을 예치합니다", async () => {
+  //   try {
 
-      const daoPDA = new PublicKey("AAb7vSHqmFterYG7mGXnsLb533xFs98d9bwH7DBSDdG9");
+  //     const daoPDA = new PublicKey("AAb7vSHqmFterYG7mGXnsLb533xFs98d9bwH7DBSDdG9");
 
-      const amount = new anchor.BN(0.0123 * LAMPORTS_PER_SOL); // 0.123 SOL     
-      console.log("DAO PDA:", daoPDA.toString());
-      console.log("initializer:", initializer.toString());
-      const tx = await program.methods
-        .deposit(amount)
-        .accounts({
-          depositor: initializer,
-          dao: daoPDA,
-          systemProgram: anchor.web3.SystemProgram.programId,
-        })
-        .rpc();
+  //     const amount = new anchor.BN(0.0234 * LAMPORTS_PER_SOL); // 0.123 SOL     
+  //     console.log("DAO PDA:", daoPDA.toString());
+  //     console.log("initializer:", initializer.toString());
+  //     const tx = await program.methods
+  //       .deposit(amount)
+  //       .accounts({
+  //         depositor: initializer,
+  //         dao: daoPDA,
+  //         systemProgram: anchor.web3.SystemProgram.programId,
+  //       })
+  //       .rpc();
       
-      console.log("예치할 금액:",parseFloat(amount.toString())/LAMPORTS_PER_SOL, "SOL");
-      console.log("예치 트랜잭션:", tx);
-      console.log("Solana Explorer URL:", `https://explorer.solana.com/tx/${tx}?cluster=devnet`);
+  //     console.log("예치할 금액:",parseFloat(amount.toString())/LAMPORTS_PER_SOL, "SOL");
+  //     console.log("예치 트랜잭션:", tx);
+  //     console.log("Solana Explorer URL:", `https://explorer.solana.com/tx/${tx}?cluster=devnet`);
 
-      // 트랜잭션 확인 대기
-      const latestBlockhash = await provider.connection.getLatestBlockhash();
-      await provider.connection.confirmTransaction({
-        signature: tx,
-        blockhash: latestBlockhash.blockhash,
-        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
-      });
-      console.log("✅예치 트랜잭션이 확인되었습니다!");      
+  //     // 트랜잭션 확인 대기
+  //     const latestBlockhash = await provider.connection.getLatestBlockhash();
+  //     await provider.connection.confirmTransaction({
+  //       signature: tx,
+  //       blockhash: latestBlockhash.blockhash,
+  //       lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
+  //     });
+  //     console.log("✅예치 트랜잭션이 확인되었습니다!");      
       
-      // DAO 상태 확인
-      const daoAccount = await program.account.daoState.fetch(daoPDA);
-      console.log("업데이트된 DAO 데이터:", daoAccount);
+  //     // DAO 상태 확인
+  //     const daoAccount = await program.account.daoState.fetch(daoPDA);
+  //     console.log("업데이트된 DAO 데이터:", daoAccount);
       
-      // 검증
-      // assert.equal(daoAccount.totalDeposit.toNumber(), amount.toNumber());
-      console.log("total deposit amount", daoAccount.totalDeposit.toNumber()/LAMPORTS_PER_SOL, "SOL");
-      const depositor = daoAccount.depositors[0];
-      // assert.equal(depositor.depositor.toString(), initializer.toString());
-      // assert.equal(depositor.amount.toNumber(), amount.toNumber());
-    } catch (error) {
-      console.error("예치 중 에러 발생:", error);
-      throw error;
-    }
-  });
+  //     // 검증
+  //     // assert.equal(daoAccount.totalDeposit.toNumber(), amount.toNumber());
+  //     console.log("total deposit amount", daoAccount.totalDeposit.toNumber()/LAMPORTS_PER_SOL, "SOL");
+  //     const depositor = daoAccount.depositors[0];
+  //     // assert.equal(depositor.depositor.toString(), initializer.toString());
+  //     // assert.equal(depositor.amount.toNumber(), amount.toNumber());
+  //   } catch (error) {
+  //     console.error("예치 중 에러 발생:", error);
+  //     throw error;
+  //   }
+  // });
 
   // it("컨텐츠를 제출합니다", async () => {
   //   try {
-  //     const daoPDA = new PublicKey("EtZwNta6zavZEoD768NuLAvMdHZUp1tWfQpxkjv2MphY");
+  //     // const daoPDA = new PublicKey("EtZwNta6zavZEoD768NuLAvMdHZUp1tWfQpxkjv2MphY");
 
   //     const contentText = "afadfafaf";
   //     const imageUri = "https://apricot-selective-kangaroo-871.mypinata.cloud/ipfs/bafkreifb64ur44ufdlejl57ucowyv2jqhptgd7zotv6qfoaj4r7jqkbkau";
 
-  //     // const tx = await program.methods
-  //     //   .submitContent(contentText, imageUri)
-  //     //   .accounts({
-  //     //     author: initializer,
-  //     //     dao: daoPDA,
-  //     //   })
-  //     //   .rpc();
+  //     const tx = await program.methods
+  //       .submitContent(contentText, imageUri)
+  //       .accounts({
+  //         author: initializer,
+  //         dao: daoPDA,
+  //       })
+  //       .rpc();
       
-  //     // console.log("컨텐츠 제출 트랜잭션:", tx);
-  //     // console.log("Solana Explorer URL:", `https://explorer.solana.com/tx/${tx}?cluster=devnet`);
+  //     console.log("컨텐츠 제출 트랜잭션:", tx);
+  //     console.log("Solana Explorer URL:", `https://explorer.solana.com/tx/${tx}?cluster=devnet`);
 
-  //     // // 트랜잭션 확인 대기
-  //     // const latestBlockhash = await provider.connection.getLatestBlockhash();
-  //     // await provider.connection.confirmTransaction({
-  //     //   signature: tx,
-  //     //   blockhash: latestBlockhash.blockhash,
-  //     //   lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
-  //     // });
-  //     // console.log("컨텐츠 제출 트랜잭션이 확인되었습니다!");
+  //     // 트랜잭션 확인 대기
+  //     const latestBlockhash = await provider.connection.getLatestBlockhash();
+  //     await provider.connection.confirmTransaction({
+  //       signature: tx,
+  //       blockhash: latestBlockhash.blockhash,
+  //       lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
+  //     });
+  //     console.log("컨텐츠 제출 트랜잭션이 확인되었습니다!");
 
   //     // DAO 상태 확인
   //     const daoAccount = await program.account.daoState.fetch(daoPDA);
@@ -268,4 +268,50 @@ describe("turtle_anchor", () => {
   //     throw error;
   //   }
   // });
+
+  it("DAO의 활성 상태를 변경합니다", async () => {
+    try {
+      console.log("================================================");
+      console.log("DAO 상태 변경 테스트 시작");
+      
+      // 상태 변경 전 DAO 상태 확인
+      const beforeState = await program.account.daoState.fetch(daoPDA);
+      console.log("변경 전 DAO 활성 상태:", beforeState.isActive);
+  
+      // 상태 변경 트랜잭션 실행
+      const tx = await program.methods
+        .toggleDaoState()
+        .accounts({
+          authority: initializer,
+          dao: daoPDA,
+        })
+        .rpc();
+      
+      console.log("상태 변경 트랜잭션:", tx);
+      console.log("Solana Explorer URL:", `https://explorer.solana.com/tx/${tx}?cluster=devnet`);
+      
+      // 트랜잭션 확인 대기
+      const latestBlockhash = await provider.connection.getLatestBlockhash();
+      await provider.connection.confirmTransaction({
+        signature: tx,
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
+      });
+      console.log("✅ 상태 변경 트랜잭션이 확인되었습니다!");
+  
+      // 변경 후 DAO 상태 확인
+      const afterState = await program.account.daoState.fetch(daoPDA);
+      console.log("변경 후 DAO 활성 상태:", afterState.isActive);
+  
+      // 검증
+      assert.equal(afterState.isActive, !beforeState.isActive, "DAO 상태가 제대로 토글되지 않았습니다");
+      
+      console.log("================================================");
+    } catch (error) {
+      console.error("DAO 상태 변경 중 에러 발생:", error);
+      throw error;
+    }
+  });
+
+
 });
