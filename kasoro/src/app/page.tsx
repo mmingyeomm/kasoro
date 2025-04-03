@@ -109,7 +109,11 @@ export default function Home() {
             <div className="w-12 h-12 bg-white rounded-xl shadow-pink flex items-center justify-center p-2">
               <Image src="/kasoro_logo.png" alt="Kasoro Logo" width={32} height={32} />
             </div>
-            <h2 className="text-xl font-bold text-pink-primary">KASORO</h2>
+            <h2 className="text-xl font-bold text-pink-primary">
+              <Link href="/">
+                KASORO
+              </Link>
+            </h2>
           </div>
           <nav className="hidden md:flex items-center gap-6">
             <a href="#features" className="text-purple-dark font-medium hover:text-pink-primary transition-colors">Features</a>
