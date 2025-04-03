@@ -1,26 +1,125 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@300;400;500;600;700&display=swap');
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+@theme {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-pixel: var(--font-silkscreen);
+  --font-poppins: 'Poppins', sans-serif;
+  --font-quicksand: 'Quicksand', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: #FFF6F9;
+  --foreground: #4A3A52;
+  --pink-light: #FFCCE0;
+  --pink-medium: #FF9EC6;
+  --pink-primary: #FF5F9E;
+  --pink-dark: #E84A8A;
+  --purple-light: #E9D2FF;
+  --purple-medium: #C89BFF;
+  --purple-primary: #9965DE;
+  --purple-dark: #7E43C9;
+  --rounded-xl: 1.5rem;
+  --rounded-2xl: 2rem;
+  --rounded-full: 9999px;
+}
+
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Quicksand', 'Poppins', Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Animation Styles */
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-fbpung), Arial, Helvetica, sans-serif;
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes pulse-soft {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 3s ease-in-out infinite;
+}
+
+/* Shadow Styles */
+.shadow-pink {
+  box-shadow: 0 10px 25px -5px rgba(255, 95, 158, 0.5);
+}
+
+.shadow-purple {
+  box-shadow: 0 10px 25px -5px rgba(153, 101, 222, 0.5);
+}
+
+/* Custom utility classes */
+.pink-gradient {
+  background: linear-gradient(135deg, var(--pink-primary) 0%, var(--purple-primary) 100%);
+}
+
+.pink-text-gradient {
+  background: linear-gradient(135deg, var(--pink-primary) 0%, var(--purple-primary) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.rounded-bubble {
+  border-radius: 24px;
+}
+
+.shadow-soft {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+}
+
+/* Bubble button */
+.bubble-button {
+  background: linear-gradient(135deg, var(--pink-primary) 0%, var(--purple-primary) 100%);
+  color: white;
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px -5px rgba(255, 95, 158, 0.4);
+}
+
+.bubble-button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 25px -5px rgba(255, 95, 158, 0.5);
+}
+
+.bubble-card {
+  background: white;
+  border-radius: 24px;
+  border: 2px solid var(--pink-light);
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.bubble-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px -10px rgba(255, 95, 158, 0.2);
 }
