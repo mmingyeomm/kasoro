@@ -318,6 +318,11 @@ export type TurtleAnchor = {
       "code": 6007,
       "name": "timeoutNotReached",
       "msg": "Timeout not reached"
+    },
+    {
+      "code": 6008,
+      "name": "daoNotActive",
+      "msg": "DAO is not active"
     }
   ],
   "types": [
@@ -419,6 +424,10 @@ export type TurtleAnchor = {
           {
             "name": "nextProposalId",
             "type": "u64"
+          },
+          {
+            "name": "isActive",
+            "type": "bool"
           }
         ]
       }

@@ -14,7 +14,7 @@ describe("turtle_anchor", () => {
   const initializer = provider.wallet.publicKey;
 
   // 테스트용 변수 설정
-  const daoName = "test4";
+  const daoName = "test 4월 3일";
   const timeLimit = 60 * 60 * 24 * 7; // 7일(초 단위)
   const baseFee = 5; // 5%
   const aiModeration = true;
@@ -22,14 +22,14 @@ describe("turtle_anchor", () => {
   
   /////////////////////////////////////////////////////////////////////////
   let daoPDA: PublicKey;
-  // [daoPDA] = PublicKey.findProgramAddressSync(
-  //     [
-  //       Buffer.from("dao"), 
-  //       initializer.toBuffer(), 
-  //       Buffer.from(daoName)
-  //     ],
-  //     program.programId
-  // );
+  [daoPDA] = PublicKey.findProgramAddressSync(
+      [
+        Buffer.from("dao"), 
+        initializer.toBuffer(), 
+        Buffer.from(daoName)
+      ],
+      program.programId
+  );
   /////////////////////////////////////////////////////////////////////////
 
   // it("DAO를 초기화합니다", async () => {
@@ -85,51 +85,51 @@ describe("turtle_anchor", () => {
   //   }
   // });
 
-  // it("DAO에 SOL을 예치합니다", async () => {
-  //   try {
+  it("DAO에 SOL을 예치합니다", async () => {
+    try {
 
-  //     const daoPDA = new PublicKey("EtZwNta6zavZEoD768NuLAvMdHZUp1tWfQpxkjv2MphY");
+      const daoPDA = new PublicKey("AAb7vSHqmFterYG7mGXnsLb533xFs98d9bwH7DBSDdG9");
 
-  //     const amount = new anchor.BN(0.123 * LAMPORTS_PER_SOL); // 0.123 SOL     
-  //     console.log("DAO PDA:", daoPDA.toString());
-  //     console.log("initializer:", initializer.toString());
-  //     const tx = await program.methods
-  //       .deposit(amount)
-  //       .accounts({
-  //         depositor: initializer,
-  //         dao: daoPDA,
-  //         systemProgram: anchor.web3.SystemProgram.programId,
-  //       })
-  //       .rpc();
+      const amount = new anchor.BN(0.0123 * LAMPORTS_PER_SOL); // 0.123 SOL     
+      console.log("DAO PDA:", daoPDA.toString());
+      console.log("initializer:", initializer.toString());
+      const tx = await program.methods
+        .deposit(amount)
+        .accounts({
+          depositor: initializer,
+          dao: daoPDA,
+          systemProgram: anchor.web3.SystemProgram.programId,
+        })
+        .rpc();
       
-  //     console.log("예치할 금액:",parseFloat(amount.toString())/LAMPORTS_PER_SOL, "SOL");
-  //     console.log("예치 트랜잭션:", tx);
-  //     console.log("Solana Explorer URL:", `https://explorer.solana.com/tx/${tx}?cluster=devnet`);
+      console.log("예치할 금액:",parseFloat(amount.toString())/LAMPORTS_PER_SOL, "SOL");
+      console.log("예치 트랜잭션:", tx);
+      console.log("Solana Explorer URL:", `https://explorer.solana.com/tx/${tx}?cluster=devnet`);
 
-  //     // 트랜잭션 확인 대기
-  //     const latestBlockhash = await provider.connection.getLatestBlockhash();
-  //     await provider.connection.confirmTransaction({
-  //       signature: tx,
-  //       blockhash: latestBlockhash.blockhash,
-  //       lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
-  //     });
-  //     console.log("✅예치 트랜잭션이 확인되었습니다!");      
+      // 트랜잭션 확인 대기
+      const latestBlockhash = await provider.connection.getLatestBlockhash();
+      await provider.connection.confirmTransaction({
+        signature: tx,
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
+      });
+      console.log("✅예치 트랜잭션이 확인되었습니다!");      
       
-  //     // DAO 상태 확인
-  //     const daoAccount = await program.account.daoState.fetch(daoPDA);
-  //     console.log("업데이트된 DAO 데이터:", daoAccount);
+      // DAO 상태 확인
+      const daoAccount = await program.account.daoState.fetch(daoPDA);
+      console.log("업데이트된 DAO 데이터:", daoAccount);
       
-  //     // 검증
-  //     // assert.equal(daoAccount.totalDeposit.toNumber(), amount.toNumber());
-  //     console.log("total deposit amount", daoAccount.totalDeposit.toNumber()/LAMPORTS_PER_SOL, "SOL");
-  //     const depositor = daoAccount.depositors[0];
-  //     // assert.equal(depositor.depositor.toString(), initializer.toString());
-  //     // assert.equal(depositor.amount.toNumber(), amount.toNumber());
-  //   } catch (error) {
-  //     console.error("예치 중 에러 발생:", error);
-  //     throw error;
-  //   }
-  // });
+      // 검증
+      // assert.equal(daoAccount.totalDeposit.toNumber(), amount.toNumber());
+      console.log("total deposit amount", daoAccount.totalDeposit.toNumber()/LAMPORTS_PER_SOL, "SOL");
+      const depositor = daoAccount.depositors[0];
+      // assert.equal(depositor.depositor.toString(), initializer.toString());
+      // assert.equal(depositor.amount.toNumber(), amount.toNumber());
+    } catch (error) {
+      console.error("예치 중 에러 발생:", error);
+      throw error;
+    }
+  });
 
   // it("컨텐츠를 제출합니다", async () => {
   //   try {
@@ -177,54 +177,54 @@ describe("turtle_anchor", () => {
   //   }
   // });
 
-  it("투표 제안을 생성합니다", async () => {
-    try {
-      const title = "기본 수수료 변경";
-      const description = "기본 수수료를 5%에서 3%로 변경 제안";
-      const voteType = { changeBaseFee: {} }; // VoteType enum
-      const options = ["3", "5", "7"];
-      const votingPeriod = new anchor.BN(60 * 60 * 24 * 7); // 7일(초 단위)
+  // it("투표 제안을 생성합니다", async () => {
+  //   try {
+  //     const title = "기본 수수료 변경";
+  //     const description = "기본 수수료를 5%에서 3%로 변경 제안";
+  //     const voteType = { changeBaseFee: {} }; // VoteType enum
+  //     const options = ["3", "5", "7"];
+  //     const votingPeriod = new anchor.BN(60 * 60 * 24 * 7); // 7일(초 단위)
 
-      const tx = await program.methods
-        .createVote(title, description, voteType, options, votingPeriod)
-        .accounts({
-          proposer: initializer,
-          dao: daoPDA,
-        })
-        .rpc();
+  //     const tx = await program.methods
+  //       .createVote(title, description, voteType, options, votingPeriod)
+  //       .accounts({
+  //         proposer: initializer,
+  //         dao: daoPDA,
+  //       })
+  //       .rpc();
       
-      console.log("투표 제안 트랜잭션:", tx);
-      console.log("Solana Explorer URL:", `https://explorer.solana.com/tx/${tx}?cluster=devnet`);
+  //     console.log("투표 제안 트랜잭션:", tx);
+  //     console.log("Solana Explorer URL:", `https://explorer.solana.com/tx/${tx}?cluster=devnet`);
 
-      // 트랜잭션 확인 대기
-      const latestBlockhash = await provider.connection.getLatestBlockhash();
-      await provider.connection.confirmTransaction({
-        signature: tx,
-        blockhash: latestBlockhash.blockhash,
-        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
-      });
-      console.log("투표 제안 트랜잭션이 확인되었습니다!");
+  //     // 트랜잭션 확인 대기
+  //     const latestBlockhash = await provider.connection.getLatestBlockhash();
+  //     await provider.connection.confirmTransaction({
+  //       signature: tx,
+  //       blockhash: latestBlockhash.blockhash,
+  //       lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
+  //     });
+  //     console.log("투표 제안 트랜잭션이 확인되었습니다!");
 
-      // DAO 상태 확인
-      const daoAccount = await program.account.daoState.fetch(daoPDA);
-      console.log("DAO 상태:", daoAccount);
-      console.log("투표 제안 생성 후 DAO 데이터:", daoAccount.voteProposals);
+  //     // DAO 상태 확인
+  //     const daoAccount = await program.account.daoState.fetch(daoPDA);
+  //     console.log("DAO 상태:", daoAccount);
+  //     console.log("투표 제안 생성 후 DAO 데이터:", daoAccount.voteProposals);
       
-      // 투표 제안 정보 확인
-      assert.equal(daoAccount.voteProposals.length, 1);
+  //     // 투표 제안 정보 확인
+  //     assert.equal(daoAccount.voteProposals.length, 1);
       
-      const proposal = daoAccount.voteProposals[0];
-      assert.equal(proposal.proposer.toString(), initializer.toString());
-      assert.equal(proposal.title, title);
-      assert.equal(proposal.description, description);
-      assert.deepEqual(proposal.options, options);
-      assert.equal(proposal.votes.length, 0);
-      assert.ok(proposal.status.active !== undefined);
-    } catch (error) {
-      console.error("투표 제안 생성 중 에러 발생:", error);
-      throw error;
-    }
-  });
+  //     const proposal = daoAccount.voteProposals[0];
+  //     assert.equal(proposal.proposer.toString(), initializer.toString());
+  //     assert.equal(proposal.title, title);
+  //     assert.equal(proposal.description, description);
+  //     assert.deepEqual(proposal.options, options);
+  //     assert.equal(proposal.votes.length, 0);
+  //     assert.ok(proposal.status.active !== undefined);
+  //   } catch (error) {
+  //     console.error("투표 제안 생성 중 에러 발생:", error);
+  //     throw error;
+  //   }
+  // });
 
   // it("투표를 진행합니다", async () => {
   //   try {

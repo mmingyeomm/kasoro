@@ -72,12 +72,18 @@ pub mod turtle_anchor {
         dao.timeout_timestamp = Clock::get()?.unix_timestamp as u64 + time_limit;
         dao.total_deposit = 0;
         dao.next_proposal_id = 0;
+        dao.is_active = true;
         Ok(())
     }
 
     pub fn deposit(ctx: Context<Deposit>, amount: u64) -> Result<()> {
         let depositor = &ctx.accounts.depositor;
         let current_time = Clock::get()?.unix_timestamp as u64;
+        
+        // DAO가 활성화되어 있는지 확인
+        require!(ctx.accounts.dao.is_active, ErrorCode::DaoNotActive);
+
+        let time_limit = ctx.accounts.dao.time_limit;
 
         // Transfer SOL
         let cpi_context = CpiContext::new(
@@ -89,9 +95,9 @@ pub mod turtle_anchor {
         );
         anchor_lang::system_program::transfer(cpi_context, amount)?;
 
-        // Update depositor info
         let dao = &mut ctx.accounts.dao;
-        let time_limit = dao.time_limit;
+        
+        // Update depositor info
         let depositor_info = DepositorInfo {
             depositor: depositor.key(),
             amount,
@@ -112,6 +118,9 @@ pub mod turtle_anchor {
         let dao = &mut ctx.accounts.dao;
         let author = &ctx.accounts.author;
         let current_time = Clock::get()?.unix_timestamp as u64;
+
+        // DAO가 활성화되어 있는지 확인
+        require!(dao.is_active, ErrorCode::DaoNotActive);
 
         // Verify author is a depositor
         if !dao.depositors.iter().any(|d| d.depositor == author.key()) {
@@ -145,6 +154,9 @@ pub mod turtle_anchor {
         let dao = &mut ctx.accounts.dao;
         let proposer = &ctx.accounts.proposer;
         let current_time = Clock::get()?.unix_timestamp as u64;
+
+        // DAO가 활성화되어 있는지 확인
+        require!(dao.is_active, ErrorCode::DaoNotActive);
 
         // Verify proposer is a depositor
         if !dao.depositors.iter().any(|d| d.depositor == proposer.key()) {
@@ -183,6 +195,9 @@ pub mod turtle_anchor {
         let dao = &mut ctx.accounts.dao;
         let voter = &ctx.accounts.voter;
         let current_time = Clock::get()?.unix_timestamp as u64;
+
+        // DAO가 활성화되어 있는지 확인
+        require!(dao.is_active, ErrorCode::DaoNotActive);
 
         // Find voter's deposit amount
         let voting_power = dao.depositors
@@ -364,6 +379,7 @@ pub struct DaoState {
     pub contents: Vec<Content>,
     pub vote_proposals: Vec<VoteProposal>,
     pub next_proposal_id: u64,
+    pub is_active: bool,
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]
@@ -470,6 +486,8 @@ pub enum ErrorCode {
     AlreadyVoted,
     #[msg("Timeout not reached")]
     TimeoutNotReached,
+    #[msg("DAO is not active")]
+    DaoNotActive,
 }
 
 #[derive(Accounts)]

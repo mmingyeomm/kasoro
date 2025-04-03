@@ -312,6 +312,11 @@
       "code": 6007,
       "name": "TimeoutNotReached",
       "msg": "Timeout not reached"
+    },
+    {
+      "code": 6008,
+      "name": "DaoNotActive",
+      "msg": "DAO is not active"
     }
   ],
   "types": [
@@ -413,6 +418,10 @@
           {
             "name": "next_proposal_id",
             "type": "u64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
           }
         ]
       }
