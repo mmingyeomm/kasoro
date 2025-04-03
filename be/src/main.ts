@@ -14,14 +14,17 @@ async function bootstrap() {
   // Get frontend URL based on environment
   const frontendUrl = process.env.NODE_ENV === 'production' 
     ? configService.get('FRONTEND_URL')
-    : configService.get('FRONTEND_DEV_URL');
+    : configService.get('FRONTEND_DEV_URL') || 'http://localhost:3000';
   
-  // Enable CORS using environment variables
+  console.log('Using frontend URL for CORS:', frontendUrl);
+  
+  // Enable CORS with credentials and proper headers
   app.enableCors({
-    origin: frontendUrl,
+    origin: ['http://localhost:3000', frontendUrl],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    exposedHeaders: ['Set-Cookie'],
   });
   
   // Setup session with proper CORS support

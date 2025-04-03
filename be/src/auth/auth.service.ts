@@ -1,11 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as OAuth from 'oauth-1.0a';
 import * as crypto from 'crypto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private userService: UserService
+  ) {}
 
   // In-memory token storage as a fallback
   private static tokenSecrets: Map<string, string> = new Map();
@@ -180,6 +184,23 @@ export class AuthService {
         user_id: userData.user_id,
         screen_name: userData.screen_name,
       });
+      
+      // Store user data in database
+      try {
+        if (userData.user_id && userData.screen_name) {
+          await this.userService.create({
+            xId: userData.user_id,
+            username: userData.screen_name,
+            displayName: userData.screen_name, // Twitter API v1 doesn't return display name, so using screen_name
+          });
+          console.log('[GET_ACCESS_TOKEN] User saved to database');
+        } else {
+          console.error('[GET_ACCESS_TOKEN] Missing required user data from Twitter API');
+        }
+      } catch (error) {
+        console.error('[GET_ACCESS_TOKEN] Error saving user to database:', error);
+        // Continue even if database save fails
+      }
       
       return userData;
     } catch (error) {

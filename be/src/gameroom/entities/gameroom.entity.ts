@@ -1,0 +1,28 @@
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
+import { User } from '../../user/entities/user.entity';
+import { Message } from '../../message/entities/message.entity';
+
+@Entity()
+export class GameRoom {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  name: string;
+
+  @Column({ nullable: true })
+  description: string;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'creatorId' })
+  creator: User;
+
+  @Column()
+  creatorId: string;
+
+  @OneToMany(() => Message, message => message.gameRoom)
+  messages: Message[];
+}

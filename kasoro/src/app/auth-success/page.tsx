@@ -20,10 +20,13 @@ export default function AuthSuccess() {
     async function fetchUser() {
       try {
         const response = await fetch("http://localhost:3001/auth/user", {
+          method: 'GET',
           credentials: "include",
           headers: {
             'Accept': 'application/json',
+            'Content-Type': 'application/json',
           },
+          mode: 'cors',
         });
         
         if (!response.ok) {
