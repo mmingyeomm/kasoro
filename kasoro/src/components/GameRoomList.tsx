@@ -3,13 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-type GameRoom = {
+interface GameRoom {
   id: string;
   name: string;
   description: string;
   createdAt: string;
   creatorId: string;
-};
+  bountyAmount?: number;
+  timeLimit?: number;
+  baseFeePercentage?: number;
+}
 
 export default function GameRoomList() {
   const [gameRooms, setGameRooms] = useState<GameRoom[]>([]);
@@ -22,16 +25,20 @@ export default function GameRoomList() {
         const response = await fetch("http://localhost:3001/gamerooms", {
           credentials: "include",
         });
-        
+
         if (!response.ok) {
-          throw new Error(`Failed to fetch game rooms: ${response.statusText}`);
+          throw new Error(`Failed to fetch game rooms: ${response.status}`);
         }
-        
+
         const data = await response.json();
         setGameRooms(data);
       } catch (error) {
         console.error("Error fetching game rooms:", error);
-        setError(error instanceof Error ? error.message : "An unknown error occurred");
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Failed to load communities"
+        );
       } finally {
         setLoading(false);
       }
@@ -42,11 +49,9 @@ export default function GameRoomList() {
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <div className="animate-pulse space-y-4">
-          {[...Array(3)].map((_, index) => (
-            <div key={index} className="h-24 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
-          ))}
+      <div className="bg-white dark:bg-gray-800 border-2 border-black dark:border-white p-6">
+        <div className="flex justify-center items-center h-40">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900 dark:border-white"></div>
         </div>
       </div>
     );
@@ -54,46 +59,71 @@ export default function GameRoomList() {
 
   if (error) {
     return (
-      <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-md p-6 text-red-800 dark:text-red-300">
-        <h2 className="text-xl font-semibold mb-2">Error</h2>
-        <p>{error}</p>
+      <div className="bg-white dark:bg-gray-800 border-2 border-black dark:border-white p-6">
+        <div className="bg-red-50 dark:bg-red-900/30 border-2 border-red-200 dark:border-red-700 p-4 text-red-800 dark:text-red-300">
+          {error}
+        </div>
       </div>
     );
   }
 
   if (gameRooms.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 text-center">
-        <p className="text-gray-500 dark:text-gray-400">No game rooms available. Create the first one!</p>
+      <div className="bg-white dark:bg-gray-800 border-2 border-black dark:border-white p-6">
+        <p className="text-center text-gray-500 dark:text-gray-400 py-8">
+          No communities found. Be the first to create one!
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-      <div className="p-4 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="text-xl font-semibold">Available Game Rooms</h2>
-      </div>
-      <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+    <div className="bg-white dark:bg-gray-800 border-2 border-black dark:border-white p-6">
+      <h2 className="text-2xl font-bold tracking-widest uppercase mb-4">Active Communities</h2>
+      <hr className="border-black dark:border-white border-1 mb-6" />
+      
+      <div className="space-y-4">
         {gameRooms.map((room) => (
-          <li key={room.id}>
-            <Link 
-              href={`/gamerooms/${room.id}`}
-              className="block p-6 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-            >
+          <Link
+            key={room.id}
+            href={`/gamerooms/${room.id}`}
+            className="block"
+          >
+            <div className="border-2 border-black dark:border-white hover:bg-blue-50 dark:hover:bg-gray-700 p-4 transition-colors cursor-pointer">
               <div className="flex justify-between items-start">
-                <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400">{room.name}</h3>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {new Date(room.createdAt).toLocaleDateString()}
-                </span>
+                <h3 className="font-bold text-lg">{room.name}</h3>
+                <div className="flex space-x-2">
+                  {room.bountyAmount && (
+                    <span className="bg-yellow-300 text-black px-2 py-1 text-xs font-mono font-bold border-2 border-black">
+                      {room.bountyAmount} SOL
+                    </span>
+                  )}
+                  {room.timeLimit && (
+                    <span className="bg-green-300 text-black px-2 py-1 text-xs font-mono font-bold border-2 border-black">
+                      {room.timeLimit} MIN
+                    </span>
+                  )}
+                </div>
               </div>
               {room.description && (
-                <p className="mt-2 text-gray-600 dark:text-gray-400">{room.description}</p>
+                <p className="text-gray-600 dark:text-gray-300 mt-2 text-sm line-clamp-2">
+                  {room.description}
+                </p>
               )}
-            </Link>
-          </li>
+              <div className="flex justify-between mt-3 text-xs text-gray-500 dark:text-gray-400">
+                <span>
+                  Created{" "}
+                  {new Date(room.createdAt).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
+              </div>
+            </div>
+          </Link>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

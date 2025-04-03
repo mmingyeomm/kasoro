@@ -18,6 +18,9 @@ export class User {
   profileImageUrl: string;
 
   @Column({ nullable: true })
+  walletAddress: string;
+
+  @Column({ nullable: true })
   email: string;
 
   @CreateDateColumn()

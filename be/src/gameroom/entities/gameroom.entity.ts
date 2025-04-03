@@ -23,10 +23,18 @@ export class GameRoom {
   @OneToMany(() => Message, message => message.gameRoom)
   messages: Message[];
 
-  @Column()
+  @Column({ nullable: true })
   contractAddress: string; 
 
-  @Column()
+  @Column({ nullable: true })
   bountyAmount: number;
 
+  @Column({ nullable: true })
+  timeLimit: number;
+
+  @Column({ nullable: true })
+  baseFeePercentage: number;
+  
+  @Column({ nullable: true })
+  walletAddress: string;
 }

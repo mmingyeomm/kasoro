@@ -169,14 +169,18 @@ export class AuthController {
 
   @Get('user')
   getUser(@Session() session: Record<string, any>, @Res({ passthrough: true }) res: Response) {
-    console.log('User session data requested, returning:', session.user ? { id: session.user.id, username: session.user.username } : 'No user');
+    console.log('User session data requested, returning:', session.user ? { id: session.user.id, username: session.user.username, walletAddress: session.user.walletAddress } : 'No user');
 
     // Set CORS headers explicitly
     res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.header('Access-Control-Allow-Credentials', 'true');
     
     // Always return a valid JSON object
-    return session.user || { loggedIn: false };
+    return session.user ? {
+      id: session.user.id,
+      username: session.user.username,
+      walletAddress: session.user.walletAddress || null
+    } : { loggedIn: false };
   }
   
   @Get('debug')

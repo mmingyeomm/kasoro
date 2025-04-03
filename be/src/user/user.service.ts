@@ -21,8 +21,6 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-
-
   async findById(id: string): Promise<User | null> {  // number에서 string으로 변경
     return this.userRepository.findOne({ where: { id } });
   }
@@ -41,11 +39,24 @@ export class UserService {
     return updatedUser;
   }
 
-  async findByXId(xId: string): Promise<User> {
+  async findByXId(xId: string): Promise<User | null> {
     const user = await this.userRepository.findOne({ where: { xId } });
-    if (!user) {
-      throw new NotFoundException(`User with xId ${xId} not found`);
-    }
     return user;
+  }
+
+  async updateWalletAddress(userId: string, walletAddress: string): Promise<User> {
+    console.log(`Updating wallet address for user ${userId} to ${walletAddress}`);
+    
+    const user = await this.findById(userId);
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+    
+    user.walletAddress = walletAddress;
+    return this.userRepository.save(user);
+  }
+
+  async findByWalletAddress(walletAddress: string): Promise<User | null> {
+    return this.userRepository.findOne({ where: { walletAddress } });
   }
 }

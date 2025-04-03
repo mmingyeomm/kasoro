@@ -3,6 +3,7 @@ import { GameRoomService } from './gameroom.service';
 import { CreateGameRoomDto } from './dto/create-gameroom.dto';
 import { GameRoom } from './entities/gameroom.entity';
 import { AuthGuard } from '../auth/auth.guard';
+import { WalletGuard } from '../auth/wallet.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
 @Controller('gamerooms')
@@ -20,15 +21,15 @@ export class GameRoomController {
   }
 
   @Post()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, WalletGuard)
   async createGameRoom(
     @Body() createGameRoomDto: CreateGameRoomDto,
     @CurrentUser() user: any,
   ): Promise<GameRoom> {
-
-    console.log( "2-------------------------- "+ user)
-
-    return this.gameRoomService.createGameRoom(createGameRoomDto, user.id);
+    console.log('User from auth:', user);
+    // Use user.xId since we're linking wallets to Twitter IDs
+    const userId = user.xId || user.id;
+    return this.gameRoomService.createGameRoom(createGameRoomDto, userId);
   }
 
   @Get(':id/messages')
