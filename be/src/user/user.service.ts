@@ -21,9 +21,7 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  async findByXId(xId: string): Promise<User | null> {
-    return this.userRepository.findOne({ where: { xId } });
-  }
+
 
   async findById(id: string): Promise<User | null> {  // number에서 string으로 변경
     return this.userRepository.findOne({ where: { id } });
@@ -41,5 +39,13 @@ export class UserService {
     }
     
     return updatedUser;
+  }
+
+  async findByXId(xId: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { xId } });
+    if (!user) {
+      throw new NotFoundException(`User with xId ${xId} not found`);
+    }
+    return user;
   }
 }

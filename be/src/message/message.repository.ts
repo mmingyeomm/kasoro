@@ -22,4 +22,8 @@ export class MessageRepository {
     const newMessage = this.messageRepository.create(message);
     return this.messageRepository.save(newMessage);
   }
+
+  async save(message: Message): Promise<Message> {
+    return this.messageRepository.save(message);
+  }
 }

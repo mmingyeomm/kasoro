@@ -20,6 +20,10 @@ export class MessageController {
     @Body() createMessageDto: CreateMessageDto,
     @CurrentUser() user: any,
   ): Promise<Message> {
-    return this.messageService.createMessage(createMessageDto, user.id);
+    return this.messageService.createMessage(createMessageDto, user);
   }
 }
+
+
+
+

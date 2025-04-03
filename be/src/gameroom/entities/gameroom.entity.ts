@@ -22,4 +22,11 @@ export class GameRoom {
 
   @OneToMany(() => Message, message => message.gameRoom)
   messages: Message[];
+
+  @Column()
+  contractAddress: string; 
+
+  @Column()
+  bountyAmount: number;
+
 }
