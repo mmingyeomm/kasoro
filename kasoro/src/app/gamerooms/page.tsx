@@ -22,7 +22,7 @@ export default function GameRoomsPage() {
 
   const fetchUser = async () => {
     try {
-      const response = await fetch("http://localhost:3001/auth/user", {
+      const response = await fetch("https://kasoro.onrender.com/auth/user", {
         credentials: "include",
       });
       
@@ -83,7 +83,7 @@ export default function GameRoomsPage() {
             </>
           ) : (
             <Link 
-              href="http://localhost:3001/auth/login/twitter"
+              href="https://kasoro.onrender.com/auth/login/twitter"
               className="bg-black text-white px-4 py-2 border-2 border-black text-sm font-bold"
             >
               Login with X
