@@ -243,6 +243,10 @@
         {
           "name": "dao",
           "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -347,6 +351,16 @@
       "code": 6009,
       "name": "UnauthorizedAccess",
       "msg": "Unauthorized access"
+    },
+    {
+      "code": 6010,
+      "name": "TextTooLong",
+      "msg": "Text too long"
+    },
+    {
+      "code": 6011,
+      "name": "ImageUriTooLong",
+      "msg": "Image URI too long"
     }
   ],
   "types": [
@@ -373,6 +387,10 @@
           },
           {
             "name": "vote_count",
+            "type": "u64"
+          },
+          {
+            "name": "challenge_amount",
             "type": "u64"
           }
         ]

@@ -8,51 +8,14 @@ pub const MASTER_WALLET: &str = "wPrpTY68NWWQQqJbiHaiYNPMk2QRtgWBb3tmEj5nfxY";
 ////////////////////////////////////////////////////////////////////////////////////////
 // 추가할거
 // 1. 투표 시 vote_count 증가?
-// 2. daostate의 is_active 변경하는 함수 권한 -> signer말고 프로젝트 측 마스터 지갑으로 변경해야할듯
-////////////////////////////////////////////////////////////////////////////////////////
+// 2. daostate의 is_active 변경하는 함수 권한 -> signer말고 프로젝트 측 마스터 지갑으로 변경해야할듯 -- 완료
+// 3. 1등에게 상금 분배 함수 추가
+//     - 백엔드에서 시간 종료 알림 받으면 마지막 사용자에게 상금 분배
+// 4. deposit 기능이랑 submit_content 기능 합치기? 둘이 같은 기능인가
+// dao pda에는 바운티 돈만들어있음, base fee는 바운티 건사람에게 대부분 가고 일정비율은 lock or fund로 이동
 
-// ┌───────────────┐          ┌────────────────────┐
-// │ (1) Initialize│          │   DaoState (PDA)   │
-// │      Dao      │          │  dao_name, ...     │
-// │  - dao_name   │  create  │  depositors, ...   │
-// │  - time_limit ├─────────►│  contents, ...     │
-// │  - ...        │          │  vote_proposals,   │
-// └──────┬────────┘          │  next_proposal_id  │
-//        │                   └─────────┬───────────┘
-//        ▼                             │
-// ┌───────────────┐          ┌────────▼───────────┐
-// │ (2) Deposit   │          │  depositors        │
-// │  - amount     ├─────────►│   push(Depositor)  │
-// └──────┬────────┘          └────────^───────────┘
-//        │                             │
-//        ▼                             │
-// ┌───────────────┐          ┌────────▼───────────┐
-// │(3) SubmitContent         │  contents          │
-// │ - text, image_uri ──────►│   push(Content)    │
-// └──────┬────────┘          └────────^───────────┘
-//        │                             │
-//        ▼                             │
-// ┌───────────────┐          ┌────────▼───────────┐
-// │ (4) CreateVote │          │ vote_proposals     │
-// │ - title, desc  ├─────────►│   push(Proposal)   │
-// │ - vote_type    │          └────────^───────────┘
-// │ - options, ... │                     │
-// └──────┬────────┘                     │
-//        │                              │
-//        ▼                              │
-// ┌───────────────┐                     │
-// │ (5) CastVote   │                     │
-// │ - proposal_id  ├────────────────────►│
-// │ - option_index │     Add VoteInfo    │
-// └──────┬────────┘                     │
-//        │                              │
-//        ▼                              │
-// ┌───────────────┐                     │
-// │(6) ProcessTime │--------------------►
-// │ - 라운드 종료? │  1) 투표 마감 -> 결과 집계
-// │ - 보상 분배    │  2) 컨텐츠 우승 -> 보상
-// │ - 설정 변경    │  3) DAO 상태 리셋
-// └───────────────┘   
+//space 크기 수정 및 다듬기 => 컨텐츠 할당 크기 10MB 오바댐 백엔드로 바꾸던가 해야하나
+////////////////////////////////////////////////////////////////////////////////////////
 
 #[program]
 pub mod turtle_anchor {
@@ -131,6 +94,23 @@ pub mod turtle_anchor {
             return err!(ErrorCode::NotADepositor);
         }
 
+        // 문자열 길이 제한 검증
+        require!(text.len() <= 64, ErrorCode::TextTooLong);
+        require!(image_uri.len() <= 64, ErrorCode::ImageUriTooLong);
+
+        // 0.1 SOL을 challenge_amount로 설정
+        let challenge_amount: u64 = 100000000; // 0.1 SOL (lamports)
+
+        // Transfer SOL from author to DAO account
+        let cpi_context = CpiContext::new(
+            ctx.accounts.system_program.to_account_info(),
+            anchor_lang::system_program::Transfer {
+                from: author.to_account_info(),
+                to: dao.to_account_info(),
+            },
+        );
+        anchor_lang::system_program::transfer(cpi_context, challenge_amount)?;
+
         // Create new content
         let content = Content {
             author: author.key(),
@@ -138,6 +118,7 @@ pub mod turtle_anchor {
             image_uri,
             timestamp: current_time,
             vote_count: 0,
+            challenge_amount,
         };
 
         // Add content and reset timeout
@@ -360,7 +341,7 @@ pub mod turtle_anchor {
     }
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq, InitSpace)]
 pub enum VoteType {
     ChangeTimeLimit,
     ChangeBaseFee,
@@ -368,7 +349,7 @@ pub enum VoteType {
     ContentQualityRating,
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq, InitSpace)]
 pub enum VoteStatus {
     Active,
     Completed,
@@ -376,7 +357,9 @@ pub enum VoteStatus {
 }
 
 #[account]
+#[derive(InitSpace)]
 pub struct DaoState {
+    #[max_len(100)]
     pub dao_name: String,
     pub initializer: Pubkey,
     pub time_limit: u64,
@@ -385,14 +368,21 @@ pub struct DaoState {
     pub deposit_share: u8,
     pub timeout_timestamp: u64,
     pub total_deposit: u64,
+
+    #[max_len(100,2000)]
     pub depositors: Vec<DepositorInfo>,
+
+    #[max_len(100,2000)]
     pub contents: Vec<Content>,
+
+    #[max_len(2,200)]
     pub vote_proposals: Vec<VoteProposal>,
+
     pub next_proposal_id: u64,
     pub is_active: bool,
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
 pub struct DepositorInfo {
     pub depositor: Pubkey,
     pub amount: u64,
@@ -400,33 +390,44 @@ pub struct DepositorInfo {
     pub locked_until: u64,
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
 pub struct Content {
     pub author: Pubkey,
+    #[max_len(1000)]
     pub text: String,
+    #[max_len(200)]
     pub image_uri: String,
     pub timestamp: u64,
     pub vote_count: u64,
+    pub challenge_amount: u64,
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
 pub struct VoteInfo {
     pub voter: Pubkey,
     pub option_index: u8,
     pub voting_power: u64,
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
 pub struct VoteProposal {
     pub proposal_id: u64,
     pub proposer: Pubkey,
+
+    #[max_len(200)]
     pub title: String,
+
+    #[max_len(200)]
     pub description: String,
+    #[max_len(200)]
     pub vote_type: VoteType,
+    #[max_len(10, 200)]
     pub options: Vec<String>,
     pub start_time: u64,
     pub end_time: u64,
+    #[max_len(200)]
     pub votes: Vec<VoteInfo>,
+    #[max_len(200)]
     pub status: VoteStatus,
 }
 
@@ -439,7 +440,7 @@ pub struct InitializeDao<'info> {
     #[account(
         init,
         payer = initializer,
-        space = 8 + DaoState::SPACE,
+        space = 8 + DaoState::INIT_SPACE, 
         seeds = [
             b"dao", 
             initializer.key().as_ref(),
@@ -449,7 +450,6 @@ pub struct InitializeDao<'info> {
     )]
     pub dao: Account<'info, DaoState>,
     pub system_program: Program<'info, System>,
-    
 }
 
 #[derive(Accounts)]
@@ -460,22 +460,6 @@ pub struct Deposit<'info> {
     #[account(mut)]
     pub dao: Account<'info, DaoState>,
     pub system_program: Program<'info, System>,
-}
-
-impl DaoState {
-    pub const SPACE: usize = 
-        4 + 32 + // dao_name: String (max 32 bytes)
-        32 + // initializer: Pubkey
-        8 + // time_limit: u64
-        8 + // base_fee: u64
-        1 + // ai_moderation: bool
-        1 + // deposit_share: u8
-        8 + // timeout_timestamp: u64
-        8 + // total_deposit: u64
-        4 + (32 + 8 + 8 + 8) * 10 + // depositors: Vec<DepositorInfo> (max 10)
-        4 + (32 + 128 + 128 + 8 + 8) * 5 + // contents: Vec<Content> (max 5, 텍스트 및 이미지 크기 축소)
-        4 + (8 + 32 + 32 + 128 + 1 + 4 + 32 * 3 + 8 + 8 + 4 + (32 + 1 + 8) * 10 + 1) * 3 + // vote_proposals: Vec<VoteProposal> (max 3)
-        8; // next_proposal_id: u64
 }
 
 #[error_code]
@@ -500,6 +484,10 @@ pub enum ErrorCode {
     DaoNotActive,
     #[msg("Unauthorized access")]
     UnauthorizedAccess,
+    #[msg("Text too long")]
+    TextTooLong,
+    #[msg("Image URI too long")]
+    ImageUriTooLong,
 }
 
 #[derive(Accounts)]
@@ -508,6 +496,7 @@ pub struct SubmitContent<'info> {
     pub author: Signer<'info>,
     #[account(mut)]
     pub dao: Account<'info, DaoState>,
+    pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]

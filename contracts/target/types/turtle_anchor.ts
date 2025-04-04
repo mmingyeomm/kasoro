@@ -249,6 +249,10 @@ export type TurtleAnchor = {
         {
           "name": "dao",
           "writable": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -353,6 +357,16 @@ export type TurtleAnchor = {
       "code": 6009,
       "name": "unauthorizedAccess",
       "msg": "Unauthorized access"
+    },
+    {
+      "code": 6010,
+      "name": "textTooLong",
+      "msg": "Text too long"
+    },
+    {
+      "code": 6011,
+      "name": "imageUriTooLong",
+      "msg": "Image URI too long"
     }
   ],
   "types": [
@@ -379,6 +393,10 @@ export type TurtleAnchor = {
           },
           {
             "name": "voteCount",
+            "type": "u64"
+          },
+          {
+            "name": "challengeAmount",
             "type": "u64"
           }
         ]
