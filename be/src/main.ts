@@ -25,14 +25,14 @@ async function bootstrap() {
   
   // Get frontend URL based on environment
   const frontendUrl = process.env.NODE_ENV === 'production' 
-    ? configService.get('FRONTEND_URL')
-    : configService.get('FRONTEND_DEV_URL') || 'http://localhost:3000';
+    ? 'https://kasoro.vercel.app'
+    : 'http://localhost:3000';
   
   console.log('Using frontend URL for CORS:', frontendUrl);
   
   // Enable CORS with credentials and proper headers
   app.enableCors({
-    origin: ['http://localhost:3000', frontendUrl],
+    origin: [frontendUrl],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],

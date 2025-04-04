@@ -9,12 +9,6 @@ export class AuthController {
   @Get('login/twitter')
   async twitterLogin(@Res() res: Response, @Session() session: Record<string, any>) {
     try {
-      console.log('=============================================');
-      console.log('[AUTH] Starting Twitter login process...');
-      console.log('[AUTH] Session ID:', session.id);
-      console.log('[AUTH] Session cookie settings:', session.cookie);
-      console.log('[AUTH] Full session object:', JSON.stringify(session, null, 2));
-      console.log('[AUTH] Req headers:', JSON.stringify(res.req.headers, null, 2));
       
       // Clear any existing oauth data to prevent issues
       if (session.oauth_token_secret) {
@@ -66,7 +60,10 @@ export class AuthController {
       return res.redirect(redirectUrl);
     } catch (error) {
       console.error('[AUTH] Twitter login error:', error);
-      return res.redirect('http://localhost:3000/login-error');
+      const frontendUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://kasoro.vercel.app'
+        : 'http://localhost:3000';
+      return res.redirect(`${frontendUrl}/login-error`);
     }
   }
 
@@ -79,13 +76,7 @@ export class AuthController {
     @Res() res: Response,
   ) {
     try {
-      console.log('=============================================');
-      console.log('[CALLBACK] Received from Twitter with params:', { oauth_token, oauth_verifier, state });
-      console.log('[CALLBACK] Session ID:', session.id);
-      console.log('[CALLBACK] Session cookie settings:', session.cookie);
-      console.log('[CALLBACK] Full session object:', JSON.stringify(session, null, 2));
-      console.log('[CALLBACK] Req headers:', JSON.stringify(res.req.headers, null, 2));
-      
+
       // Try to get the token secret from both the session and in-memory storage
       let oauth_token_secret = session.oauth_token_secret;
       
@@ -160,10 +151,16 @@ export class AuthController {
       
       // Redirect to frontend with success
       console.log('[CALLBACK] Redirecting to success page');
-      return res.redirect('http://localhost:3000/auth-success');
+      const frontendUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://kasoro.vercel.app'
+        : 'http://localhost:3000';
+      return res.redirect(`${frontendUrl}/auth-success`);
     } catch (error) {
       console.error('[CALLBACK] Twitter callback error:', error);
-      return res.redirect('http://localhost:3000/login-error');
+      const frontendUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://kasoro.vercel.app'
+        : 'http://localhost:3000';
+      return res.redirect(`${frontendUrl}/login-error`);
     }
   }
 
@@ -171,8 +168,11 @@ export class AuthController {
   getUser(@Session() session: Record<string, any>, @Res({ passthrough: true }) res: Response) {
     console.log('User session data requested, returning:', session.user ? { id: session.user.id, username: session.user.username, walletAddress: session.user.walletAddress } : 'No user');
 
-    // Set CORS headers explicitly
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    // Set CORS headers explicitly based on environment
+    const frontendUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://kasoro.vercel.app'
+      : 'http://localhost:3000';
+    res.header('Access-Control-Allow-Origin', frontendUrl);
     res.header('Access-Control-Allow-Credentials', 'true');
     
     // Always return a valid JSON object
@@ -214,6 +214,9 @@ export class AuthController {
   @Get('logout')
   logout(@Session() session: Record<string, any>, @Res() res: Response) {
     session.user = null;
-    return res.redirect('http://localhost:3000');
+    const frontendUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://kasoro.vercel.app'
+      : 'http://localhost:3000';
+    return res.redirect(frontendUrl);
   }
 }
