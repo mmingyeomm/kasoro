@@ -13,6 +13,7 @@ import { MessageModule } from './message/message.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
     TypeOrmModule.forRoot(databaseConfig),
     AuthModule,

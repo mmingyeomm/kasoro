@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+
   
   // Print environment variables to debug
   console.log('API_KEY configured:', configService.get('API_KEY') ? 'Yes' : 'No');
