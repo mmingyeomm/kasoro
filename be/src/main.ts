@@ -44,8 +44,8 @@ async function bootstrap() {
       .setDescription('The Kasoro API documentation')
       .setVersion('1.0')
       .addTag('auth', 'Authentication endpoints')
-      .addTag('gamerooms', 'Game rooms management')
-      .addTag('messages', 'Messages in game rooms')
+      .addTag('communities', 'Communities management')
+      .addTag('messages', 'Messages in communities')
       .addTag('users', 'User management')
       .addBearerAuth()
       .build();
@@ -106,7 +106,7 @@ async function bootstrap() {
   await app.listen(port);
   
   logger.log(`Application is running on: ${await app.getUrl()}`);
-  logger.log(`WebSocket server enabled at: ${await app.getUrl()}/gamerooms`);
+  logger.log(`WebSocket server enabled at: ${await app.getUrl()}/communities`);
   logger.log(`Swagger documentation available at: ${await app.getUrl()}/api`);
 }
 

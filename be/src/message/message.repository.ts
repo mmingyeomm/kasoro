@@ -10,10 +10,10 @@ export class MessageRepository {
     private messageRepository: Repository<Message>,
   ) {}
 
-  async findByGameRoom(gameRoomId: string): Promise<Message[]> {
+  async findByCommunity(communityId: string): Promise<Message[]> {
     return this.messageRepository.find({
-      where: { gameRoomId },
-      relations: ['user'],
+      where: { communityId },
+      relations: ['sender'],
       order: { createdAt: 'ASC' },
     });
   }

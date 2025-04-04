@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
-import { GameRoom } from '../../gameroom/entities/gameroom.entity';
+import { Community } from '../../communities/entities/community.entity';
 
-@Entity()
+@Entity('messages')
 export class Message {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -10,20 +10,20 @@ export class Message {
   @Column()
   content: string;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'userId' })
-  user: User;
+  @Column()
+  senderId: string;
 
-    @Column()
-    userId: string;
-
-  @ManyToOne(() => GameRoom, gameRoom => gameRoom.messages)
-  @JoinColumn({ name: 'gameRoomId' })
-  gameRoom: GameRoom;
+  @ManyToOne(() => User, { eager: true })
+  @JoinColumn({ name: 'senderId' })
+  sender: User;
 
   @Column()
-  gameRoomId: string;
+  communityId: string;
+
+  @ManyToOne(() => Community, (community) => community.messages)
+  @JoinColumn({ name: 'communityId' })
+  community: Community;
 }

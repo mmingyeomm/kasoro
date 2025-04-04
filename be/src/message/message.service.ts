@@ -1,57 +1,47 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { MessageRepository } from './message.repository';
-import { CreateMessageDto } from './dto/create-message.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Message } from './entities/message.entity';
-import { GameRoomService } from '../gameroom/gameroom.service';
-import { UserService } from '../user/user.service';
-import { GameRoomGateway } from '../gameroom/gameroom.gateway';
+import { CreateMessageDto } from './dto/create-message.dto';
+import { CommunityService } from '../communities/community.service';
+import { CommunityGateway } from '../communities/community.gateway';
 
 @Injectable()
 export class MessageService {
   constructor(
-    private messageRepository: MessageRepository,
-    private gameRoomService: GameRoomService,
-    private userService: UserService,
-    private gameRoomGateway: GameRoomGateway,
+    @InjectRepository(Message)
+    private messageRepository: Repository<Message>,
+    private communityService: CommunityService,
+    private communityGateway: CommunityGateway,
   ) {}
 
-  async getMessagesByGameRoom(gameRoomId: string): Promise<Message[]> {
-    await this.gameRoomService.getGameRoomById(gameRoomId);
-    return this.messageRepository.findByGameRoom(gameRoomId);
-  }
-
-  async createMessage(createMessageDto: CreateMessageDto, user: any): Promise<Message> {
-    // Check if game room exists
-    await this.gameRoomService.getGameRoomById(createMessageDto.gameRoomId);
-    
-    // Get user information
-    const userRecord = await this.userService.findByXId(user.id);
-    if (!userRecord) {
-      throw new NotFoundException(`User with xId ${user.id} not found`);
+  async createMessage(createMessageDto: CreateMessageDto, userId: string): Promise<Message> {
+    try {
+      // Check if community exists
+      await this.communityService.getCommunityById(createMessageDto.communityId);
+      
+      // Get current time for both message creation and community update
+      const currentTime = new Date();
+      
+      // Create and save the message
+      const message = this.messageRepository.create({
+        content: createMessageDto.content,
+        senderId: userId,
+        communityId: createMessageDto.communityId,
+        createdAt: currentTime,
+      });
+      
+      const savedMessage = await this.messageRepository.save(message);
+      
+      // Update the community's lastMessageTime
+      await this.communityService.updateLastMessageTime(createMessageDto.communityId, currentTime);
+      
+      // Broadcast the update to all clients in the room
+      this.communityGateway.broadcastLastMessageUpdate(createMessageDto.communityId, currentTime);
+      
+      return savedMessage;
+    } catch (error) {
+      throw error;
     }
-    
-    // Current timestamp for both message creation and game room update
-    const currentTime = new Date();
-    
-    // Create message
-    const message = this.messageRepository.create({
-      ...createMessageDto,
-      userId: userRecord.id,
-      createdAt: currentTime,
-    });
-    
-    // Save the message
-    const savedMessage = await this.messageRepository.save(await message);
-    
-    // Update the game room's lastMessageTime
-    await this.gameRoomService.updateLastMessageTime(createMessageDto.gameRoomId, currentTime);
-    
-    // Broadcast the lastMessageTime update to all clients in the room
-    await this.gameRoomGateway.broadcastLastMessageUpdate(
-      createMessageDto.gameRoomId,
-      currentTime
-    );
-    
-    return savedMessage;
   }
 }

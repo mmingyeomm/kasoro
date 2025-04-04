@@ -1,54 +1,57 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { Message } from '../../message/entities/message.entity';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-@Entity()
-export class GameRoom {
-  @ApiProperty({
-    description: 'Unique identifier for the game room',
-    example: '123e4567-e89b-12d3-a456-426614174000'
-  })
+@Entity('communities')
+export class Community {
+  @ApiProperty({ description: 'Unique identifier for the community' })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({
-    description: 'Name of the game room',
-    example: 'Crypto Enthusiasts'
-  })
+  @ApiProperty({ description: 'Name of the community' })
   @Column()
   name: string;
 
-  @ApiPropertyOptional({
-    description: 'Description of the game room',
-    example: 'A community for crypto discussions'
-  })
+  @ApiProperty({ description: 'Description of the community', required: false })
   @Column({ nullable: true })
   description: string;
 
-  @ApiProperty({
-    description: 'Creation date and time',
-    example: '2023-04-01T12:00:00Z'
-  })
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @ApiProperty({ description: 'Creation date of the community' })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @ApiProperty({
-    description: 'User who created the game room'
-  })
+  @ApiProperty({ description: 'ID of the user who created the community' })
+  @Column()
+  creatorId: string;
+
+  @ApiProperty({ description: 'User who created the community', type: () => User })
   @ManyToOne(() => User)
   @JoinColumn({ name: 'creatorId' })
   creator: User;
 
-  @ApiProperty({
-    description: 'Messages in the game room',
-    type: () => [Message]
+  @ApiProperty({ 
+    description: 'Messages in the community', 
+    type: () => [Message], 
+    required: false 
   })
-  @OneToMany(() => Message, message => message.gameRoom)
+  @OneToMany(() => Message, message => message.community)
   messages: Message[];
 
+  @ApiProperty({ 
+    description: 'Timestamp of the last message in the community',
+    required: false
+  })
+  @Column({ 
+    name: 'lastMessageTime',
+    nullable: true, 
+    type: 'timestamp',
+    default: null
+  })
+  lastMessageTime: Date;
+
   @ApiPropertyOptional({
-    description: 'Smart contract address for the game room',
+    description: 'Smart contract address for the community',
     example: '0x123abc456def789ghi'
   })
   @Column({ nullable: true })
@@ -81,11 +84,4 @@ export class GameRoom {
   })
   @Column({ nullable: true })
   walletAddress: string;
-
-  @ApiPropertyOptional({
-    description: 'Timestamp of the last message posted in this game room',
-    example: '2023-04-01T14:30:00Z'
-  })
-  @Column({ nullable: true, type: 'timestamp' })
-  lastMessageTime: Date;
 }

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
-import { GameRoomService } from './gameroom.service';
+import { CommunityService } from './community.service';
 
 @WebSocketGateway({
   cors: {
@@ -17,16 +17,16 @@ import { GameRoomService } from './gameroom.service';
     methods: ['GET', 'POST'],
     credentials: true,
   },
-  namespace: 'gamerooms',
+  namespace: 'communities',
 })
-export class GameRoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  private readonly logger = new Logger(GameRoomGateway.name);
+export class CommunityGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  private readonly logger = new Logger(CommunityGateway.name);
   private readonly roomClients = new Map<string, Set<string>>();
 
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly gameRoomService: GameRoomService) {}
+  constructor(private readonly communityService: CommunityService) {}
 
   handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
@@ -65,12 +65,12 @@ export class GameRoomGateway implements OnGatewayConnection, OnGatewayDisconnect
       this.logger.log(`Client ${client.id} joined room ${roomId}`);
       
       // Send current lastMessageTime to the client
-      const gameRoom = await this.gameRoomService.getGameRoomById(roomId);
+      const community = await this.communityService.getCommunityById(roomId);
       return {
         event: 'roomJoined',
         data: {
           roomId,
-          lastMessageTime: gameRoom.lastMessageTime || null,
+          lastMessageTime: community.lastMessageTime || null,
           clientCount: this.roomClients.get(roomId)?.size || 0,
         },
       };
