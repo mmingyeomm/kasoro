@@ -83,7 +83,7 @@ export default function GameRoomsPage() {
             </>
           ) : (
             <Link 
-              href="https://kasoro.onrender.com/auth/login/twitter"
+              href="http://localhost:3001/auth/login/twitter"
               className="bg-black text-white px-4 py-2 border-2 border-black text-sm font-bold"
             >
               Login with X
