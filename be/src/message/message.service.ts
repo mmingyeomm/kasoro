@@ -3,14 +3,16 @@ import { MessageRepository } from './message.repository';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { Message } from './entities/message.entity';
 import { GameRoomService } from '../gameroom/gameroom.service';
-import { UserService } from '../user/user.service'; // UserService 추가
+import { UserService } from '../user/user.service';
+import { GameRoomGateway } from '../gameroom/gameroom.gateway';
 
 @Injectable()
 export class MessageService {
   constructor(
     private messageRepository: MessageRepository,
     private gameRoomService: GameRoomService,
-    private userService: UserService, // UserService 주입
+    private userService: UserService,
+    private gameRoomGateway: GameRoomGateway,
   ) {}
 
   async getMessagesByGameRoom(gameRoomId: string): Promise<Message[]> {
@@ -19,10 +21,10 @@ export class MessageService {
   }
 
   async createMessage(createMessageDto: CreateMessageDto, user: any): Promise<Message> {
-    // 게임룸 존재 확인
+    // Check if game room exists
     await this.gameRoomService.getGameRoomById(createMessageDto.gameRoomId);
     
-    // user.id가 실제로는 xId인 경우
+    // Get user information
     const userRecord = await this.userService.findByXId(user.id);
     if (!userRecord) {
       throw new NotFoundException(`User with xId ${user.id} not found`);
@@ -31,23 +33,24 @@ export class MessageService {
     // Current timestamp for both message creation and game room update
     const currentTime = new Date();
     
-    // 메시지 생성
+    // Create message
     const message = this.messageRepository.create({
       ...createMessageDto,
-      userId: userRecord.id, // 실제 UUID 형식의 사용자 ID 사용
-      createdAt: currentTime, // Explicitly set creation time
+      userId: userRecord.id,
+      createdAt: currentTime,
     });
     
     // Save the message
     const savedMessage = await this.messageRepository.save(await message);
-
-    console.log(1)
     
     // Update the game room's lastMessageTime
     await this.gameRoomService.updateLastMessageTime(createMessageDto.gameRoomId, currentTime);
-
-    console.log(2)
-
+    
+    // Broadcast the lastMessageTime update to all clients in the room
+    await this.gameRoomGateway.broadcastLastMessageUpdate(
+      createMessageDto.gameRoomId,
+      currentTime
+    );
     
     return savedMessage;
   }

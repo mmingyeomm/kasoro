@@ -2,9 +2,28 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
 import { ConfigService } from '@nestjs/config';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe, Logger } from '@nestjs/common';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 async function bootstrap() {
+  const logger = new Logger('Bootstrap');
+  
+  logger.log('Starting application...');
+  
+  const app = await NestFactory.create(AppModule);
+  
+  // Set up WebSockets
+  app.useWebSocketAdapter(new IoAdapter(app));
+  
+  // Apply validation pipes globally
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true,
+    whitelist: true,
+  }));
+  
+  const configService = app.get(ConfigService);
+
   console.log('Database config:', {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -12,20 +31,38 @@ async function bootstrap() {
     database: process.env.DB_DATABASE,
     // 비밀번호는 보안을 위해 출력하지 않음
   });
-  const app = await NestFactory.create(AppModule);
   
-  const configService = app.get(ConfigService);
-
   // Print environment variables to debug
   console.log('API_KEY configured:', configService.get('API_KEY') ? 'Yes' : 'No');
   console.log('API_KEY_SECRET configured:', configService.get('API_KEY_SECRET') ? 'Yes' : 'No');
   
+  // Setup Swagger
+  try {
+    logger.log('Setting up Swagger documentation...');
+    const config = new DocumentBuilder()
+      .setTitle('Kasoro API')
+      .setDescription('The Kasoro API documentation')
+      .setVersion('1.0')
+      .addTag('auth', 'Authentication endpoints')
+      .addTag('gamerooms', 'Game rooms management')
+      .addTag('messages', 'Messages in game rooms')
+      .addTag('users', 'User management')
+      .addBearerAuth()
+      .build();
+    
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
+    logger.log('Swagger documentation is set up at /api path');
+  } catch (error) {
+    logger.error('Failed to set up Swagger: ' + error.message);
+  }
+
   // Get frontend URL based on environment
   const frontendUrl = process.env.NODE_ENV === 'production' 
     ? 'https://kasoro.vercel.app'
     : 'http://localhost:3000';
   
-  console.log('Using frontend URL for CORS:', frontendUrl);
+  logger.log('Using frontend URL for CORS: ' + frontendUrl);
   
   // Enable CORS with credentials and proper headers
   app.enableCors({
@@ -65,18 +102,12 @@ async function bootstrap() {
     frontendUrl,
   });
 
-  // Swagger 설정 수정
-  const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
-    .setVersion('1.0')
-    .addTag('cats')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
-  
   const port = configService.get('PORT') || 3001;
   await app.listen(port);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  
+  logger.log(`Application is running on: ${await app.getUrl()}`);
+  logger.log(`WebSocket server enabled at: ${await app.getUrl()}/gamerooms`);
+  logger.log(`Swagger documentation available at: ${await app.getUrl()}/api`);
 }
+
 bootstrap();
