@@ -6,15 +6,17 @@ declare_id!("38cVbT7EHqPwfXR1VgXA5jJiBe3DSAFr6cdCEPx4fbAv");
 pub const MASTER_WALLET: &str = "wPrpTY68NWWQQqJbiHaiYNPMk2QRtgWBb3tmEj5nfxY";
 
 ////////////////////////////////////////////////////////////////////////////////////////
-// 추가할거
-// 1. 투표 시 vote_count 증가?
-// 2. daostate의 is_active 변경하는 함수 권한 -> signer말고 프로젝트 측 마스터 지갑으로 변경해야할듯 -- 완료
+// 계정 크기 제한(10KB)으로 인해 구조체 크기 축소
+// 1. depositors, contents, vote_proposals 벡터 크기 대폭 축소
+// 2. 텍스트 필드 길이 제한
+// 3. 대용량 데이터는 오프체인(DB)에 저장하고 해시나 참조만 온체인에 저장 권장
+//
+// 추가할 것:
+// 1. 투표 시 vote_count 증가
+// 2. daostate의 is_active 변경하는 함수 권한 -> 마스터 지갑으로 변경(완료)
 // 3. 1등에게 상금 분배 함수 추가
 //     - 백엔드에서 시간 종료 알림 받으면 마지막 사용자에게 상금 분배
-// 4. deposit 기능이랑 submit_content 기능 합치기? 둘이 같은 기능인가
-// dao pda에는 바운티 돈만들어있음, base fee는 바운티 건사람에게 대부분 가고 일정비율은 lock or fund로 이동
-
-//space 크기 수정 및 다듬기 => 컨텐츠 할당 크기 10MB 오바댐 백엔드로 바꾸던가 해야하나
+// 4. deposit 기능이랑 submit_content 기능 합치기 
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #[program]
@@ -359,7 +361,7 @@ pub enum VoteStatus {
 #[account]
 #[derive(InitSpace)]
 pub struct DaoState {
-    #[max_len(100)]
+    #[max_len(32)]
     pub dao_name: String,
     pub initializer: Pubkey,
     pub time_limit: u64,
@@ -369,13 +371,13 @@ pub struct DaoState {
     pub timeout_timestamp: u64,
     pub total_deposit: u64,
 
-    #[max_len(100,2000)]
+    #[max_len(5, 32)]
     pub depositors: Vec<DepositorInfo>,
 
-    #[max_len(100,2000)]
+    #[max_len(5, 32)]
     pub contents: Vec<Content>,
 
-    #[max_len(2,200)]
+    #[max_len(3, 16)]
     pub vote_proposals: Vec<VoteProposal>,
 
     pub next_proposal_id: u64,
@@ -393,9 +395,9 @@ pub struct DepositorInfo {
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
 pub struct Content {
     pub author: Pubkey,
-    #[max_len(1000)]
+    #[max_len(32)]
     pub text: String,
-    #[max_len(200)]
+    #[max_len(32)]
     pub image_uri: String,
     pub timestamp: u64,
     pub vote_count: u64,
@@ -414,20 +416,18 @@ pub struct VoteProposal {
     pub proposal_id: u64,
     pub proposer: Pubkey,
 
-    #[max_len(200)]
+    #[max_len(16)]
     pub title: String,
 
-    #[max_len(200)]
+    #[max_len(32)]
     pub description: String,
-    #[max_len(200)]
     pub vote_type: VoteType,
-    #[max_len(10, 200)]
+    #[max_len(3, 8)]
     pub options: Vec<String>,
     pub start_time: u64,
     pub end_time: u64,
-    #[max_len(200)]
+    #[max_len(5)]
     pub votes: Vec<VoteInfo>,
-    #[max_len(200)]
     pub status: VoteStatus,
 }
 

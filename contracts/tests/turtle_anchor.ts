@@ -14,7 +14,7 @@ describe("turtle_anchor", () => {
   const initializer = provider.wallet.publicKey;
 
   // 테스트용 변수 설정
-  const daoName = "daostate space test 10MB";
+  const daoName = "daostate space test 2";
   const timeLimit = 60 * 60 * 24 * 7; // 7일(초 단위)
   const baseFee = 5; // 5%
   const aiModeration = true;
