@@ -39,13 +39,13 @@ export default function KasoroApp() {
       {/* Main Content */}
       <main className="flex-grow p-6 md:p-10">
         <div className={`max-w-6xl mx-auto transition-all duration-700 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <h2 className="text-3xl font-bold mb-6">Welcome to Kasoro App</h2>
+          <h2 className="text-3xl font-bold mb-6">COMMUNITIES</h2>
+            <p className="text-gray-600 mb-6">
+              Join existing communities or create your own
+            </p>
           
           <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-            <h3 className="text-xl font-semibold mb-4">Get Started</h3>
-            <p className="mb-4 text-gray-600">
-              Connect your wallet to start depositing or challenging in communities.
-            </p>
+            
             <button className="px-6 py-3 bg-gradient-to-r from-pink-500 to-fuchsia-600 text-white rounded-full">
               Connect Wallet
             </button>
