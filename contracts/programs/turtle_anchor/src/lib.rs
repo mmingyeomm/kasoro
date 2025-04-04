@@ -42,6 +42,8 @@ pub mod turtle_anchor {
         dao.total_deposit = 0;
         dao.next_proposal_id = 0;
         dao.is_active = true;
+
+        
         Ok(())
     }
 
@@ -384,6 +386,13 @@ pub struct DaoState {
     pub is_active: bool,
 }
 
+#[account]
+#[derive(InitSpace)]
+pub struct Basefee_Vault {
+    #[max_len(5, 32)]
+    pub deposit_info: Vec<DepositorInfo>,
+}
+
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
 pub struct DepositorInfo {
     pub depositor: Pubkey,
@@ -449,6 +458,21 @@ pub struct InitializeDao<'info> {
         bump
     )]
     pub dao: Account<'info, DaoState>,
+
+    #[account(
+        init,
+        payer = initializer,
+        space = 8 + DaoState::INIT_SPACE, 
+        seeds = [
+            b"dao2", 
+            initializer.key().as_ref(),
+            dao_name.as_bytes() // 단순히 DAO 이름을 시드로 사용
+        ],
+        bump
+    )]
+    pub dao2: Account<'info, DaoState>,
+
+
     pub system_program: Program<'info, System>,
 }
 

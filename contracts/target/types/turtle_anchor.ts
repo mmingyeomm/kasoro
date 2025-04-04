@@ -176,6 +176,31 @@ export type TurtleAnchor = {
           }
         },
         {
+          "name": "dao2",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  97,
+                  111,
+                  50
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "initializer"
+              },
+              {
+                "kind": "arg",
+                "path": "daoName"
+              }
+            ]
+          }
+        },
+        {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         }
