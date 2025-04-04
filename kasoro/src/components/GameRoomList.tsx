@@ -12,6 +12,7 @@ interface GameRoom {
   bountyAmount?: number;
   timeLimit?: number;
   baseFeePercentage?: number;
+  lastMessageTime?: string | null;
 }
 
 export default function GameRoomList() {
@@ -119,6 +120,17 @@ export default function GameRoomList() {
                     day: "numeric",
                   })}
                 </span>
+                {room.lastMessageTime && (
+                  <span>
+                    Last message:{" "}
+                    {new Date(room.lastMessageTime).toLocaleString(undefined, {
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                )}
               </div>
             </div>
           </Link>

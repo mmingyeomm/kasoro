@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import MessageList from "@/components/MessageList";
 import CreateMessageForm from "@/components/CreateMessageForm";
+import LastMessageTimer from "@/components/LastMessageTimer";
 
 type User = {
   id: string;
@@ -151,6 +152,10 @@ export default function GameRoomPage() {
         {gameRoom.description && (
           <p className="text-gray-600 dark:text-gray-400 mt-2">{gameRoom.description}</p>
         )}
+        
+        <div className="mt-3">
+          <LastMessageTimer gameRoomId={gameRoom.id} />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-8">
