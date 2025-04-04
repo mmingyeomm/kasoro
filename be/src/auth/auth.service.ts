@@ -58,8 +58,10 @@ export class AuthService {
     // Use the appropriate callback URL based on environment
     const isProduction = process.env.NODE_ENV === 'production';
     const callback = isProduction
-      ? 'https://kasoro-be.onrender.com/auth/callback'
+      ? 'https://kasoro.onrender.com/auth/callback'
       : 'http://localhost:3001/auth/callback';
+    
+    console.log('[GET_REQUEST_TOKEN] Using callback URL:', callback);
   
     // OAuth 1.0a parameters must be included in both the signature and the request
     const requestData = {

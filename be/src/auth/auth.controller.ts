@@ -1,5 +1,5 @@
-import { Controller, Get, Query, Res, Session } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Get, Query, Res, Session, Req } from '@nestjs/common';
+import { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -165,14 +165,12 @@ export class AuthController {
   }
 
   @Get('user')
-  getUser(@Session() session: Record<string, any>, @Res({ passthrough: true }) res: Response) {
+  getUser(@Session() session: Record<string, any>, @Req() req: Request, @Res({ passthrough: true }) res: Response) {
     console.log('User session data requested, returning:', session.user ? { id: session.user.id, username: session.user.username, walletAddress: session.user.walletAddress } : 'No user');
 
-    // Set CORS headers explicitly based on environment
-    const frontendUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://kasoro.vercel.app'
-      : 'http://localhost:3000';
-    res.header('Access-Control-Allow-Origin', frontendUrl);
+    // Set CORS headers to allow any origin
+    const origin = req.headers.origin || '*';
+    res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Credentials', 'true');
     
     // Always return a valid JSON object
