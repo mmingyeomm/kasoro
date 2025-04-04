@@ -1,3 +1,6 @@
+pub mod instructions;
+pub mod states;
+
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::clock::Clock;
 
@@ -16,7 +19,7 @@ pub const MASTER_WALLET: &str = "wPrpTY68NWWQQqJbiHaiYNPMk2QRtgWBb3tmEj5nfxY";
 // 2. daostate의 is_active 변경하는 함수 권한 -> 마스터 지갑으로 변경(완료)
 // 3. 1등에게 상금 분배 함수 추가
 //     - 백엔드에서 시간 종료 알림 받으면 마지막 사용자에게 상금 분배
-// 4. deposit 기능이랑 submit_content 기능 합치기 
+// 4. deposit 기능이랑 submit_content 기능 합치기
 ////////////////////////////////////////////////////////////////////////////////////////
 
 #[program]
@@ -42,15 +45,13 @@ pub mod turtle_anchor {
         dao.total_deposit = 0;
         dao.next_proposal_id = 0;
         dao.is_active = true;
-
-        
         Ok(())
     }
 
     pub fn deposit(ctx: Context<Deposit>, amount: u64) -> Result<()> {
         let depositor = &ctx.accounts.depositor;
         let current_time = Clock::get()?.unix_timestamp as u64;
-        
+
         // DAO가 활성화되어 있는지 확인
         require!(ctx.accounts.dao.is_active, ErrorCode::DaoNotActive);
 
@@ -67,7 +68,7 @@ pub mod turtle_anchor {
         anchor_lang::system_program::transfer(cpi_context, amount)?;
 
         let dao = &mut ctx.accounts.dao;
-        
+
         // Update depositor info
         let depositor_info = DepositorInfo {
             depositor: depositor.key(),
@@ -306,26 +307,26 @@ pub mod turtle_anchor {
         // Find best content and distribute rewards
         let mut best_content_index = None;
         let mut best_vote_count = 0;
-        
+
         for (i, content) in dao.contents.iter().enumerate() {
             if content.vote_count > best_vote_count {
                 best_vote_count = content.vote_count;
                 best_content_index = Some(i);
             }
         }
-        
+
         if let Some(best_index) = best_content_index {
             let _winner = dao.contents[best_index].author;
-            
+
             // Calculate rewards
             let base_fee_amount = dao.total_deposit * (dao.base_fee as u64) / 100;
             let _quality_share = base_fee_amount * (dao.deposit_share as u64) / 100;
-            
+
             // Reset DAO state
             dao.timeout_timestamp = current_time + dao.time_limit;
             dao.total_deposit = 0;
             dao.contents.clear();
-            
+
             // Reset depositor amounts
             for depositor in dao.depositors.iter_mut() {
                 depositor.amount = 0;
@@ -386,13 +387,6 @@ pub struct DaoState {
     pub is_active: bool,
 }
 
-#[account]
-#[derive(InitSpace)]
-pub struct Basefee_Vault {
-    #[max_len(5, 32)]
-    pub deposit_info: Vec<DepositorInfo>,
-}
-
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
 pub struct DepositorInfo {
     pub depositor: Pubkey,
@@ -449,30 +443,15 @@ pub struct InitializeDao<'info> {
     #[account(
         init,
         payer = initializer,
-        space = 8 + DaoState::INIT_SPACE, 
+        space = 8 + DaoState::INIT_SPACE,
         seeds = [
-            b"dao", 
+            b"dao",
             initializer.key().as_ref(),
             dao_name.as_bytes() // 단순히 DAO 이름을 시드로 사용
         ],
         bump
     )]
     pub dao: Account<'info, DaoState>,
-
-    #[account(
-        init,
-        payer = initializer,
-        space = 8 + DaoState::INIT_SPACE, 
-        seeds = [
-            b"dao2", 
-            initializer.key().as_ref(),
-            dao_name.as_bytes() // 단순히 DAO 이름을 시드로 사용
-        ],
-        bump
-    )]
-    pub dao2: Account<'info, DaoState>,
-
-
     pub system_program: Program<'info, System>,
 }
 
@@ -480,7 +459,7 @@ pub struct InitializeDao<'info> {
 pub struct Deposit<'info> {
     #[account(mut)]
     pub depositor: Signer<'info>,
-    
+
     #[account(mut)]
     pub dao: Account<'info, DaoState>,
     pub system_program: Program<'info, System>,

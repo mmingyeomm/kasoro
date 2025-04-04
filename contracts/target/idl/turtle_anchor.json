@@ -170,31 +170,6 @@
           }
         },
         {
-          "name": "dao2",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  100,
-                  97,
-                  111,
-                  50
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "initializer"
-              },
-              {
-                "kind": "arg",
-                "path": "dao_name"
-              }
-            ]
-          }
-        },
-        {
           "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
