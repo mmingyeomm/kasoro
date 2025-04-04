@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import { SolanaWalletProvider } from "@/components/SolanaWalletProvider";
-import { Geist, Geist_Mono, Silkscreen, Poppins, Quicksand } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Silkscreen,
+  Poppins,
+  Quicksand,
+} from "next/font/google";
 import "./globals.css";
 import localFont from "next/font/local";
 
 const fbpung = localFont({
-  src:"../../public/fonts/FB-pung-pop-M.ttf",
+  src: "../../public/fonts/FB-pung-pop-M.ttf",
   display: "swap",
-  variable: "--font-fbpung"
+  variable: "--font-fbpung",
 });
 
 const geistSans = Geist({
@@ -43,7 +48,8 @@ const quicksand = Quicksand({
 
 export const metadata: Metadata = {
   title: "Kasoro | First CommuniFi on Solana",
-  description: "The cutest community-driven platform for content creators and community builders on Solana",
+  description:
+    "The cutest community-driven platform for content creators and community builders on Solana",
 };
 
 export default function RootLayout({
@@ -56,9 +62,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${silkscreen.variable} ${poppins.variable} ${quicksand.variable} antialiased`}
       >
-        <SolanaWalletProvider>
-          {children}
-        </SolanaWalletProvider>
+        <SolanaWalletProvider>{children}</SolanaWalletProvider>
       </body>
     </html>
   );
