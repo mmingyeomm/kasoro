@@ -4,10 +4,21 @@ import * as session from 'express-session';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
+  console.log('Database config:', {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    username: process.env.DB_USERNAME,
+    database: process.env.DB_DATABASE,
+    // 비밀번호는 보안을 위해 출력하지 않음
+  });
   const app = await NestFactory.create(AppModule);
+
+  
   const configService = app.get(ConfigService);
 
   
+  
+
   // Print environment variables to debug
   console.log('API_KEY configured:', configService.get('API_KEY') ? 'Yes' : 'No');
   console.log('API_KEY_SECRET configured:', configService.get('API_KEY_SECRET') ? 'Yes' : 'No');
