@@ -45,28 +45,7 @@ export default function KasoroApp() {
             </p>
           
           <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-            
-            <button className="px-6 py-3 bg-gradient-to-r from-pink-500 to-fuchsia-600 text-white rounded-full">
-              Connect Wallet
-            </button>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-xl font-semibold mb-4">Active Communities</h3>
-              <p className="text-gray-500 mb-8">No communities available yet. Connect wallet to see communities.</p>
-              <button className="px-4 py-2 border border-pink-500 text-fuchsia-600 rounded-full hover:bg-pink-50 transition-colors">
-                Browse Communities
-              </button>
-            </div>
-            
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-xl font-semibold mb-4">My Activity</h3>
-              <p className="text-gray-500 mb-8">Connect your wallet to see your activity.</p>
-              <button className="px-4 py-2 border border-pink-500 text-fuchsia-600 rounded-full hover:bg-pink-50 transition-colors">
-                View Activity
-              </button>
-            </div>
+            <h3 className="text-2xl mb-6">ACTIVE COMMUNITIES</h3>
           </div>
         </div>
       </main>
