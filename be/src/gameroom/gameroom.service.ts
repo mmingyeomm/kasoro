@@ -37,4 +37,15 @@ export class GameRoomService {
     }
     return gameRoom;
   }
+  
+  async updateLastMessageTime(id: string, timestamp: Date = new Date()): Promise<void> {
+    console.log(3)
+    // First check if the game room exists
+    await this.getGameRoomById(id);
+    
+    // Then update the lastMessageTime
+    await this.gameRoomRepository.updateLastMessageTime(id, timestamp);
+    
+    console.log(`Updated lastMessageTime for game room ${id} to ${timestamp}`);
+  }
 }

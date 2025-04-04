@@ -32,6 +32,10 @@ export class GameRoomRepository {
     });
   }
 
-
-
+  async updateLastMessageTime(id: string, timestamp: Date): Promise<void> {
+    await this.gameRoomRepository.update(
+      { id },
+      { lastMessageTime: timestamp }
+    );
+  }
 }

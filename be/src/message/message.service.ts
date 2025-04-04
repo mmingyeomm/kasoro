@@ -28,13 +28,27 @@ export class MessageService {
       throw new NotFoundException(`User with xId ${user.id} not found`);
     }
     
+    // Current timestamp for both message creation and game room update
+    const currentTime = new Date();
+    
     // 메시지 생성
     const message = this.messageRepository.create({
       ...createMessageDto,
       userId: userRecord.id, // 실제 UUID 형식의 사용자 ID 사용
+      createdAt: currentTime, // Explicitly set creation time
     });
     
-    // 데이터베이스에 저장 (create만으로는 DB에 저장되지 않음)
-    return this.messageRepository.save(await message);
+    // Save the message
+    const savedMessage = await this.messageRepository.save(await message);
+
+    console.log(1)
+    
+    // Update the game room's lastMessageTime
+    await this.gameRoomService.updateLastMessageTime(createMessageDto.gameRoomId, currentTime);
+
+    console.log(2)
+
+    
+    return savedMessage;
   }
 }

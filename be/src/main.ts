@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
 import { ConfigService } from '@nestjs/config';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   console.log('Database config:', {
@@ -12,12 +13,8 @@ async function bootstrap() {
     // 비밀번호는 보안을 위해 출력하지 않음
   });
   const app = await NestFactory.create(AppModule);
-
   
   const configService = app.get(ConfigService);
-
-  
-  
 
   // Print environment variables to debug
   console.log('API_KEY configured:', configService.get('API_KEY') ? 'Yes' : 'No');
@@ -67,6 +64,16 @@ async function bootstrap() {
     environment: process.env.NODE_ENV || 'development',
     frontendUrl,
   });
+
+  // Swagger 설정 수정
+  const config = new DocumentBuilder()
+    .setTitle('Cats example')
+    .setDescription('The cats API description')
+    .setVersion('1.0')
+    .addTag('cats')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
   
   const port = configService.get('PORT') || 3001;
   await app.listen(port);
