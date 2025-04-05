@@ -61,4 +61,12 @@ export class CreateCommunityDto {
   @IsOptional()
   @IsString()
   walletAddress?: string;
+
+  @ApiPropertyOptional({
+    description: 'Image URL for the community',
+    example: 'https://example.com/image.jpg'
+  })
+  @IsOptional()
+  @IsString()
+  imageURL?: string;
 }

@@ -36,6 +36,7 @@ export class CommunityService {
         timeLimit: true,
         baseFeePercentage: true,
         walletAddress: true,
+        imageURL: true, // 이 필드가 명시적으로 선택되었는지 확인
         creator: {
           id: true,
           xId: true,
@@ -46,6 +47,7 @@ export class CommunityService {
       }
     });
   }
+  
 
   async getCommunityById(id: string): Promise<Community> {
     const community = await this.communityRepository.findOne({

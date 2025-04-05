@@ -53,6 +53,9 @@ export class CommunityController {
     @CurrentUser() user: any,
   ): Promise<Community> {
     console.log('User from auth:', user);
+
+
+    console.log(createCommunityDto);
     
     // Get Twitter ID from user session
     const twitterId = user.xId || user.id;

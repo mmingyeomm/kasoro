@@ -84,7 +84,7 @@ export class Community {
     description: 'Base fee percentage',
     example: 5
   })
-  @Column({ nullable: true })
+  @Column('float', { nullable: true })
   baseFeePercentage: number;
   
   @ApiPropertyOptional({
@@ -93,6 +93,13 @@ export class Community {
   })
   @Column({ nullable: true })
   walletAddress: string;
+
+  @ApiPropertyOptional({
+    description: 'Image URL for the community',
+    example: 'https://example.com/image.jpg'
+  })
+  @Column({ nullable: true, name: 'imageURL' }) // 컬럼명이 정확한지 확인
+  imageURL: string;
 
   @BeforeInsert()
   @BeforeUpdate()
