@@ -287,7 +287,7 @@ export default function CommunityPage() {
 								>
 									<div className="relative">
 										<div className="text-lg font-extrabold mb-1 uppercase">
-											{isExpired() ? "Time's Up!" : "No Time Left"}
+											{isExpired() ? "Time's Up!" : "Time Left"}
 										</div>
 										<div className={`text-3xl font-mono font-extrabold bg-white dark:bg-gray-900 px-4 py-2 rounded-lg border-2 border-dashed ${
 											isExpired()
