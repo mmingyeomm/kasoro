@@ -5,8 +5,8 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { toast } from 'react-hot-toast';
 import { api } from '@/api';
-import { Kasoro } from '../../../../contract/target/types/kasoro';
-import kasoroIdl from '../../../../contract/target/idl/kasoro.json';
+import { Kasoro } from '../../../contract_idl/kasoro';
+import kasoroIdl from '../../../contract_idl/kasoro.json';
 
 import { useRouter } from 'next/navigation';
 import { Program, AnchorProvider, web3 } from '@coral-xyz/anchor';
