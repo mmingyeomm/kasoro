@@ -25,7 +25,7 @@ export default function SearchCommunities({ onSearch }: SearchCommunitiesProps) 
 			<div className="relative">
 				<input
 					type="text"
-					placeholder="Find dank meme communities..."
+					placeholder="Find communities..."
 					value={searchTerm}
 					onChange={(e) => {
 						setSearchTerm(e.target.value);

@@ -152,14 +152,22 @@ export default function DepositBountyDialog({
 			  }, 3000);
 			// Wait for confirmation
 			
-			await connection.confirmTransaction(
-				{
-					signature,
-					blockhash: latestBlockhash.blockhash,
-					lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-				},
-				'confirmed'
-			);
+			console.log('Transaction sent with signature:', signature);
+      toast.success('트랜잭션이 제출되었습니다. 확인 중...');
+
+      // Wait for confirmation - 수정된 컨펌 로직
+      try {
+        const confirmation = await connection.confirmTransaction(signature, 'confirmed');
+        
+        if (confirmation.value.err) {
+          throw new Error('트랜잭션이 실패했습니다: ' + confirmation.value.err.toString());
+        }
+        
+        console.log('Transaction confirmed:', confirmation);
+      } catch (confirmError) {
+        console.error('트랜잭션 확인 중 오류:', confirmError);
+        throw new Error('트랜잭션 확인에 실패했습니다. 나중에 다시 시도해주세요.');
+      }
 
 			// const communityAccount = await program.account.communityState.fetch(communityPda);
 			// console.log('CommunityState account pubkey:', communityPda.toString());

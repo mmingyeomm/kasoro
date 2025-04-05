@@ -186,7 +186,7 @@ export default function CommunityPage() {
 		return (
 			<div className="container mx-auto px-4 py-8 bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-950">
 				<div className="bg-red-100 dark:bg-red-900/30 border-4 border-dashed border-red-400 dark:border-red-600 p-6 rounded-xl text-red-800 dark:text-red-300 text-center font-bold text-xl">
-					{error || 'Oops! This meme community was too dank to find! 🤔'}
+					{error || 'Oops! 🤔'}
 				</div>
 			</div>
 		);
@@ -200,7 +200,7 @@ export default function CommunityPage() {
 						href="/communities"
 						className="inline-flex items-center gap-2 text-base font-bold text-[#5F96FF] dark:text-[#5F96FF] hover:text-[#1493FF] dark:hover:text-[#1493FF] bg-white dark:bg-gray-800 px-4 py-2 rounded-full border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] shadow-md transform hover:-translate-x-1 transition-all"
 					>
-						← back to all the dank memes
+						← back to all the communities
 					</Link>
 				</div>
 
@@ -210,7 +210,7 @@ export default function CommunityPage() {
 						<div className="mb-6">
 							<div className="flex items-center mb-4">
 								<div className="w-8 h-8 bg-[#5F96FF] rounded-full mr-3 transform rotate-0"></div>
-								<h2 className="text-xl font-extrabold text-[#5F96FF] dark:text-[#5F96FF] uppercase">Meme Stakers</h2>
+								<h2 className="text-xl font-extrabold text-[#5F96FF] dark:text-[#5F96FF] uppercase">Stakers</h2>
 							</div>
 							<hr className="border-[#5F96FF] dark:border-[#1493FF] border-2 border-dashed mb-4" />
 							<DepositorsList communityId={id as string} />
@@ -264,12 +264,12 @@ export default function CommunityPage() {
 							<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 								<div className="relative overflow-hidden rounded-xl border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] p-5 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 shadow-lg transform rotate-0 hover:rotate-0 transition-all">
 									<div className="relative">
-										<div className="text-lg font-extrabold mb-1 text-[#5F96FF] dark:text-[#5F96FF] uppercase">Total Stonks</div>
+										<div className="text-lg font-extrabold mb-1 text-[#5F96FF] dark:text-[#5F96FF] uppercase">Total Bounty</div>
 										<div className="text-3xl font-mono font-extrabold bg-white dark:bg-gray-900 px-4 py-2 rounded-lg border-2 border-dashed border-[#5F96FF] dark:border-[#1493FF] text-center">
 											{community.bountyAmount !== null && community.bountyAmount !== undefined
 												? Number(community.bountyAmount).toFixed(2)
 												: '0.00'}{' '}
-											SOL
+											INF
 										</div>
 										<div className="absolute -right-1 -top-1 text-2xl animate-bounce">💰</div>
 									</div>
@@ -287,7 +287,7 @@ export default function CommunityPage() {
 								>
 									<div className="relative">
 										<div className="text-lg font-extrabold mb-1 uppercase">
-											{isExpired() ? "Time's Up!" : "Meme Time Left"}
+											{isExpired() ? "Time's Up!" : "No Time Left"}
 										</div>
 										<div className={`text-3xl font-mono font-extrabold bg-white dark:bg-gray-900 px-4 py-2 rounded-lg border-2 border-dashed ${
 											isExpired()
@@ -326,11 +326,11 @@ export default function CommunityPage() {
 									<span className="font-bold text-[#5F96FF] dark:text-[#5F96FF]">Created:</span> {new Date(community.createdAt).toLocaleString()}
 								</div>
 								<div className="flex items-center">
-									<span className="font-bold text-[#5F96FF] dark:text-[#5F96FF]">Latest meme:</span>
+									<span className="font-bold text-[#5F96FF] dark:text-[#5F96FF]">Latest content:</span>
 									<span className="font-medium ml-1">
 										{community.lastMessageTime
 											? new Date(community.lastMessageTime).toLocaleString()
-											: 'No memes posted yet'}
+											: 'No contents posted yet'}
 									</span>
 									{isConnected && (
 										<span className="flex h-3 w-3 ml-2">
@@ -345,22 +345,22 @@ export default function CommunityPage() {
 						<div className="bg-white dark:bg-gray-800 border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] p-6 shadow-xl rounded-xl transform rotate-0">
 							<div className="flex items-center gap-4 mb-8">
 								<div className="w-8 h-8 bg-[#5F96FF] rounded-full mr-1 transform rotate-0"></div>
-								<h2 className="text-2xl font-extrabold text-[#5F96FF] dark:text-[#5F96FF] uppercase">Meme Feed</h2>
+								<h2 className="text-2xl font-extrabold text-[#5F96FF] dark:text-[#5F96FF] uppercase">Content Feed</h2>
 								<div className="w-8 h-8 bg-[#5F96FF] rounded-full ml-1 transform rotate-0"></div>
 							</div>
 							
 							{parseInt(remainingTimeText) < 15 && !isExpired() && (
 								<div className="mb-6 bg-red-100 dark:bg-red-900/30 border-4 border-dashed border-red-400 dark:border-red-600 p-4 rounded-xl text-center font-extrabold text-xl">
 									<span className="text-red-600 dark:text-red-400 animate-pulse flex items-center justify-center">
-										⚠️ HURRY UP! Post your meme before time runs out! ⚠️
+										⚠️ HURRY UP! Post your content before time runs out! ⚠️
 									</span>
 								</div>
 							)}
 							
 							{isExpired() ? (
 								<div className="bg-red-100 dark:bg-red-900/30 border-4 border-dashed border-red-400 dark:border-red-600 p-6 rounded-xl text-center mb-6">
-									<div className="text-2xl font-extrabold text-red-600 dark:text-red-400 mb-2">This meme community has expired! 💀</div>
-									<div className="text-lg font-bold">Too late for the memes... Better luck next time!</div>
+									<div className="text-2xl font-extrabold text-red-600 dark:text-red-400 mb-2">TIME OUT! 💀</div>
+									<div className="text-lg font-bold">Too late... Better luck next time!</div>
 								</div>
 							) : (
 								<>

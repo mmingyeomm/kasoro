@@ -160,7 +160,7 @@ export default function CommunityCard({
 												: 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
 										} px-3 py-1.5 text-sm font-bold rounded-full mt-1 text-center border-2 border-yellow-400 dark:border-yellow-600`}
 									>
-										{bountyAmount !== undefined ? `${bountyAmount} SOL` : 'no stonks'}
+										{bountyAmount !== undefined ? `${bountyAmount} SOL` : 'No bounty yet '}
 									</span>
 								</div>
 
@@ -196,7 +196,7 @@ export default function CommunityCard({
 												: 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
 										} px-3 py-1.5 text-sm font-bold rounded-full mt-1 text-center border-2 border-blue-400 dark:border-blue-600`}
 									>
-										{baseFeePercentage !== undefined && baseFeePercentage !== null ? `${baseFeePercentage} SOL` : 'free memes'}
+										{baseFeePercentage !== undefined && baseFeePercentage !== null ? `${baseFeePercentage} SOL` : 'Free'}
 									</span>
 								</div>
 							</div>
@@ -214,7 +214,7 @@ export default function CommunityCard({
 								</div>
 
 								<div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-300 mt-2 font-medium">
-									<span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">last meme:</span>
+									<span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">last content:</span>
 									<span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">{formatTimestamp(displayedLastMessageTime)}</span>
 								</div>
 							</div>

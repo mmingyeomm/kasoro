@@ -41,19 +41,6 @@ export default function CreateCommunityForm({ userWalletAddress }: FormProps) {
 			return;
 		}
 
-		// If user has a wallet connected but it doesn't match their linked wallet, warn them
-		if (connected && publicKey && isWalletLinked && publicKey.toString() !== userWalletAddress) {
-			setError("Warning: The connected wallet doesn't match your linked wallet");
-			toast("The connected wallet doesn't match your linked wallet", {
-				icon: '⚠️',
-				style: {
-					borderRadius: '10px',
-					background: '#FFF3CD',
-					color: '#856404',
-				},
-			});
-			// Don't return, allow them to continue
-		}
 
 		setLoading(true);
 		setError(null);

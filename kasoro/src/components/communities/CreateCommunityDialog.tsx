@@ -122,13 +122,6 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 			return;
 		}
 
-		// Check that connected wallet matches linked wallet
-		if (publicKey.toString() !== userWalletAddress) {
-			setError("The connected wallet doesn't match your linked wallet");
-			toast.error("The connected wallet doesn't match your linked wallet");
-			return;
-		}
-
 		setLoading(true);
 		setError(null);
 
@@ -231,14 +224,22 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 
 			// Wait for confirmation
 
-			await connection.confirmTransaction(
-				{
-					signature,
-					blockhash: latestBlockhash.blockhash,
-					lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-				},
-				'confirmed'
-			);
+			console.log('Transaction sent with signature:', signature);
+      toast.success('트랜잭션이 제출되었습니다. 확인 중...');
+
+      // Wait for confirmation - 수정된 컨펌 로직
+      try {
+        const confirmation = await connection.confirmTransaction(signature, 'confirmed');
+        
+        if (confirmation.value.err) {
+          throw new Error('트랜잭션이 실패했습니다: ' + confirmation.value.err.toString());
+        }
+        
+        console.log('Transaction confirmed:', confirmation);
+      } catch (confirmError) {
+        console.error('트랜잭션 확인 중 오류:', confirmError);
+        throw new Error('트랜잭션 확인에 실패했습니다. 나중에 다시 시도해주세요.');
+      }
 
 			const communityAccount = await program.account.communityState.fetch(communityPda);
 			console.log('CommunityState account pubkey:', communityPda.toString());
@@ -300,12 +301,12 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 			onClick={handleBackdropClick}
 		>
 			<div className="relative w-full max-w-2xl my-8" onClick={(e) => e.stopPropagation()}>
-				<div className="bg-white dark:bg-gray-800 rounded-xl border-4 border-dashed border-[#0000FF] dark:border-[#0000CD] p-6 shadow-2xl transform transition-all duration-300 animate-scaleIn max-h-[90vh] overflow-y-auto">
+				<div className="bg-white dark:bg-gray-800 rounded-xl border-4 border-dashed border-[#87CEFA] dark:border-[#1E90FF] p-6 shadow-2xl transform transition-all duration-300 animate-scaleIn max-h-[90vh] overflow-y-auto">
 					<div className="absolute top-2 right-2">
 						<button
 							type="button"
 							onClick={onClose}
-							className="bg-[#0000FF] text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-[#0000CD] transition-all duration-300 shadow-lg transform hover:scale-110 hover:rotate-90"
+							className="bg-[#87CEFA] text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-[#1E90FF] transition-all duration-300 shadow-lg transform hover:scale-110 hover:rotate-90"
 							title="Close dialog"
 						>
 							<svg
@@ -320,8 +321,8 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 						</button>
 					</div>
 
-					<h2 className="text-3xl font-extrabold tracking-wider mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-[#0000FF] to-purple-500 dark:from-[#0000CD] dark:to-purple-400 uppercase">
-						Create a Dank Meme Community
+					<h2 className="text-3xl font-extrabold tracking-wider mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-[#87CEFA] to-purple-500 dark:from-[#1E90FF] dark:to-purple-400 uppercase">
+						Create a Community
 					</h2>
 
 					{error && (
@@ -335,7 +336,7 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 							<div>
 								<label
 									htmlFor="name"
-									className="block text-lg font-extrabold text-[#0000FF] dark:text-[#0000FF] mb-2 uppercase"
+									className="block text-lg font-extrabold text-[#87CEFA] dark:text-[#87CEFA] mb-2 uppercase"
 								>
 									Community Name
 								</label>
@@ -346,9 +347,9 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 									onChange={(e) => setName(e.target.value)}
 									placeholder="e.g. Doge Lovers"
 									required
-									className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 
-									border-3 border-dashed border-[#0000FF] dark:border-[#0000CD] 
-									focus:border-[#0000CD] focus:outline-none focus:ring-2 focus:ring-[#0000FF] 
+									className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 
+									border-3 border-dashed border-[#87CEFA] dark:border-[#1E90FF] 
+									focus:border-[#1E90FF] focus:outline-none focus:ring-2 focus:ring-[#87CEFA] 
 									text-gray-700 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 
 									font-medium transform hover:scale-[1.01] transition-all"
 								/>
@@ -357,19 +358,19 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 							<div>
 								<label
 									htmlFor="description"
-									className="block text-lg font-extrabold text-[#0000FF] dark:text-[#0000FF] mb-2 uppercase"
+									className="block text-lg font-extrabold text-[#87CEFA] dark:text-[#87CEFA] mb-2 uppercase"
 								>
-									Meme Description
+								 Community Description
 								</label>
 								<textarea
 									id="description"
 									value={description}
 									onChange={(e) => setDescription(e.target.value)}
-									placeholder="Describe your meme community vibes..."
+									placeholder="Describe your community vibes..."
 									rows={3}
-									className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 
-									border-3 border-dashed border-[#0000FF] dark:border-[#0000CD] 
-									focus:border-[#0000CD] focus:outline-none focus:ring-2 focus:ring-[#0000FF] 
+									className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 
+									border-3 border-dashed border-[#87CEFA] dark:border-[#1E90FF] 
+									focus:border-[#1E90FF] focus:outline-none focus:ring-2 focus:ring-[#87CEFA] 
 									text-gray-700 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 
 									font-medium transform hover:scale-[1.01] transition-all"
 								></textarea>
@@ -379,7 +380,7 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 								<div>
 									<label
 										htmlFor="timeLimit"
-										className="block text-lg font-extrabold text-[#0000FF] dark:text-[#0000FF] mb-2 uppercase"
+										className="block text-lg font-extrabold text-[#87CEFA] dark:text-[#87CEFA] mb-2 uppercase"
 									>
 										Time Limit (minutes)
 									</label>
@@ -392,9 +393,9 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 											min="1"
 											max="1440"
 											required
-											className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 
-											border-3 border-dashed border-[#0000FF] dark:border-[#0000CD] 
-											focus:border-[#0000CD] focus:outline-none focus:ring-2 focus:ring-[#0000FF] 
+											className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 
+											border-3 border-dashed border-[#87CEFA] dark:border-[#1E90FF] 
+											focus:border-[#1E90FF] focus:outline-none focus:ring-2 focus:ring-[#87CEFA] 
 											text-gray-700 dark:text-gray-200 
 											font-medium transform hover:scale-[1.01] transition-all text-center"
 										/>
@@ -404,7 +405,7 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 								<div>
 									<label
 										htmlFor="baseFee"
-										className="block text-lg font-extrabold text-[#0000FF] dark:text-[#0000FF] mb-2 uppercase"
+										className="block text-lg font-extrabold text-[#87CEFA] dark:text-[#87CEFA] mb-2 uppercase"
 									>
 										Base Fee (SOL)
 									</label>
@@ -417,9 +418,9 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 											min="0"
 											step="0.01"
 											required
-											className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 
-											border-3 border-dashed border-[#0000FF] dark:border-[#0000CD] 
-											focus:border-[#0000CD] focus:outline-none focus:ring-2 focus:ring-[#0000FF] 
+											className="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 
+											border-3 border-dashed border-[#87CEFA] dark:border-[#1E90FF] 
+											focus:border-[#1E90FF] focus:outline-none focus:ring-2 focus:ring-[#87CEFA] 
 											text-gray-700 dark:text-gray-200 
 											font-medium transform hover:scale-[1.01] transition-all text-center"
 										/>
@@ -428,13 +429,13 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 							</div>
 
 							<div>
-								<label className="block text-lg font-extrabold text-[#0000FF] dark:text-[#0000FF] mb-2 uppercase">
-									Meme Profile Image (Optional)
+								<label className="block text-lg font-extrabold text-[#87CEFA] dark:text-[#87CEFA] mb-2 uppercase">
+									Community Profile Image (Optional)
 								</label>
 								<div className="flex justify-center">
 									<label
 										htmlFor="image"
-										className="cursor-pointer flex flex-col items-center justify-center w-40 h-40 border-4 border-dashed border-[#0000FF] dark:border-[#0000CD] rounded-2xl overflow-hidden bg-pink-50 dark:bg-gray-700 hover:bg-pink-100 dark:hover:bg-gray-600 transition-colors transform hover:scale-105"
+										className="cursor-pointer flex flex-col items-center justify-center w-40 h-40 border-4 border-dashed border-[#87CEFA] dark:border-[#1E90FF] rounded-2xl overflow-hidden bg-blue-50 dark:bg-gray-700 hover:bg-blue-100 dark:hover:bg-gray-600 transition-colors transform hover:scale-105"
 									>
 										{imagePreview ? (
 											<img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
@@ -442,7 +443,7 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 											<div className="flex flex-col items-center justify-center p-4">
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
-													className="h-12 w-12 text-[#0000FF] dark:text-[#0000CD] mb-2"
+													className="h-12 w-12 text-[#87CEFA] dark:text-[#1E90FF] mb-2"
 													viewBox="0 0 20 20"
 													fill="currentColor"
 												>
@@ -452,8 +453,8 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 														clipRule="evenodd"
 													/>
 												</svg>
-												<span className="text-base font-bold text-[#0000FF] dark:text-[#0000CD]">
-													{uploadingImage ? 'Uploading...' : 'Upload Meme Pic'}
+												<span className="text-base font-bold text-[#87CEFA] dark:text-[#1E90FF]">
+													{uploadingImage ? 'Uploading...' : 'Upload Community Pic'}
 												</span>
 											</div>
 										)}
@@ -486,7 +487,7 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 
 						{!connected && (
 							<div className="bg-yellow-100 dark:bg-yellow-900/30 border-4 border-dashed border-yellow-400 dark:border-yellow-600 p-4 rounded-xl text-yellow-800 dark:text-yellow-300 font-bold text-center">
-								Connect your wallet to create a dank meme community!
+								Connect your wallet to create a community!
 							</div>
 						)}
 
@@ -501,7 +502,7 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 							<button
 								type="submit"
 								disabled={loading || !name.trim() || !connected}
-								className="px-6 py-3 bg-gradient-to-r from-[#0000FF] to-[#0000CD] hover:from-[#0000CD] hover:to-[#0000FF] text-white font-extrabold border-4 border-dashed border-white dark:border-gray-700 rounded-full disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 uppercase tracking-wider text-lg shadow-md"
+								className="px-6 py-3 bg-gradient-to-r from-[#4682B4] to-[#0000CD] hover:from-[#0000CD] hover:to-[#4682B4] text-white font-extrabold border-4 border-dashed border-white dark:border-gray-700 rounded-full disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 uppercase tracking-wider text-lg shadow-md"
 							>
 								{loading ? 'Creating...' : '🚀 Create Community 🚀'}
 							</button>

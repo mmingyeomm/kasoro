@@ -62,9 +62,9 @@ export default function DepositorsList({ communityId }: DepositorListProps) {
       <div className="mb-6 flex flex-col">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <span className="w-4 h-4 bg-[#5F96FF] dark:bg-[#1493FF] rounded-full"></span>
-            <h3 className="text-lg font-extrabold tracking-widest uppercase text-[#5F96FF] dark:text-[#5F96FF]">Meme Stakers</h3>
-            <span className="w-4 h-4 bg-[#5F96FF] dark:bg-[#1493FF] rounded-full"></span>
+           
+            <h3 className="text-lg font-extrabold tracking-widest uppercase text-[#5F96FF] dark:text-[#5F96FF]"> Stakers</h3>
+           
           </div>
           <button 
             onClick={() => fetchDepositors()} 
@@ -75,7 +75,7 @@ export default function DepositorsList({ communityId }: DepositorListProps) {
           </button>
         </div>
         <div className="text-sm font-medium text-gray-600 dark:text-gray-400 border-b-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] pb-2">
-          {depositors.length} staker{depositors.length !== 1 ? 's' : ''} · {totalStaked.toFixed(2)} SOL total
+          {depositors.length} staker{depositors.length !== 1 ? 's' : ''} · {totalStaked.toFixed(2)} INF total
         </div>
       </div>
       
@@ -109,7 +109,7 @@ export default function DepositorsList({ communityId }: DepositorListProps) {
                   className="font-mono font-bold text-gray-600 dark:text-gray-400 text-sm mt-1 flex items-center"
                   title={`Last deposit: ${new Date(depositor.depositedAt).toLocaleString()}`}
                 >
-                  <span>{depositor.amount.toFixed(2)} SOL</span>
+                  <span>{depositor.amount.toFixed(2)} INF</span>
                   <span className="ml-2 bg-[#5F96FF]/10 dark:bg-[#5F96FF]/20 px-1.5 py-0.5 rounded text-xs">
                     {totalStaked > 0 ? ((depositor.amount / totalStaked) * 100).toFixed(1) : '0'}%
                   </span>

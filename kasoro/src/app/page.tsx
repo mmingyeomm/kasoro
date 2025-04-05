@@ -104,7 +104,7 @@ function HomeContent() {
 							First CommuniFi on Solana
 						</p>
 						<p className="text-lg md:text-xl max-w-3xl mx-auto mb-10 md:mb-16 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm px-8 py-4 rounded-xl border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] text-gray-700 dark:text-gray-200 font-medium">
-							The community-driven platform for dank meme creators and community builders
+							Interaction-based community amplifier with innovative bounty mechanism
 						</p>
 
 						<div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6">
@@ -142,7 +142,7 @@ function HomeContent() {
 								Why Choose Pulse?
 							</h2>
 							<p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-								Discover the dankest features that make our platform special
+								Explore the powerful features that make our platform a standout choice for community-driven innovation.
 							</p>
 						</div>
 
@@ -230,7 +230,7 @@ function HomeContent() {
 								Community as DeFi Itself
 							</h2>
 							<p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-								Pulse connects depositors and challengers to create sustainable meme communities
+								Pulse connects depositors and challengers to create sustainable communities
 							</p>
 						</div>
 
@@ -245,7 +245,7 @@ function HomeContent() {
 								</div>
 								<h3 className="text-2xl font-extrabold text-[#5F96FF] dark:text-[#5F96FF] mb-4">Depositors</h3>
 								<p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-									Deposit SOL as bounties for community building and dank meme creation. Set time limits and base fees
+									Deposit LST as bounties for community building. Set time limits and base fees
 									to ensure quality contributions.
 								</p>
 								<div className="flex items-center text-[#5F96FF] dark:text-[#5F96FF] font-extrabold">
@@ -267,7 +267,7 @@ function HomeContent() {
 								</div>
 								<h3 className="text-2xl font-extrabold text-[#5F96FF] dark:text-[#5F96FF] mb-4">Challengers</h3>
 								<p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-									Create valuable dank meme content for communities. The last challenger to post before the time limit
+									Create creative community content for communities. The last challenger to post before the time limit
 									gets the bounty prize.
 								</p>
 								<div className="flex items-center text-[#5F96FF] dark:text-[#5F96FF] font-extrabold">
@@ -290,14 +290,11 @@ function HomeContent() {
 									<h3 className="text-3xl font-extrabold text-[#5F96FF] dark:text-[#5F96FF] mb-4">
 										Ready to join our community?
 									</h3>
-									<p className="text-xl text-gray-700 dark:text-gray-300 mb-6">
-										Start building or challenging in our dank meme ecosystem today!
-									</p>
 									<Link
 										href="/communities"
 										className="inline-block px-8 py-3 bg-[#5F96FF] hover:bg-[#1493FF] text-white font-extrabold border-4 border-dashed border-white dark:border-gray-700 rounded-full transition-all transform hover:scale-105 shadow-lg"
 									>
-										🚀 JOIN DANK MEME COMMUNITY 🚀
+										🚀 JOIN PULSE COMMUNITY 🚀
 									</Link>
 								</div>
 							</div>

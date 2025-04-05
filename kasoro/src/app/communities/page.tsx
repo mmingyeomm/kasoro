@@ -129,7 +129,7 @@ export default function CommunitysPage() {
 				<div className="flex justify-between items-center mb-8">
 					<div className="flex items-center gap-4">
 						<h1 className="text-4xl font-extrabold uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#5F96FF] to-purple-500 dark:from-[#1493FF] dark:to-purple-400">
-							MEME COMMUNITIES
+							COMMUNITIES
 						</h1>
 						{user && (
 							<button
@@ -137,7 +137,7 @@ export default function CommunitysPage() {
 								className="flex items-center gap-2 bg-[#5F96FF] hover:bg-[#1493FF] text-white px-5 py-3 border-4 border-dashed border-white dark:border-gray-700 rounded-full text-sm font-extrabold transition-all transform hover:scale-105 shadow-lg"
 							>
 								<span className="text-xl">+</span>
-								<span>CREATE DANK MEME COMMUNITY</span>
+								<span>CREATE COMMUNITY</span>
 							</button>
 						)}
 					</div>
@@ -149,7 +149,7 @@ export default function CommunitysPage() {
 						<div className="mb-6 flex items-center">
 							<span className="w-8 h-8 bg-[#5F96FF] rounded-full mr-3"></span>
 							<h2 className="text-3xl font-extrabold tracking-widest uppercase mb-0 text-[#5F96FF] dark:text-[#5F96FF]">
-								Trending Meme Communities
+								Trending Communities
 							</h2>
 							<span className="w-8 h-8 bg-[#5F96FF] rounded-full ml-3"></span>
 						</div>
@@ -168,10 +168,10 @@ export default function CommunitysPage() {
 						) : filteredCommunitys.length === 0 ? (
 							<div className="text-center py-12">
 								<p className="text-xl text-gray-600 dark:text-gray-300 font-bold mb-4">
-									No meme communities found yet!
+									No communities found yet!
 								</p>
 								<p className="text-lg text-[#5F96FF] dark:text-[#5F96FF] font-extrabold">
-									Be the first to create a dank meme community!
+									Be the first to create a community!
 								</p>
 								<div className="mt-4 text-5xl">🤔 → 💯 → 🚀</div>
 							</div>
