@@ -117,20 +117,27 @@ export default function CommunityCard({
 
 	return (
 		<Link href={`/communities/${id}`}>
-			<div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl group transition-all duration-300 h-full flex flex-col border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] transform hover:scale-[1.01]">
-				<div className="flex flex-row h-full">
-					{/* Image Section - Larger and on the left */}
+			<div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl group transition-all duration-300 h-full flex flex-col border-4 border-dashed border-[#5fb3ff] dark:border-[#4a9ce8] transform hover:scale-[1.01]">
+				<div className="flex flex-col md:flex-row h-full">
+					{/* Title Section - Only visible on mobile */}
+					<div className="md:hidden bg-gradient-to-r from-[#5fb3ff] to-[#99d0ff] dark:from-[#4a9ce8] dark:to-[#5fb3ff] p-5 transition-all duration-300 border-b-4 border-dashed border-[#5fb3ff] dark:border-[#4a9ce8]">
+						<h3 className="font-extrabold text-xl line-clamp-1 text-white drop-shadow-md tracking-wide uppercase">
+							{name}
+						</h3>
+					</div>
+
+					{/* Image Section - Top on mobile (after title), Left on desktop */}
 					{imageURL ? (
-						<div className="w-1/3 min-w-[180px] bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900">
-							<img 
-								src={imageURL} 
-								alt={name} 
-								className="w-full h-full object-cover border-r-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] transform hover:scale-105 transition-transform duration-300" 
+						<div className="w-full md:w-1/3 min-h-[180px] md:min-h-0 md:min-w-[180px] bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 flex-shrink-0">
+							<img
+								src={imageURL}
+								alt={name}
+								className="w-full h-full object-cover border-b-4 md:border-b-0 md:border-r-4 border-dashed border-[#5fb3ff] dark:border-[#4a9ce8] transform hover:scale-105 transition-transform duration-300"
 							/>
 						</div>
 					) : (
-						<div className="w-1/3 min-w-[180px] bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 flex items-center justify-center">
-							<div className="w-24 h-24 rounded-full bg-[#5F96FF] flex items-center justify-center transform hover:scale-105 transition-transform duration-300 border-4 border-white dark:border-gray-700 shadow-lg">
+						<div className="w-full md:w-1/3 min-h-[180px] md:min-h-0 md:min-w-[180px] bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 flex items-center justify-center flex-shrink-0">
+							<div className="w-24 h-24 rounded-full bg-[#5fb3ff] flex items-center justify-center transform hover:scale-105 transition-transform duration-300 border-4 border-white dark:border-gray-700 shadow-lg">
 								<span className="text-3xl font-extrabold text-white">{name.charAt(0).toUpperCase()}</span>
 							</div>
 						</div>
@@ -138,14 +145,19 @@ export default function CommunityCard({
 
 					{/* Content Section */}
 					<div className="flex flex-col flex-grow">
-						<div className="bg-gradient-to-r from-[#5F96FF] to-[#B6D7FF] dark:from-[#1493FF] dark:to-[#5F96FF] p-5 transition-all duration-300 border-b-4 border-dashed border-[#5F96FF] dark:border-[#1493FF]">
-							<h3 className="font-extrabold text-xl line-clamp-1 text-white drop-shadow-md tracking-wide uppercase">{name}</h3>
+						{/* Title Section - Only visible on desktop */}
+						<div className="hidden md:block bg-gradient-to-r from-[#5fb3ff] to-[#99d0ff] dark:from-[#4a9ce8] dark:to-[#5fb3ff] p-5 transition-all duration-300 border-b-4 border-dashed border-[#5fb3ff] dark:border-[#4a9ce8]">
+							<h3 className="font-extrabold text-xl line-clamp-1 text-white drop-shadow-md tracking-wide uppercase">
+								{name}
+							</h3>
 						</div>
 
 						<div className="p-5 flex-grow flex flex-col bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-gray-900">
 							<div className="flex items-start mb-4">
-								<NotebookTabs size={16} className="text-[#5F96FF] dark:text-[#5F96FF] mt-0.5 mr-2 flex-shrink-0" />
-								<p className="text-gray-700 dark:text-gray-300 text-sm line-clamp-2 font-medium">{description || 'No description, just vibes'}</p>
+								<NotebookTabs size={16} className="text-[#5fb3ff] dark:text-[#5fb3ff] mt-0.5 mr-2 flex-shrink-0" />
+								<p className="text-gray-700 dark:text-gray-300 text-sm line-clamp-2 font-medium">
+									{description || 'No description, just vibes'}
+								</p>
 							</div>
 
 							<div className="grid grid-cols-3 gap-3 mb-auto">
@@ -160,7 +172,7 @@ export default function CommunityCard({
 												: 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
 										} px-3 py-1.5 text-sm font-bold rounded-full mt-1 text-center border-2 border-yellow-400 dark:border-yellow-600`}
 									>
-										{bountyAmount !== undefined ? `${bountyAmount} SOL` : 'No bounty yet '}
+										{bountyAmount !== undefined ? `${bountyAmount} SOL` : 'no stonks'}
 									</span>
 								</div>
 
@@ -196,12 +208,14 @@ export default function CommunityCard({
 												: 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
 										} px-3 py-1.5 text-sm font-bold rounded-full mt-1 text-center border-2 border-blue-400 dark:border-blue-600`}
 									>
-										{baseFeePercentage !== undefined && baseFeePercentage !== null ? `${baseFeePercentage} SOL` : 'Free'}
+										{baseFeePercentage !== undefined && baseFeePercentage !== null
+											? `${baseFeePercentage} SOL`
+											: 'free memes'}
 									</span>
 								</div>
 							</div>
 
-							<div className="pt-4 mt-4 border-t-2 border-dashed border-[#5F96FF] dark:border-[#1493FF]">
+							<div className="pt-4 mt-4 border-t-2 border-dashed border-[#5fb3ff] dark:border-[#4a9ce8]">
 								<div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-300 font-medium">
 									<span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">created:</span>
 									<span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">
@@ -214,8 +228,10 @@ export default function CommunityCard({
 								</div>
 
 								<div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-300 mt-2 font-medium">
-									<span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">last content:</span>
-									<span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">{formatTimestamp(displayedLastMessageTime)}</span>
+									<span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">last meme:</span>
+									<span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">
+										{formatTimestamp(displayedLastMessageTime)}
+									</span>
 								</div>
 							</div>
 						</div>
