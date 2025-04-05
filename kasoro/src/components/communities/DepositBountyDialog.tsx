@@ -146,6 +146,10 @@ export default function DepositBountyDialog({
 			// Send transaction to the network
 			const signature = await sendTransaction(transaction, connection);
 
+
+			setTimeout(() => {
+				console.log("5 seconds passed");
+			  }, 3000);
 			// Wait for confirmation
 			
 			await connection.confirmTransaction(
