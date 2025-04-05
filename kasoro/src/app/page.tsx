@@ -95,7 +95,7 @@ function HomeContent() {
 									className="font-extrabold mt-4 md:mt-6 text-6xl md:text-8xl lg:text-9xl tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-[#FF69B4] to-purple-500 dark:from-[#FF1493] dark:to-purple-400 animate-pulse-soft"
 									style={{ textShadow: '0 0 15px rgba(255, 105, 180, 0.3)' }}
 								>
-									KASORO
+									PULSE
 								</h1>
 							</div>
 						</div>
@@ -139,7 +139,7 @@ function HomeContent() {
 								OUR FEATURES
 							</div>
 							<h2 className="text-5xl font-extrabold tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-[#FF69B4] to-purple-500 dark:from-[#FF1493] dark:to-purple-400 mb-8">
-								Why Choose Kasoro
+								Why Choose Pulse?
 							</h2>
 							<p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
 								Discover the dankest features that make our platform special
@@ -230,7 +230,7 @@ function HomeContent() {
 								Community as DeFi Itself
 							</h2>
 							<p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
-								Kasoro connects depositors and challengers to create sustainable meme communities
+								Pulse connects depositors and challengers to create sustainable meme communities
 							</p>
 						</div>
 

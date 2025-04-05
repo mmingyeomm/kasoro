@@ -58,7 +58,7 @@ export default function GlobalHeader() {
 						<div className="w-12 h-12 bg-gradient-to-br from-[#FF69B4] to-purple-500 dark:from-[#FF1493] dark:to-purple-400 rounded-full border-4 border-dashed border-white dark:border-gray-800 flex items-center justify-center p-1.5 shadow-lg transform group-hover:scale-110 transition-all">
 							<Image src="/images/kasoro_logo.png" alt="Kasoro Logo" width={32} height={32} className="rounded-full" />
 						</div>
-						<h2 className="font-extrabold text-xl tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-[#FF69B4] to-purple-500 dark:from-[#FF1493] dark:to-purple-400 group-hover:scale-105 transition-transform">KASORO</h2>
+						<h2 className="font-extrabold text-xl tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-[#FF69B4] to-purple-500 dark:from-[#FF1493] dark:to-purple-400 group-hover:scale-105 transition-transform">PULSE</h2>
 					</Link>
 					<div className="h-8 border-r-2 border-dashed border-[#FF69B4]/30 dark:border-[#FF1493]/30 mx-2"></div>
 					<nav className="flex items-center gap-6 ml-1">

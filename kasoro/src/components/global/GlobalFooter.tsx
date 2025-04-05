@@ -10,7 +10,7 @@ export default function GlobalFooter() {
 							<div className="w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center">
 								<Image src="/images/kasoro_logo.png" alt="Kasoro Logo" width={30} height={30} />
 							</div>
-							<h4 className="font-[bazzi] font-bold text-xl">KASORO</h4>
+							<h4 className="font-[bazzi] font-bold text-xl">PULSE</h4>
 						</a>
 						<p className="text-sm">First CommuniFi on Solana</p>
 					</div>
@@ -41,7 +41,7 @@ export default function GlobalFooter() {
 				</div>
 
 				<div className="flex flex-col md:flex-row justify-between items-center">
-					<p className="text-sm mb-4 md:mb-0">© 2025 Kasoro. All rights reserved.</p>
+					<p className="text-sm mb-4 md:mb-0">© 2025 PULSE. All rights reserved.</p>
 					<div className="flex space-x-6">
 						<a href="#" className="text-sm text-white/80 hover:text-white transition-colors">
 							Terms
