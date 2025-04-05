@@ -9,7 +9,7 @@ This document provides an overview of the Kasoro frontend architecture, explaini
 3. [Core Components](#core-components)
 4. [Authentication Flow](#authentication-flow)
 5. [Wallet Integration](#wallet-integration)
-6. [Game Room & Messaging UI](#game-room--messaging-ui)
+6. [Community & Messaging UI](#game-room--messaging-ui)
 7. [State Management](#state-management)
 8. [Styling Approach](#styling-approach)
 
@@ -32,7 +32,7 @@ The codebase follows Next.js 13+ app directory structure:
   - `app/`: Next.js app directory
     - `page.tsx`: Home page
     - `auth-success/`: Authentication success page
-    - `gamerooms/`: Game rooms pages
+    - `communities/`: Comunities pages
     - `login-error/`: Login error page
   - `components/`: Reusable React components
   - `public/`: Static assets
@@ -46,17 +46,17 @@ The codebase follows Next.js 13+ app directory structure:
 - **WalletButton**: Component for connecting to Solana wallets
 - **LinkWalletButton**: Component for linking Twitter and wallet accounts
 
-### Game Room Components
+### Community Components
 
-- **GameRoomList**: Displays list of available game rooms
-- **CreateGameRoomForm**: Form for creating new game rooms with parameters
+- **CommunityList**: Displays list of available comunities
+- **CreateCommunityForm**: Form for creating new comunities with parameters
   - Bounty amount slider
   - Time limit slider
   - Base fee percentage slider
 
 ### Message Components
 
-- **MessageList**: Displays messages in a game room
+- **MessageList**: Displays messages in a community
 - **CreateMessageForm**: Input for sending new messages
 
 ## Authentication Flow
@@ -64,10 +64,12 @@ The codebase follows Next.js 13+ app directory structure:
 The Kasoro application uses Twitter OAuth for authentication:
 
 1. **Login Initiation**:
+
    - User clicks "Login with X" button
    - Redirected to Twitter OAuth endpoint
 
 2. **OAuth Callback**:
+
    - After successful Twitter auth, redirected to `/auth-success`
    - Frontend fetches user details from backend
    - User state is updated in the application
@@ -81,38 +83,43 @@ The Kasoro application uses Twitter OAuth for authentication:
 The platform integrates with Solana wallets:
 
 1. **Wallet Connection**:
+
    - Users connect their Solana wallet using the WalletButton component
    - Connection state is managed by the Solana Wallet Adapter
 
 2. **Wallet Linking**:
+
    - Once connected, users link their wallet to their Twitter account
    - LinkWalletButton component manages this process
    - After linking, the wallet address is stored in the user profile
 
 3. **Wallet Verification**:
    - The application verifies that the connected wallet matches the linked wallet
-   - This verification is required for creating game rooms
+   - This verification is required for creating comunities
 
-## Game Room & Messaging UI
+## Community & Messaging UI
 
-### Game Room Creation
+### Community Creation
 
-The CreateGameRoomForm component includes:
+The CreateCommunityForm component includes:
+
 - Room name and description inputs
 - Bounty amount slider (SOL)
 - Time limit slider (minutes)
 - Base fee percentage slider
 
-### Game Room List
+### Community List
 
-The GameRoomList component:
-- Displays available game rooms in a visually appealing layout
+The CommunityList component:
+
+- Displays available comunities in a visually appealing layout
 - Shows parameters for each room (bounty, time limit)
-- Provides navigation to individual game rooms
+- Provides navigation to individual comunities
 
 ### Messaging System
 
 The messaging UI includes:
+
 - Real-time message display
 - Message composition and sending
 - User attribution for messages
@@ -122,10 +129,12 @@ The messaging UI includes:
 The application uses:
 
 1. **React State and Hooks**:
+
    - Local component state with useState
    - Side effects with useEffect
 
 2. **Context API**:
+
    - For global state like user authentication
    - Wallet connection state
 
@@ -138,11 +147,13 @@ The application uses:
 The application uses:
 
 1. **Tailwind CSS**:
+
    - Utility-first approach
    - Consistent design system
    - Dark mode support
 
 2. **Custom Components**:
+
    - Pixel art aesthetic
    - Retro-style UI elements
    - Responsive design for various screen sizes
@@ -152,4 +163,4 @@ The application uses:
    - Specific color coding for different types of data:
      - Yellow for SOL values
      - Green for time limits
-     - Red for fees 
+     - Red for fees

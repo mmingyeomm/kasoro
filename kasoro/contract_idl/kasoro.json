@@ -1,0 +1,464 @@
+{
+  "address": "CEnBjSSjuoL13LtgDeALeAMWqSg9W7t1J5rtjeKNarAM",
+  "metadata": {
+    "name": "kasoro",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "bounty_distribute",
+      "discriminator": [
+        33,
+        73,
+        137,
+        160,
+        30,
+        38,
+        10,
+        62
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "community",
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "target_pda",
+          "type": "pubkey"
+        },
+        {
+          "name": "vault_pda",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "claim",
+      "discriminator": [
+        62,
+        198,
+        214,
+        193,
+        213,
+        159,
+        108,
+        210
+      ],
+      "accounts": [
+        {
+          "name": "depositor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "community",
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "deposit",
+      "discriminator": [
+        242,
+        35,
+        198,
+        137,
+        82,
+        225,
+        242,
+        182
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "community",
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "target_pda",
+          "type": "pubkey"
+        },
+        {
+          "name": "vault_pda",
+          "type": "pubkey"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize",
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "initializer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "community",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  109,
+                  109,
+                  117,
+                  110,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "initializer"
+              },
+              {
+                "kind": "arg",
+                "path": "community_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "initializer"
+              },
+              {
+                "kind": "arg",
+                "path": "community_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "community_name",
+          "type": "string"
+        },
+        {
+          "name": "time_limit",
+          "type": "u64"
+        },
+        {
+          "name": "base_fee",
+          "type": "u64"
+        },
+        {
+          "name": "fee_multiplier",
+          "type": "u8"
+        },
+        {
+          "name": "lst_addr",
+          "type": "pubkey"
+        },
+        {
+          "name": "ai_moderation",
+          "type": "bool"
+        },
+        {
+          "name": "vec",
+          "type": {
+            "vec": "f32"
+          }
+        }
+      ]
+    },
+    {
+      "name": "submit_content",
+      "discriminator": [
+        83,
+        67,
+        55,
+        88,
+        192,
+        77,
+        115,
+        15
+      ],
+      "accounts": [
+        {
+          "name": "author",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "community",
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "text",
+          "type": "string"
+        },
+        {
+          "name": "image_uri",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "BasefeeVault",
+      "discriminator": [
+        178,
+        112,
+        45,
+        184,
+        120,
+        128,
+        157,
+        184
+      ]
+    },
+    {
+      "name": "CommunityState",
+      "discriminator": [
+        133,
+        66,
+        57,
+        235,
+        219,
+        148,
+        104,
+        230
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "BasefeeVault",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "deposit_info",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "DepositersInfo"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Challengers",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "ratio",
+            "type": {
+              "vec": "f32"
+            }
+          },
+          {
+            "name": "challengers",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "len",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CommunityState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "community_name",
+            "type": "string"
+          },
+          {
+            "name": "time_limit",
+            "type": "u64"
+          },
+          {
+            "name": "init_base_fee",
+            "type": "u64"
+          },
+          {
+            "name": "fee_multiplier",
+            "type": "u8"
+          },
+          {
+            "name": "prize_ratio",
+            "type": {
+              "defined": {
+                "name": "Challengers"
+              }
+            }
+          },
+          {
+            "name": "voted",
+            "type": "f32"
+          },
+          {
+            "name": "vote_period",
+            "type": "u8"
+          },
+          {
+            "name": "lst_addr",
+            "type": "pubkey"
+          },
+          {
+            "name": "active",
+            "type": "bool"
+          },
+          {
+            "name": "ai_moderation",
+            "type": "bool"
+          },
+          {
+            "name": "initializer",
+            "type": "pubkey"
+          },
+          {
+            "name": "contents",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "CreatorContent"
+                }
+              }
+            }
+          },
+          {
+            "name": "basefee_vault",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreatorContent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "author",
+            "type": "pubkey"
+          },
+          {
+            "name": "text",
+            "type": "string"
+          },
+          {
+            "name": "image_uri",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DepositersInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "deposit_address",
+            "type": "pubkey"
+          },
+          {
+            "name": "bounty_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    }
+  ]
+}

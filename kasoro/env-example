@@ -1,0 +1,5 @@
+# 아래 변수들 프로젝트 루트 경로에 `.env` 파일로 만들어서 추가
+
+NEXT_PUBLIC_API_URL=https://kasoro.onrender.com
+NEXT_PUBLIC_PINATA_API_KEY=[Your key here]
+NEXT_PUBLIC_PINATA_SECRET_KEY=[Your key here]
