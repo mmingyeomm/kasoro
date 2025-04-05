@@ -41,7 +41,7 @@ export default function CreateMessageForm({ communityId, onMessageSent }: Create
 					creatorId: string;
 					walletAddress: string;
 				}
-				
+
 				const { data } = await api.get<CommunityResponse>(`/communities/${communityId}`);
 				setCommunityName(data.name);
 				setInitializerAddress(data.walletAddress);
@@ -52,7 +52,7 @@ export default function CreateMessageForm({ communityId, onMessageSent }: Create
 				toast.error('커뮤니티 데이터를 불러오는데 실패했습니다');
 			}
 		};
-		
+
 		if (communityId) {
 			fetchCommunityName();
 		}
@@ -65,7 +65,6 @@ export default function CreateMessageForm({ communityId, onMessageSent }: Create
 				const { data } = await api.get(`/communities/${communityId}/messages`);
 				setCommunityData(data);
 				console.log('Community data loaded:', data);
-
 			} catch (err) {
 				console.error('Error fetching community data:', err);
 				setError('Could not load community data. Please refresh the page.');
@@ -74,8 +73,6 @@ export default function CreateMessageForm({ communityId, onMessageSent }: Create
 
 		fetchCommunityData();
 	}, [communityId]);
-
-
 
 	const uploadToPinata = async (file: File): Promise<string> => {
 		try {
@@ -159,50 +156,41 @@ export default function CreateMessageForm({ communityId, onMessageSent }: Create
 			toast.loading('Sending message...', { id: 'message' });
 
 			console.log('imageUrl', imageUrl);
-			
+
 			// Create the message payload
 			const messageData = {
 				content,
-				communityId
+				communityId,
 			};
-			
+
 			// Only add imageLink if we have an image URL
 			if (imageUrl) {
 				Object.assign(messageData, { imageLink: imageUrl });
 				console.log('Sending message with image URL:', imageUrl);
 			}
-			
+
 			const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
-			console.log("Connection structure:", connection);
+			console.log('Connection structure:', connection);
 
 			// PDA 주소 계산
 			const [communityPda] = anchor.web3.PublicKey.findProgramAddressSync(
-				[
-					Buffer.from("community"),
-					initializerPubkey.toBuffer(),
-					Buffer.from(communityName)
-				],
+				[Buffer.from('community'), initializerPubkey.toBuffer(), Buffer.from(communityName)],
 				PROGRAM_ID
 			);
 
-			console.log("Community PDA:", communityPda.toString());
-			
+			console.log('Community PDA:', communityPda.toString());
+
 			const [vaultPda] = anchor.web3.PublicKey.findProgramAddressSync(
-				[
-					Buffer.from("vault"),
-					initializerPubkey.toBuffer(),
-					Buffer.from(communityName)
-				],
+				[Buffer.from('vault'), initializerPubkey.toBuffer(), Buffer.from(communityName)],
 				PROGRAM_ID
 			);
-			console.log("Vault PDA:", vaultPda.toString());
-			
-			
+			console.log('Vault PDA:', vaultPda.toString());
+
 			// Create a provider from connection and wallet
 			const provider = new AnchorProvider(
 				connection,
 				{
-					publicKey: publicKey as PublicKey,	
+					publicKey: publicKey as PublicKey,
 					signTransaction: async (tx: web3.Transaction | web3.VersionedTransaction) => {
 						if (tx instanceof web3.Transaction) {
 							tx.feePayer = publicKey;
@@ -226,15 +214,12 @@ export default function CreateMessageForm({ communityId, onMessageSent }: Create
 			const transaction = new web3.Transaction();
 			console.log('Transaction structure:', transaction);
 			// Find PDA for community and vault
-			
-		    console.log("parameter:", communityPda.toString(), vaultPda.toString(), content, imageUrl);
+
+			console.log('parameter:', communityPda.toString(), vaultPda.toString(), content, imageUrl);
 			// Add initialize instruction to transaction
 			transaction.add(
 				await program.methods
-					.submitContent(
-						content,
-						imageUrl
-					)
+					.submitContent(content, imageUrl)
 					.accounts({
 						authority: publicKey as PublicKey,
 						community: communityPda,
@@ -249,12 +234,14 @@ export default function CreateMessageForm({ communityId, onMessageSent }: Create
 			const signature = await sendTransaction(transaction, connection);
 
 			// Wait for confirmation
-			await connection.confirmTransaction({
-				signature,
-				blockhash: latestBlockhash.blockhash,
-				lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
-			}, 'confirmed');
-
+			await connection.confirmTransaction(
+				{
+					signature,
+					blockhash: latestBlockhash.blockhash,
+					lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+				},
+				'confirmed'
+			);
 
 			const message = await program.account.communityState.fetch(communityPda);
 			console.log('Message:', message.content);

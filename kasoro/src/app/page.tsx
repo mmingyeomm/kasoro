@@ -2,13 +2,15 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import IntroAnimation from '@/components/global/IntroAnimation';
+import { useSearchParams } from 'next/navigation';
 
-export default function Home() {
+function HomeContent() {
 	const [introComplete, setIntroComplete] = useState(false);
 	const [scrollY, setScrollY] = useState(0);
 	const [activeFeature, setActiveFeature] = useState(0);
+	const searchParams = useSearchParams();
 
 	// Features data
 	const features = [
@@ -157,7 +159,9 @@ export default function Home() {
 									<p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">{feature.description}</p>
 									<div className="flex items-center text-[#FF69B4] dark:text-[#FF69B4] font-extrabold">
 										<span className="mr-2">Learn more</span>
-										<span className="w-7 h-7 rounded-full border-2 border-dashed border-[#FF69B4] dark:border-[#FF1493] flex items-center justify-center">→</span>
+										<span className="w-7 h-7 rounded-full border-2 border-dashed border-[#FF69B4] dark:border-[#FF1493] flex items-center justify-center">
+											→
+										</span>
 									</div>
 								</div>
 							))}
@@ -185,11 +189,17 @@ export default function Home() {
 											</div>
 										</div>
 										<div className="md:w-1/2 p-8 sm:p-12 flex flex-col items-center md:items-start justify-center">
-											<h3 className="text-3xl md:text-4xl font-extrabold text-[#FF69B4] dark:text-[#FF69B4] mb-6">{feature.title}</h3>
-											<p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed">{feature.description}</p>
+											<h3 className="text-3xl md:text-4xl font-extrabold text-[#FF69B4] dark:text-[#FF69B4] mb-6">
+												{feature.title}
+											</h3>
+											<p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
+												{feature.description}
+											</p>
 											<div className="mt-8 flex items-center text-[#FF69B4] dark:text-[#FF69B4] font-extrabold">
 												<span className="mr-2">Learn more</span>
-												<span className="w-7 h-7 rounded-full border-2 border-dashed border-[#FF69B4] dark:border-[#FF1493] flex items-center justify-center">→</span>
+												<span className="w-7 h-7 rounded-full border-2 border-dashed border-[#FF69B4] dark:border-[#FF1493] flex items-center justify-center">
+													→
+												</span>
 											</div>
 										</div>
 									</div>
@@ -230,12 +240,14 @@ export default function Home() {
 								</div>
 								<h3 className="text-2xl font-extrabold text-[#FF69B4] dark:text-[#FF69B4] mb-4">Depositors</h3>
 								<p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-									Deposit SOL as bounties for community building and dank meme creation. Set time limits and base fees to
-									ensure quality contributions.
+									Deposit SOL as bounties for community building and dank meme creation. Set time limits and base fees
+									to ensure quality contributions.
 								</p>
 								<div className="flex items-center text-[#FF69B4] dark:text-[#FF69B4] font-extrabold">
 									<span className="mr-2">Learn more about depositing</span>
-									<span className="w-7 h-7 rounded-full border-2 border-dashed border-[#FF69B4] dark:border-[#FF1493] flex items-center justify-center">→</span>
+									<span className="w-7 h-7 rounded-full border-2 border-dashed border-[#FF69B4] dark:border-[#FF1493] flex items-center justify-center">
+										→
+									</span>
 								</div>
 							</div>
 
@@ -250,12 +262,14 @@ export default function Home() {
 								</div>
 								<h3 className="text-2xl font-extrabold text-[#FF69B4] dark:text-[#FF69B4] mb-4">Challengers</h3>
 								<p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-									Create valuable dank meme content for communities. The last challenger to post before the time limit gets the
-									bounty prize.
+									Create valuable dank meme content for communities. The last challenger to post before the time limit
+									gets the bounty prize.
 								</p>
 								<div className="flex items-center text-[#FF69B4] dark:text-[#FF69B4] font-extrabold">
 									<span className="mr-2">Learn more about challenging</span>
-									<span className="w-7 h-7 rounded-full border-2 border-dashed border-[#FF69B4] dark:border-[#FF1493] flex items-center justify-center">→</span>
+									<span className="w-7 h-7 rounded-full border-2 border-dashed border-[#FF69B4] dark:border-[#FF1493] flex items-center justify-center">
+										→
+									</span>
 								</div>
 							</div>
 						</div>
@@ -268,8 +282,12 @@ export default function Home() {
 						>
 							<div className="inline-block bg-white dark:bg-gray-800 p-0 rounded-3xl shadow-lg border-4 border-dashed border-[#FF69B4] dark:border-[#FF1493]">
 								<div className="rounded-xl px-10 py-8">
-									<h3 className="text-3xl font-extrabold text-[#FF69B4] dark:text-[#FF69B4] mb-4">Ready to join our community?</h3>
-									<p className="text-xl text-gray-700 dark:text-gray-300 mb-6">Start building or challenging in our dank meme ecosystem today!</p>
+									<h3 className="text-3xl font-extrabold text-[#FF69B4] dark:text-[#FF69B4] mb-4">
+										Ready to join our community?
+									</h3>
+									<p className="text-xl text-gray-700 dark:text-gray-300 mb-6">
+										Start building or challenging in our dank meme ecosystem today!
+									</p>
 									<Link
 										href="/communities"
 										className="inline-block px-8 py-3 bg-[#FF69B4] hover:bg-[#FF1493] text-white font-extrabold border-4 border-dashed border-white dark:border-gray-700 rounded-full transition-all transform hover:scale-105 shadow-lg"
@@ -283,5 +301,19 @@ export default function Home() {
 				</section>
 			</div>
 		</main>
+	);
+}
+
+export default function Home() {
+	return (
+		<Suspense
+			fallback={
+				<div className="flex items-center justify-center h-screen">
+					<p>Loading...</p>
+				</div>
+			}
+		>
+			<HomeContent />
+		</Suspense>
 	);
 }

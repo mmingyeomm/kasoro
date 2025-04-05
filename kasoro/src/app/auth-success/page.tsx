@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { Twitter } from 'lucide-react';
 import { api } from '@/api';
@@ -16,7 +16,7 @@ interface User {
 	walletAddress?: string | null;
 }
 
-export default function AuthSuccess() {
+function ClientAuthSuccess() {
 	const router = useRouter();
 	const { connected, publicKey } = useWallet();
 	const [user, setUser] = useState<User | null>(null);
@@ -114,4 +114,23 @@ export default function AuthSuccess() {
 			</div>
 		</div>
 	);
+}
+
+export default function AuthSuccess() {
+	// useSearchParams를 사용하지 않고 hydrate 이슈를 방지
+	const [isClient, setIsClient] = useState(false);
+
+	useEffect(() => {
+		setIsClient(true);
+	}, []);
+
+	if (!isClient) {
+		return (
+			<div className="flex items-center justify-center min-h-screen">
+				<p>Loading...</p>
+			</div>
+		);
+	}
+
+	return <ClientAuthSuccess />;
 }

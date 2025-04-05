@@ -128,7 +128,9 @@ export default function CommunitysPage() {
 				<Toaster position="top-right" />
 				<div className="flex justify-between items-center mb-8">
 					<div className="flex items-center gap-4">
-						<h1 className="text-4xl font-extrabold uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#FF69B4] to-purple-500 dark:from-[#FF1493] dark:to-purple-400">MEME COMMUNITIES</h1>
+						<h1 className="text-4xl font-extrabold uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#FF69B4] to-purple-500 dark:from-[#FF1493] dark:to-purple-400">
+							MEME COMMUNITIES
+						</h1>
 						{user && (
 							<button
 								onClick={() => setIsCreateDialogOpen(true)}
@@ -146,7 +148,9 @@ export default function CommunitysPage() {
 					<div className="bg-white dark:bg-gray-800 border-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] p-8 rounded-xl shadow-xl">
 						<div className="mb-6 flex items-center">
 							<span className="w-8 h-8 bg-[#FF69B4] rounded-full mr-3"></span>
-							<h2 className="text-3xl font-extrabold tracking-widest uppercase mb-0 text-[#FF69B4] dark:text-[#FF69B4]">Trending Meme Communities</h2>
+							<h2 className="text-3xl font-extrabold tracking-widest uppercase mb-0 text-[#FF69B4] dark:text-[#FF69B4]">
+								Trending Meme Communities
+							</h2>
 							<span className="w-8 h-8 bg-[#FF69B4] rounded-full ml-3"></span>
 						</div>
 						<hr className="border-[#FF69B4] dark:border-[#FF1493] border-2 border-dashed mb-6" />
@@ -164,7 +168,7 @@ export default function CommunitysPage() {
 						) : filteredCommunitys.length === 0 ? (
 							<div className="text-center py-12">
 								<p className="text-xl text-gray-600 dark:text-gray-300 font-bold mb-4">
-									No meme communities found yet! 
+									No meme communities found yet!
 								</p>
 								<p className="text-lg text-[#FF69B4] dark:text-[#FF69B4] font-extrabold">
 									Be the first to create a dank meme community!

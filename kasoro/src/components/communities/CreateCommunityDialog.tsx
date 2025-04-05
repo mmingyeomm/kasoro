@@ -45,8 +45,6 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 	const router = useRouter();
 	const { connected, publicKey, sendTransaction } = useWallet();
 
-	const isWalletLinked = !!userWalletAddress;
-
 	// Handle clicking outside the dialog to close it
 	const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		if (e.target === e.currentTarget) {
@@ -121,12 +119,6 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 		if (!connected || !publicKey) {
 			setError('Please connect your wallet first');
 			toast.error('Please connect your wallet first');
-			return;
-		}
-
-		if (!isWalletLinked) {
-			setError('Please link your wallet to your account first');
-			toast.error('Please link your wallet to your account first');
 			return;
 		}
 
@@ -498,12 +490,6 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 							</div>
 						)}
 
-						{connected && !isWalletLinked && (
-							<div className="bg-yellow-100 dark:bg-yellow-900/30 border-4 border-dashed border-yellow-400 dark:border-yellow-600 p-4 rounded-xl text-yellow-800 dark:text-yellow-300 font-bold text-center">
-								Link your wallet to your account first!
-							</div>
-						)}
-
 						<div className="flex justify-center gap-6 mt-8">
 							<button
 								type="button"
@@ -514,7 +500,7 @@ export default function CreateCommunityDialog({ isOpen, onClose, userWalletAddre
 							</button>
 							<button
 								type="submit"
-								disabled={loading || !name.trim() || !connected || !isWalletLinked}
+								disabled={loading || !name.trim() || !connected}
 								className="px-6 py-3 bg-gradient-to-r from-[#FF69B4] to-[#FF1493] hover:from-[#FF1493] hover:to-[#FF69B4] text-white font-extrabold border-4 border-dashed border-white dark:border-gray-700 rounded-full disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 uppercase tracking-wider text-lg shadow-md"
 							>
 								{loading ? 'Creating...' : '🚀 Create Community 🚀'}
