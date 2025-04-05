@@ -16,10 +16,10 @@
 }
 
 :root {
-	--pink-light: #ffcce0;
-	--pink-medium: #ff9ec6;
-	--pink-primary: #ff5f9e;
-	--pink-dark: #e84a8a;
+	--pink-light: #cce4ff;
+	--pink-medium: #9ec5ff;
+	--pink-primary: #5f96ff;
+	--pink-dark: #4a75e8;
 	--purple-light: #e9d2ff;
 	--purple-medium: #c89bff;
 	--purple-primary: #9965de;
@@ -131,7 +131,7 @@ body {
 
 /* Shadow Styles */
 .shadow-pink {
-	box-shadow: 0 10px 25px -5px rgba(255, 95, 158, 0.5);
+	box-shadow: 0 10px 25px -5px rgba(95, 150, 255, 0.5);
 }
 
 .shadow-purple {
@@ -166,12 +166,12 @@ body {
 	padding: 0.75rem 1.5rem;
 	font-weight: 600;
 	transition: all 0.3s ease;
-	box-shadow: 0 6px 20px -5px rgba(255, 95, 158, 0.4);
+	box-shadow: 0 6px 20px -5px rgba(95, 150, 255, 0.4);
 }
 
 .bubble-button:hover {
 	transform: translateY(-3px) scale(1.02);
-	box-shadow: 0 10px 25px -5px rgba(255, 95, 158, 0.5);
+	box-shadow: 0 10px 25px -5px rgba(95, 150, 255, 0.5);
 }
 
 .bubble-card {
@@ -184,7 +184,7 @@ body {
 
 .bubble-card:hover {
 	transform: translateY(-5px);
-	box-shadow: 0 15px 30px -10px rgba(255, 95, 158, 0.2);
+	box-shadow: 0 15px 30px -10px rgba(95, 150, 255, 0.2);
 }
 
 /* Wallet Button Styles */
@@ -196,12 +196,12 @@ body {
 	padding: 0.5rem 1rem !important;
 	border-radius: 9999px !important;
 	height: auto !important;
-	box-shadow: 0 4px 12px -2px rgba(255, 95, 158, 0.3) !important;
+	box-shadow: 0 4px 12px -2px rgba(95, 150, 255, 0.3) !important;
 }
 
 .wallet-button:hover {
 	transform: translateY(-2px) !important;
-	box-shadow: 0 6px 16px -2px rgba(255, 95, 158, 0.4) !important;
+	box-shadow: 0 6px 16px -2px rgba(95, 150, 255, 0.4) !important;
 }
 
 .dark {

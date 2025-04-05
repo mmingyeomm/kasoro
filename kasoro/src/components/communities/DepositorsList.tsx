@@ -62,19 +62,19 @@ export default function DepositorsList({ communityId }: DepositorListProps) {
       <div className="mb-6 flex flex-col">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <span className="w-4 h-4 bg-[#FF69B4] dark:bg-[#FF1493] rounded-full"></span>
-            <h3 className="text-lg font-extrabold tracking-widest uppercase text-[#FF69B4] dark:text-[#FF69B4]">Meme Stakers</h3>
-            <span className="w-4 h-4 bg-[#FF69B4] dark:bg-[#FF1493] rounded-full"></span>
+            <span className="w-4 h-4 bg-[#5F96FF] dark:bg-[#1493FF] rounded-full"></span>
+            <h3 className="text-lg font-extrabold tracking-widest uppercase text-[#5F96FF] dark:text-[#5F96FF]">Meme Stakers</h3>
+            <span className="w-4 h-4 bg-[#5F96FF] dark:bg-[#1493FF] rounded-full"></span>
           </div>
           <button 
             onClick={() => fetchDepositors()} 
-            className="text-xs bg-[#FF69B4] hover:bg-[#FF1493] text-white px-2 py-1 rounded-full border-2 border-dashed border-white dark:border-gray-700 transition-all transform hover:scale-110 font-bold"
+            className="text-xs bg-[#5F96FF] hover:bg-[#1493FF] text-white px-2 py-1 rounded-full border-2 border-dashed border-white dark:border-gray-700 transition-all transform hover:scale-110 font-bold"
             title="Refresh list"
           >
             ↻ Refresh
           </button>
         </div>
-        <div className="text-sm font-medium text-gray-600 dark:text-gray-400 border-b-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] pb-2">
+        <div className="text-sm font-medium text-gray-600 dark:text-gray-400 border-b-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] pb-2">
           {depositors.length} staker{depositors.length !== 1 ? 's' : ''} · {totalStaked.toFixed(2)} SOL total
         </div>
       </div>
@@ -82,8 +82,8 @@ export default function DepositorsList({ communityId }: DepositorListProps) {
       {loading ? (
         <div className="py-2 px-3 text-sm text-gray-500">
           <div className="animate-pulse flex space-x-2 items-center">
-            <div className="h-4 w-4 bg-[#FF69B4]/30 rounded-full"></div>
-            <div className="h-4 w-full bg-[#FF69B4]/20 rounded"></div>
+            <div className="h-4 w-4 bg-[#5F96FF]/30 rounded-full"></div>
+            <div className="h-4 w-full bg-[#5F96FF]/20 rounded"></div>
           </div>
         </div>
       ) : error ? (
@@ -91,7 +91,7 @@ export default function DepositorsList({ communityId }: DepositorListProps) {
           {error}
         </div>
       ) : depositors.length === 0 ? (
-        <div className="py-3 px-4 text-sm text-[#FF69B4] dark:text-[#FF69B4] italic bg-[#FF69B4]/10 border-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] rounded-xl font-bold text-center">
+        <div className="py-3 px-4 text-sm text-[#5F96FF] dark:text-[#5F96FF] italic bg-[#5F96FF]/10 border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] rounded-xl font-bold text-center">
           No stakers yet. Be the first to deposit! 🚀
         </div>
       ) : (
@@ -99,10 +99,10 @@ export default function DepositorsList({ communityId }: DepositorListProps) {
           {depositors.map((depositor) => (
             <div 
               key={depositor.id} 
-              className="border-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] rounded-lg p-3.5 bg-white dark:bg-gray-800 hover:shadow-lg transition-all transform hover:scale-[1.02]"
+              className="border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] rounded-lg p-3.5 bg-white dark:bg-gray-800 hover:shadow-lg transition-all transform hover:scale-[1.02]"
             >
               <div className="flex-grow">
-                <div className="font-extrabold text-[#FF69B4] dark:text-[#FF69B4]">
+                <div className="font-extrabold text-[#5F96FF] dark:text-[#5F96FF]">
                   @{depositor.user.username}
                 </div>
                 <div 
@@ -110,7 +110,7 @@ export default function DepositorsList({ communityId }: DepositorListProps) {
                   title={`Last deposit: ${new Date(depositor.depositedAt).toLocaleString()}`}
                 >
                   <span>{depositor.amount.toFixed(2)} SOL</span>
-                  <span className="ml-2 bg-[#FF69B4]/10 dark:bg-[#FF69B4]/20 px-1.5 py-0.5 rounded text-xs">
+                  <span className="ml-2 bg-[#5F96FF]/10 dark:bg-[#5F96FF]/20 px-1.5 py-0.5 rounded text-xs">
                     {totalStaked > 0 ? ((depositor.amount / totalStaked) * 100).toFixed(1) : '0'}%
                   </span>
                 </div>

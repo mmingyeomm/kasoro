@@ -117,20 +117,20 @@ export default function CommunityCard({
 
 	return (
 		<Link href={`/communities/${id}`}>
-			<div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl group transition-all duration-300 h-full flex flex-col border-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] transform hover:scale-[1.01]">
+			<div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl group transition-all duration-300 h-full flex flex-col border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] transform hover:scale-[1.01]">
 				<div className="flex flex-row h-full">
 					{/* Image Section - Larger and on the left */}
 					{imageURL ? (
-						<div className="w-1/3 min-w-[180px] bg-gradient-to-br from-pink-100 to-purple-100 dark:from-pink-900 dark:to-purple-900">
+						<div className="w-1/3 min-w-[180px] bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900">
 							<img 
 								src={imageURL} 
 								alt={name} 
-								className="w-full h-full object-cover border-r-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] transform hover:scale-105 transition-transform duration-300" 
+								className="w-full h-full object-cover border-r-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] transform hover:scale-105 transition-transform duration-300" 
 							/>
 						</div>
 					) : (
-						<div className="w-1/3 min-w-[180px] bg-gradient-to-br from-pink-100 to-purple-100 dark:from-pink-900 dark:to-purple-900 flex items-center justify-center">
-							<div className="w-24 h-24 rounded-full bg-[#FF69B4] flex items-center justify-center transform hover:scale-105 transition-transform duration-300 border-4 border-white dark:border-gray-700 shadow-lg">
+						<div className="w-1/3 min-w-[180px] bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 flex items-center justify-center">
+							<div className="w-24 h-24 rounded-full bg-[#5F96FF] flex items-center justify-center transform hover:scale-105 transition-transform duration-300 border-4 border-white dark:border-gray-700 shadow-lg">
 								<span className="text-3xl font-extrabold text-white">{name.charAt(0).toUpperCase()}</span>
 							</div>
 						</div>
@@ -138,13 +138,13 @@ export default function CommunityCard({
 
 					{/* Content Section */}
 					<div className="flex flex-col flex-grow">
-						<div className="bg-gradient-to-r from-[#FF69B4] to-[#FFB6C1] dark:from-[#FF1493] dark:to-[#FF69B4] p-5 transition-all duration-300 border-b-4 border-dashed border-[#FF69B4] dark:border-[#FF1493]">
+						<div className="bg-gradient-to-r from-[#5F96FF] to-[#B6D7FF] dark:from-[#1493FF] dark:to-[#5F96FF] p-5 transition-all duration-300 border-b-4 border-dashed border-[#5F96FF] dark:border-[#1493FF]">
 							<h3 className="font-extrabold text-xl line-clamp-1 text-white drop-shadow-md tracking-wide uppercase">{name}</h3>
 						</div>
 
-						<div className="p-5 flex-grow flex flex-col bg-gradient-to-br from-white to-pink-50 dark:from-gray-800 dark:to-gray-900">
+						<div className="p-5 flex-grow flex flex-col bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-gray-900">
 							<div className="flex items-start mb-4">
-								<NotebookTabs size={16} className="text-[#FF69B4] dark:text-[#FF69B4] mt-0.5 mr-2 flex-shrink-0" />
+								<NotebookTabs size={16} className="text-[#5F96FF] dark:text-[#5F96FF] mt-0.5 mr-2 flex-shrink-0" />
 								<p className="text-gray-700 dark:text-gray-300 text-sm line-clamp-2 font-medium">{description || 'No description, just vibes'}</p>
 							</div>
 
@@ -201,10 +201,10 @@ export default function CommunityCard({
 								</div>
 							</div>
 
-							<div className="pt-4 mt-4 border-t-2 border-dashed border-[#FF69B4] dark:border-[#FF1493]">
+							<div className="pt-4 mt-4 border-t-2 border-dashed border-[#5F96FF] dark:border-[#1493FF]">
 								<div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-300 font-medium">
-									<span className="bg-pink-100 dark:bg-pink-900/30 px-2 py-1 rounded-md">created:</span>
-									<span className="bg-pink-100 dark:bg-pink-900/30 px-2 py-1 rounded-md">
+									<span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">created:</span>
+									<span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">
 										{new Date(createdAt).toLocaleDateString('en-US', {
 											year: 'numeric',
 											month: 'short',
@@ -214,8 +214,8 @@ export default function CommunityCard({
 								</div>
 
 								<div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-300 mt-2 font-medium">
-									<span className="bg-pink-100 dark:bg-pink-900/30 px-2 py-1 rounded-md">last meme:</span>
-									<span className="bg-pink-100 dark:bg-pink-900/30 px-2 py-1 rounded-md">{formatTimestamp(displayedLastMessageTime)}</span>
+									<span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">last meme:</span>
+									<span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md">{formatTimestamp(displayedLastMessageTime)}</span>
 								</div>
 							</div>
 						</div>

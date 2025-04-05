@@ -133,7 +133,7 @@ function LoginDialogContent({
 		<div className="w-full">
 			<DialogHeader>
 				<div className="flex flex-col items-center mb-4">
-					<div className="w-16 h-16 bg-white rounded-xl shadow-pink flex items-center justify-center p-2 mb-4">
+					<div className="w-16 h-16 bg-white rounded-xl shadow-blue flex items-center justify-center p-2 mb-4">
 						<Image src="/images/kasoro_logo.png" alt="Kasoro Logo" width={40} height={40} />
 					</div>
 					<DialogTitle className="text-center text-2xl font-bold text-purple-dark">Set Profile</DialogTitle>

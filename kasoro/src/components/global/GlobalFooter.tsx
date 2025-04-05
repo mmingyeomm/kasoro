@@ -18,21 +18,21 @@ export default function GlobalFooter() {
 					<div className="flex space-x-8">
 						<a
 							href="#"
-							className="text-purple-black hover:text-pink-light transition-all hover:scale-105 duration-300 flex items-center gap-2"
+							className="text-purple-black hover:text-blue-light transition-all hover:scale-105 duration-300 flex items-center gap-2"
 						>
 							<span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">𝕏</span>
 							<span>Twitter</span>
 						</a>
 						<a
 							href="#"
-							className="text-purple-black hover:text-pink-light transition-all hover:scale-105 duration-300 flex items-center gap-2"
+							className="text-purple-black hover:text-blue-light transition-all hover:scale-105 duration-300 flex items-center gap-2"
 						>
 							<span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">📱</span>
 							<span>Telegram</span>
 						</a>
 						<a
 							href="#"
-							className="text-purple-black hover:text-pink-light transition-all hover:scale-105 duration-300 flex items-center gap-2"
+							className="text-purple-black hover:text-blue-light transition-all hover:scale-105 duration-300 flex items-center gap-2"
 						>
 							<span className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">🐙</span>
 							<span>GitHub</span>

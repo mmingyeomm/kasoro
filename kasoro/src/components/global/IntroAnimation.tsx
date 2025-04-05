@@ -33,7 +33,7 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
 	}, [onComplete]);
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-pink-light/50 via-white to-purple-light/50">
+		<div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-light/50 via-white to-purple-light/50">
 			<div className="flex flex-col items-center">
 				<div
 					className={`transform transition-all duration-1000 ease-out ${
@@ -41,12 +41,12 @@ export default function IntroAnimation({ onComplete }: IntroAnimationProps) {
 					}`}
 				>
 					<div className="relative w-32 h-32 flex items-center justify-center">
-						<div className="absolute inset-0 bg-white rounded-2xl rotate-45 shadow-pink animate-pulse-soft"></div>
+						<div className="absolute inset-0 bg-white rounded-2xl rotate-45 shadow-blue animate-pulse-soft"></div>
 						<Image src="/images/kasoro_logo.png" alt="Kasoro Logo" width={120} height={120} className="relative z-10" />
 					</div>
 				</div>
 				<h1
-					className={`font-[bazzi] mt-10 text-6xl font-bold text-purple-dark/80 bg-clip-text bg-gradient-to-r from-pink-primary to-purple-primary transition-all duration-1000 delay-300 ${
+					className={`font-[bazzi] mt-10 text-6xl font-bold text-purple-dark/80 bg-clip-text bg-gradient-to-r from-blue-primary to-purple-primary transition-all duration-1000 delay-300 ${
 						isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
 					}`}
 				>

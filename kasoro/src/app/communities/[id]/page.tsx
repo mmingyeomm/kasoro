@@ -176,15 +176,15 @@ export default function CommunityPage() {
 
 	if (loading) {
 		return (
-			<div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-white via-pink-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-950">
-				<div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[#FF69B4] dark:border-[#FF1493]"></div>
+			<div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-950">
+				<div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-[#5F96FF] dark:border-[#1493FF]"></div>
 			</div>
 		);
 	}
 
 	if (error || !community) {
 		return (
-			<div className="container mx-auto px-4 py-8 bg-gradient-to-br from-white via-pink-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-950">
+			<div className="container mx-auto px-4 py-8 bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-950">
 				<div className="bg-red-100 dark:bg-red-900/30 border-4 border-dashed border-red-400 dark:border-red-600 p-6 rounded-xl text-red-800 dark:text-red-300 text-center font-bold text-xl">
 					{error || 'Oops! This meme community was too dank to find! 🤔'}
 				</div>
@@ -193,12 +193,12 @@ export default function CommunityPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-white via-pink-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-950">
+		<div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-950">
 			<div className="container mx-auto px-4 py-8">
 				<div className="mb-8">
 					<Link
 						href="/communities"
-						className="inline-flex items-center gap-2 text-base font-bold text-[#FF69B4] dark:text-[#FF69B4] hover:text-[#FF1493] dark:hover:text-[#FF1493] bg-white dark:bg-gray-800 px-4 py-2 rounded-full border-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] shadow-md transform hover:-translate-x-1 transition-all"
+						className="inline-flex items-center gap-2 text-base font-bold text-[#5F96FF] dark:text-[#5F96FF] hover:text-[#1493FF] dark:hover:text-[#1493FF] bg-white dark:bg-gray-800 px-4 py-2 rounded-full border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] shadow-md transform hover:-translate-x-1 transition-all"
 					>
 						← back to all the dank memes
 					</Link>
@@ -206,13 +206,13 @@ export default function CommunityPage() {
 
 				<div className="flex flex-col lg:flex-row gap-8">
 					{/* Left sidebar */}
-					<div className="w-full lg:w-64 bg-white dark:bg-gray-800 border-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] p-5 shadow-xl rounded-xl transform rotate-0">
+					<div className="w-full lg:w-64 bg-white dark:bg-gray-800 border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] p-5 shadow-xl rounded-xl transform rotate-0">
 						<div className="mb-6">
 							<div className="flex items-center mb-4">
-								<div className="w-8 h-8 bg-[#FF69B4] rounded-full mr-3 transform rotate-0"></div>
-								<h2 className="text-xl font-extrabold text-[#FF69B4] dark:text-[#FF69B4] uppercase">Meme Stakers</h2>
+								<div className="w-8 h-8 bg-[#5F96FF] rounded-full mr-3 transform rotate-0"></div>
+								<h2 className="text-xl font-extrabold text-[#5F96FF] dark:text-[#5F96FF] uppercase">Meme Stakers</h2>
 							</div>
-							<hr className="border-[#FF69B4] dark:border-[#FF1493] border-2 border-dashed mb-4" />
+							<hr className="border-[#5F96FF] dark:border-[#1493FF] border-2 border-dashed mb-4" />
 							<DepositorsList communityId={id as string} />
 						</div>
 					</div>
@@ -221,22 +221,22 @@ export default function CommunityPage() {
 					<div className="flex-1">
 						<Toaster position="top-right" />
 
-						<div className="bg-white dark:bg-gray-800 border-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] p-6 mb-8 shadow-xl rounded-xl transform rotate-0">
+						<div className="bg-white dark:bg-gray-800 border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] p-6 mb-8 shadow-xl rounded-xl transform rotate-0">
 							{community.imageURL && (
 								<div className="mb-6 flex justify-center">
 									<img 
 										src={community.imageURL} 
 										alt={community.name} 
-										className="max-h-48 rounded-xl border-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] transform hover:scale-105 transition-all duration-300" 
+										className="max-h-48 rounded-xl border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] transform hover:scale-105 transition-all duration-300" 
 									/>
 								</div>
 							)}
 						
 							<div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-6">
 								<div>
-									<h1 className="text-4xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#FF69B4] to-purple-500 dark:from-[#FF1493] dark:to-purple-400 uppercase transform rotate-0">{community.name}</h1>
+									<h1 className="text-4xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#5F96FF] to-purple-500 dark:from-[#1493FF] dark:to-purple-400 uppercase transform rotate-0">{community.name}</h1>
 									<p className="text-gray-700 dark:text-gray-300 font-medium text-lg">{community.description}</p>
-									<p className="text-base text-[#FF69B4] dark:text-[#FF69B4] mt-2 font-bold">
+									<p className="text-base text-[#5F96FF] dark:text-[#5F96FF] mt-2 font-bold">
 										Created by the legendary @{community.creator.username} 🔥
 									</p>
 								</div>
@@ -244,7 +244,7 @@ export default function CommunityPage() {
 									{!isExpired() && (
 										<button
 											onClick={() => setIsClaimDialogOpen(true)}
-											className="bg-[#FF69B4] hover:bg-[#FF1493] text-white px-5 py-3 border-4 border-dashed border-white dark:border-gray-700 rounded-full text-base font-extrabold transition-all transform hover:scale-105 shadow-lg uppercase"
+											className="bg-[#5F96FF] hover:bg-[#1493FF] text-white px-5 py-3 border-4 border-dashed border-white dark:border-gray-700 rounded-full text-base font-extrabold transition-all transform hover:scale-105 shadow-lg uppercase"
 										>
 											Claim Rewards 💰
 										</button>
@@ -262,10 +262,10 @@ export default function CommunityPage() {
 							</div>
 
 							<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-								<div className="relative overflow-hidden rounded-xl border-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] p-5 bg-gradient-to-br from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 shadow-lg transform rotate-0 hover:rotate-0 transition-all">
+								<div className="relative overflow-hidden rounded-xl border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] p-5 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 shadow-lg transform rotate-0 hover:rotate-0 transition-all">
 									<div className="relative">
-										<div className="text-lg font-extrabold mb-1 text-[#FF69B4] dark:text-[#FF69B4] uppercase">Total Stonks</div>
-										<div className="text-3xl font-mono font-extrabold bg-white dark:bg-gray-900 px-4 py-2 rounded-lg border-2 border-dashed border-[#FF69B4] dark:border-[#FF1493] text-center">
+										<div className="text-lg font-extrabold mb-1 text-[#5F96FF] dark:text-[#5F96FF] uppercase">Total Stonks</div>
+										<div className="text-3xl font-mono font-extrabold bg-white dark:bg-gray-900 px-4 py-2 rounded-lg border-2 border-dashed border-[#5F96FF] dark:border-[#1493FF] text-center">
 											{community.bountyAmount !== null && community.bountyAmount !== undefined
 												? Number(community.bountyAmount).toFixed(2)
 												: '0.00'}{' '}
@@ -305,10 +305,10 @@ export default function CommunityPage() {
 										<div className="absolute -right-1 -top-1 text-2xl animate-pulse">⏰</div>
 									</div>
 								</div>
-								<div className="relative overflow-hidden rounded-xl border-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] p-5 bg-gradient-to-br from-pink-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 shadow-lg transform rotate-0 hover:rotate-0 transition-all">
+								<div className="relative overflow-hidden rounded-xl border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] p-5 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 shadow-lg transform rotate-0 hover:rotate-0 transition-all">
 									<div className="relative">
-										<div className="text-lg font-extrabold mb-1 text-[#FF69B4] dark:text-[#FF69B4] uppercase">Base Fee</div>
-										<div className="text-3xl font-mono font-extrabold bg-white dark:bg-gray-900 px-4 py-2 rounded-lg border-2 border-dashed border-[#FF69B4] dark:border-[#FF1493] text-center">
+										<div className="text-lg font-extrabold mb-1 text-[#5F96FF] dark:text-[#5F96FF] uppercase">Base Fee</div>
+										<div className="text-3xl font-mono font-extrabold bg-white dark:bg-gray-900 px-4 py-2 rounded-lg border-2 border-dashed border-[#5F96FF] dark:border-[#1493FF] text-center">
 											{community.baseFeePercentage ? Number(community.baseFeePercentage).toFixed(2) : '0.00'} SOL
 										</div>
 										<div className="absolute -right-1 -top-1 text-2xl animate-bounce delay-300">💸</div>
@@ -316,17 +316,17 @@ export default function CommunityPage() {
 								</div>
 							</div>
 
-							<div className="text-base text-gray-600 dark:text-gray-300 bg-pink-50 dark:bg-pink-900/20 p-4 rounded-xl border-2 border-dashed border-[rgba(255,182,193,0.5)] font-medium">
+							<div className="text-base text-gray-600 dark:text-gray-300 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border-2 border-dashed border-[rgba(95,150,255,0.5)] font-medium">
 								{community.contractAddress && (
 									<div className="mb-1">
-										<span className="font-bold text-[#FF69B4] dark:text-[#FF69B4]">Contract:</span> <span className="font-mono">{community.contractAddress}</span>
+										<span className="font-bold text-[#5F96FF] dark:text-[#5F96FF]">Contract:</span> <span className="font-mono">{community.contractAddress}</span>
 									</div>
 								)}
 								<div className="mb-1">
-									<span className="font-bold text-[#FF69B4] dark:text-[#FF69B4]">Created:</span> {new Date(community.createdAt).toLocaleString()}
+									<span className="font-bold text-[#5F96FF] dark:text-[#5F96FF]">Created:</span> {new Date(community.createdAt).toLocaleString()}
 								</div>
 								<div className="flex items-center">
-									<span className="font-bold text-[#FF69B4] dark:text-[#FF69B4]">Latest meme:</span>
+									<span className="font-bold text-[#5F96FF] dark:text-[#5F96FF]">Latest meme:</span>
 									<span className="font-medium ml-1">
 										{community.lastMessageTime
 											? new Date(community.lastMessageTime).toLocaleString()
@@ -342,11 +342,11 @@ export default function CommunityPage() {
 							</div>
 						</div>
 
-						<div className="bg-white dark:bg-gray-800 border-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] p-6 shadow-xl rounded-xl transform rotate-0">
+						<div className="bg-white dark:bg-gray-800 border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] p-6 shadow-xl rounded-xl transform rotate-0">
 							<div className="flex items-center gap-4 mb-8">
-								<div className="w-8 h-8 bg-[#FF69B4] rounded-full mr-1 transform rotate-0"></div>
-								<h2 className="text-2xl font-extrabold text-[#FF69B4] dark:text-[#FF69B4] uppercase">Meme Feed</h2>
-								<div className="w-8 h-8 bg-[#FF69B4] rounded-full ml-1 transform rotate-0"></div>
+								<div className="w-8 h-8 bg-[#5F96FF] rounded-full mr-1 transform rotate-0"></div>
+								<h2 className="text-2xl font-extrabold text-[#5F96FF] dark:text-[#5F96FF] uppercase">Meme Feed</h2>
+								<div className="w-8 h-8 bg-[#5F96FF] rounded-full ml-1 transform rotate-0"></div>
 							</div>
 							
 							{parseInt(remainingTimeText) < 15 && !isExpired() && (
@@ -365,10 +365,10 @@ export default function CommunityPage() {
 							) : (
 								<>
 									<div className="mb-8 flex flex-col md:flex-row items-center gap-6">
-										<div className="w-40 h-40 bg-gradient-to-br from-pink-100 to-purple-100 dark:from-pink-900 dark:to-purple-900 rounded-xl border-4 border-dashed border-[#FF69B4] dark:border-[#FF1493] flex items-center justify-center relative transform hover:scale-105 transition-all">
+										<div className="w-40 h-40 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-xl border-4 border-dashed border-[#5F96FF] dark:border-[#1493FF] flex items-center justify-center relative transform hover:scale-105 transition-all">
 											<div
 												className={`text-4xl font-extrabold ${
-													parseInt(remainingTimeText) < 15 ? 'text-red-600 dark:text-red-400 animate-pulse' : 'text-[#FF69B4] dark:text-[#FF69B4]'
+													parseInt(remainingTimeText) < 15 ? 'text-red-600 dark:text-red-400 animate-pulse' : 'text-[#5F96FF] dark:text-[#5F96FF]'
 												}`}
 											>
 												{remainingTimeText}
@@ -382,7 +382,7 @@ export default function CommunityPage() {
 								</>
 							)}
 							
-							<hr className="border-[#FF69B4] dark:border-[#FF1493] border-2 border-dashed mb-6" />
+							<hr className="border-[#5F96FF] dark:border-[#1493FF] border-2 border-dashed mb-6" />
 							
 							<MessageList messages={community.messages} currentUserId={user?.id} />
 						</div>
