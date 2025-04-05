@@ -6,11 +6,16 @@ import { useState, useEffect, useRef, Suspense } from 'react';
 import IntroAnimation from '@/components/global/IntroAnimation';
 import { useSearchParams } from 'next/navigation';
 
+// Separate component for using searchParams
+function SearchParamsHandler() {
+	const searchParams = useSearchParams();
+	return null; // This component just handles the searchParams and doesn't render anything
+}
+
 function HomeContent() {
 	const [introComplete, setIntroComplete] = useState(false);
 	const [scrollY, setScrollY] = useState(0);
 	const [activeFeature, setActiveFeature] = useState(0);
-	const searchParams = useSearchParams();
 
 	// Features data
 	const features = [
@@ -313,6 +318,10 @@ export default function Home() {
 				</div>
 			}
 		>
+			{/* Separate Suspense boundary for SearchParamsHandler */}
+			<Suspense fallback={null}>
+				<SearchParamsHandler />
+			</Suspense>
 			<HomeContent />
 		</Suspense>
 	);

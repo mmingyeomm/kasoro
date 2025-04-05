@@ -4,7 +4,7 @@ import { DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useWallet } from '@solana/wallet-adapter-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { api } from '@/api';
@@ -23,10 +23,43 @@ interface LoginDialogProps {
 	user?: User | null;
 }
 
-export default function LoginDialog({ onClose, user }: LoginDialogProps) {
-	const { publicKey, connected, disconnect } = useWallet();
-	const [hasTwitterConnected, setHasTwitterConnected] = useState(false);
+// Separate component for using searchParams
+function LoginDialogParams({ 
+	onTwitterConnect, 
+	onError 
+}: { 
+	onTwitterConnect: (connected: boolean) => void;
+	onError: (error: string | null) => void;
+}) {
 	const searchParams = useSearchParams();
+	
+	useEffect(() => {
+		// URL 파라미터로부터 트위터 연결 상태 확인
+		const twitterConnected = searchParams.get('twitter') === 'connected';
+		if (twitterConnected) {
+			onTwitterConnect(true);
+		}
+		
+		// Error handling
+		const error = searchParams.get('error');
+		if (error) {
+			onError(error);
+		}
+	}, [searchParams, onTwitterConnect, onError]);
+
+	return null;
+}
+
+function LoginDialogContent({ 
+	onClose, 
+	user, 
+	hasTwitterConnected, 
+	errorParam 
+}: LoginDialogProps & { 
+	hasTwitterConnected: boolean;
+	errorParam: string | null;
+}) {
+	const { publicKey, connected, disconnect } = useWallet();
 	const router = useRouter();
 	const [linking, setLinking] = useState(false);
 	const [walletAddress, setWalletAddress] = useState(user?.walletAddress || '');
@@ -35,15 +68,9 @@ export default function LoginDialog({ onClose, user }: LoginDialogProps) {
 	useEffect(() => {
 		// Check if user data exists from props
 		if (user && user.username) {
-			setHasTwitterConnected(true);
-		} else {
-			// URL 파라미터로부터 트위터 연결 상태 확인
-			const twitterConnected = searchParams.get('twitter') === 'connected';
-			if (twitterConnected) {
-				setHasTwitterConnected(true);
-			}
+			// We already know user has Twitter connected from the props
 		}
-	}, [searchParams, user]);
+	}, [user]);
 
 	const isLoginEnabled = publicKey && hasTwitterConnected;
 
@@ -116,9 +143,9 @@ export default function LoginDialog({ onClose, user }: LoginDialogProps) {
 				</div>
 			</DialogHeader>
 
-			{searchParams.get('error') && (
+			{errorParam && (
 				<div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm text-center">
-					{searchParams.get('error') === 'twitter_auth_failed'
+					{errorParam === 'twitter_auth_failed'
 						? 'Failed to connect X account. Please try again.'
 						: 'An error occurred. Please try again.'}
 				</div>
@@ -202,5 +229,27 @@ export default function LoginDialog({ onClose, user }: LoginDialogProps) {
 				)}
 			</div>
 		</div>
+	);
+}
+
+export default function LoginDialog({ onClose, user }: LoginDialogProps) {
+	const [hasTwitterConnected, setHasTwitterConnected] = useState(!!user?.username);
+	const [errorParam, setErrorParam] = useState<string | null>(null);
+
+	return (
+		<>
+			<Suspense fallback={null}>
+				<LoginDialogParams 
+					onTwitterConnect={setHasTwitterConnected}
+					onError={setErrorParam}
+				/>
+			</Suspense>
+			<LoginDialogContent 
+				onClose={onClose}
+				user={user}
+				hasTwitterConnected={hasTwitterConnected}
+				errorParam={errorParam}
+			/>
+		</>
 	);
 }

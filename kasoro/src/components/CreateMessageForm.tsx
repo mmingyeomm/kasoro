@@ -191,11 +191,9 @@ export default function CreateMessageForm({ communityId, onMessageSent }: Create
 				connection,
 				{
 					publicKey: publicKey as PublicKey,
-					signTransaction: async (tx: web3.Transaction | web3.VersionedTransaction) => {
-						if (tx instanceof web3.Transaction) {
-							tx.feePayer = publicKey;
-							tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
-						}
+					signTransaction: async (tx: web3.Transaction) => {
+						tx.feePayer = publicKey;
+						tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
 						return await sendTransaction(tx, connection);
 					},
 				},
