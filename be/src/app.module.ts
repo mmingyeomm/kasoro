@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { CommunityModule } from './communities/community.module';
 import { MessageModule } from './message/message.module';
+import { DepositorModule } from './depositor/depositor.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { MessageModule } from './message/message.module';
     UserModule,
     CommunityModule,
     MessageModule,
+    DepositorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

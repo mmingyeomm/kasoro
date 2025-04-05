@@ -154,7 +154,7 @@ export class AuthController {
       const frontendUrl = process.env.NODE_ENV === 'production' 
         ? 'https://kasoro.vercel.app'
         : 'http://localhost:3000';
-      return res.redirect(`${frontendUrl}/auth-success`);
+      return res.redirect(`${frontendUrl}/communities`);
     } catch (error) {
       console.error('[CALLBACK] Twitter callback error:', error);
       const frontendUrl = process.env.NODE_ENV === 'production' 

@@ -8,7 +8,7 @@ import {
   MessageBody
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Logger } from '@nestjs/common';
+import { Logger, Inject, forwardRef } from '@nestjs/common';
 import { CommunityService } from './community.service';
 
 @WebSocketGateway({
@@ -26,7 +26,10 @@ export class CommunityGateway implements OnGatewayConnection, OnGatewayDisconnec
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly communityService: CommunityService) {}
+  constructor(
+    @Inject(forwardRef(() => CommunityService))
+    private readonly communityService: CommunityService
+  ) {}
 
   handleConnection(client: Socket) {
     this.logger.log(`Client connected: ${client.id}`);
@@ -118,5 +121,23 @@ export class CommunityGateway implements OnGatewayConnection, OnGatewayDisconnec
       roomId,
       lastMessageTime: timestamp,
     });
+  }
+
+  // Add a method to broadcast deposit updates
+  broadcastDeposit(communityId: string, depositAmount: number, depositorUsername: string) {
+    const room = `community_${communityId}`;
+    
+    // Update client count for the room
+    const clientCount = this.roomClients.get(room)?.size || 0;
+    
+    this.server.to(room).emit('depositUpdate', {
+      communityId,
+      depositAmount,
+      depositorUsername,
+      timestamp: new Date(),
+      clientCount
+    });
+    
+    this.logger.log(`Broadcast deposit update to room ${room}: ${depositAmount} SOL from ${depositorUsername}`);
   }
 } 

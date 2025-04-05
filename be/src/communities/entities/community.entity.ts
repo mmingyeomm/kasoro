@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn, OneToMany, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { Message } from '../../message/entities/message.entity';
+import { Depositor } from './depositor.entity';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 @Entity('communities')
@@ -39,6 +40,14 @@ export class Community {
   messages: Message[];
 
   @ApiProperty({ 
+    description: 'Depositors who contributed to the community bounty',
+    type: () => [Depositor],
+    required: false
+  })
+  @OneToMany(() => Depositor, depositor => depositor.community)
+  depositors: Depositor[];
+
+  @ApiProperty({ 
     description: 'Timestamp of the last message in the community',
     required: false
   })
@@ -61,7 +70,7 @@ export class Community {
     description: 'Bounty amount in SOL',
     example: 1.5
   })
-  @Column({ nullable: true })
+  @Column('decimal', { precision: 10, scale: 2, nullable: true, default: 0 })
   bountyAmount: number;
 
   @ApiPropertyOptional({
@@ -84,4 +93,12 @@ export class Community {
   })
   @Column({ nullable: true })
   walletAddress: string;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  normalizeBountyAmount() {
+    if (this.bountyAmount !== undefined && this.bountyAmount !== null) {
+      this.bountyAmount = parseFloat(this.bountyAmount.toString());
+    }
+  }
 }
